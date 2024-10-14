@@ -1,0 +1,119 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                   Int       @id @default(autoincrement())
+  email                String    @unique
+  name                 String?
+  password             String
+  verifyAccountOtp     String?
+  verifyAccountExpires DateTime?
+  isVerified           Boolean   @default(false)
+  otps                 Otp[]     @relation("User       Otp")
+  createdAt            DateTime  @default(now())
+}
+
+model Otp {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  otp       String
+  createdAt DateTime @default(now())
+  user      User?    @relation("User       Otp", fields: [userId], references: [id])
+  userId    Int?
+}
+
+model Employee {
+  id               Int         @id @default(autoincrement())
+  profilePic       String?
+  firstName        String?
+  lastName         String?
+  mobileNumber     String?
+  emailAddress     String?     @unique
+  dateOfBirth      DateTime?   @default(now())
+  maritalStatus    String?
+  gender           String?
+  nationality      String?
+  address          String?
+  city             String?
+  teamId           Int?        // Optional field to designate the employee's team
+  state            String?
+  zipCode          String?
+  workingDays      Int?
+  startDate        DateTime?
+  officeLocation   String?
+  offerLetter      String?
+  payrollSlip      String?
+  cv               String?
+  meansOfId        String?
+  teams            Team?       @relation("EmployeeTeam", fields: [teamId], references: [id])
+  departmentId     Int?       
+  department       Department? @relation("DepartmentEmployees", fields: [departmentId], references: [id])
+  departmentHeadOf Department? @relation("DepartmentHeads") // Removed fields and references
+  rewards          Reward[]    @relation("EmployeeRewards")
+  teamLead         Team?       @relation("TeamLead")
+  attendance       Attendance[] @relation("EmployeeAttendance")
+  createdAt        DateTime?    @default(now())
+}
+
+model Department {
+  id               Int        @id @default(autoincrement())
+  name             String
+  teams            Team[]     @relation("TeamDepartment")
+  departmentHeadId Int?       @unique // Ensure this is unique for one-to-one relation
+  departmentHead   Employee?  @relation("DepartmentHeads", fields: [departmentHeadId], references: [id]) // Specify fields and references here
+  employees        Employee[] @relation("DepartmentEmployees")
+  rewards          Reward[]   @relation("DepartmentRewards")
+  createdAt        DateTime   @default(now())
+}
+
+model Team {
+  id           Int         @id @default(autoincrement())
+  name         String
+  department   Department? @relation("TeamDepartment", fields: [departmentId], references: [id], map: "TeamDepartmentConstraint")
+  departmentId Int?
+  teamLead     Employee?   @relation("TeamLead", fields: [teamLeadId], references: [id])
+  teamLeadId   Int?        @unique
+  employees    Employee[]  @relation("EmployeeTeam")
+  attendances  Attendance[] @relation("TeamAttendance")
+  createdAt    DateTime    @default(now())
+}
+
+model Reward {
+  id           Int         @id @default(autoincrement())
+  employeeId   Int?
+  earnedDate   DateTime?    @default(now())
+  departmentId Int?
+  categoryId   Int?
+  pointsEarned Int?
+  progress     Float?
+  department   Department? @relation("DepartmentRewards", fields: [departmentId], references: [id])
+  category     Category?   @relation("RewardCategory", fields: [categoryId], references: [id])
+  employee     Employee?   @relation("EmployeeRewards", fields: [employeeId], references: [id])
+  createdAt    DateTime    @default(now())
+}
+
+model Category {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String
+  rewards     Reward[] @relation("RewardCategory")
+  createdAt   DateTime @default(now())
+}
+
+model Attendance {
+  id           Int       @id @default(autoincrement())
+  checkIn      DateTime  @default(now())
+  teamId       Int?
+  team         Team?       @relation("TeamAttendance", fields: [teamId], references: [id])
+  status       String     // E.g., Present, Absent, Late
+  type         String     // E.g., Full-time, Part-time, etc.
+  employeeId   Int
+  employee     Employee   @relation("EmployeeAttendance", fields: [employeeId], references: [id])
+  createdAt    DateTime   @default(now())
+}
