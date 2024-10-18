@@ -12,14 +12,15 @@ import Modal from "@/app/components/Modal";
 import CustomSelect from "@/app/components/Select";
 import toast, { Toaster } from "react-hot-toast";
 import { useEffect } from "react";
-import { Category, Department, Employee } from "@prisma/client";
+import { Category, Department, Employee, Reward } from "@prisma/client";
 import EmployeeSelect from "@/app/components/EmployeeSelect";
 import { CircularProgress } from "@mui/material";
 import Pagination from "@/app/components/Pagination";
+import Image from "next/image";
 
 function Page() {
   const [search, setSearch] = useState("");
-  const [rewards, setRewards] = useState<any>([]);
+  const [rewards, setRewards] = useState([]);
   const [filtered, setFiltered] = useState(rewards);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -66,16 +67,18 @@ function Page() {
 
   // Handle apply filter
   const handleApplyFilter = () => {
-    const temp = rewards.filter((reward:any) => {
-      const matchesDepartment =
-        selectedDepartments.length === 0 ||
-        selectedDepartments.includes(reward.employee.departmentId);
-      const matchesCategory =
-        selectedCategories.length === 0 ||
-        selectedCategories.includes(reward.categoryId);
+    const temp = rewards.filter(
+      (reward: { employee: { departmentId: number }; categoryId: number }) => {
+        const matchesDepartment =
+          selectedDepartments.length === 0 ||
+          selectedDepartments.includes(reward.employee.departmentId);
+        const matchesCategory =
+          selectedCategories.length === 0 ||
+          selectedCategories.includes(reward.categoryId);
 
-      return matchesDepartment && matchesCategory;
-    });
+        return matchesDepartment && matchesCategory;
+      }
+    );
 
     setFiltered(temp);
     setIsFilterOpen(false);
@@ -125,7 +128,12 @@ function Page() {
   const onSearch = (text: string) => {
     setSearch(text);
     const filteredEmployees = rewards.filter(
-      (reward: any) =>
+      (reward: {
+        employee: { firstName: string | string[]; lastName: string | string[] };
+        department: { name: string | string[] };
+        category: { name: string | string[] };
+        progress: { toString: () => string | string[] };
+      }) =>
         reward.employee.firstName.includes(text) ||
         reward.employee.lastName.includes(text) ||
         reward.department.name.includes(text) ||
@@ -368,43 +376,56 @@ function Page() {
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                      {currentRewards.map((reward, index) => (
-                        <tr key={index}>
-                          <td className="px-6 py-4 whitespace-nowrap flex items-center">
-                            <img
-                              className="h-10 w-10 rounded-full"
-                              src={reward.employee.profilePic}
-                              alt={`Profile of ${reward.employeeId}`}
-                            />
-                            <div className="ml-4">
-                              <div className="text-sm  text-gray-900">
-                                {reward.employee.firstName}{" "}
-                                {reward.employee.lastName}
+                      {currentRewards.map(
+                        (
+                          reward: Reward & {
+                            employee: Employee;
+                            category: Category;
+                            department: Department;
+                            earnedDate: string;
+                          },
+                          index
+                        ) => (
+                          <tr key={index}>
+                            <td className="px-6 py-4 whitespace-nowrap flex items-center">
+                              <Image
+                                className="h-10 w-10 rounded-full"
+                                src={reward?.employee?.profilePic ?? ""}
+                                alt={`Profile of ${reward.employee.id}`}
+                                width={40}
+                                height={40}
+                              />
+                              <div className="ml-4">
+                                <div className="text-sm  text-gray-900">
+                                  {reward.employee.firstName}{" "}
+                                  {reward.employee.lastName}
+                                </div>
                               </div>
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm text-gray-500">
-                              {new Date(reward.earnedDate).toLocaleDateString()}
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm text-gray-500">
-                              {reward.department?.name}
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm text-gray-500">
-                              {reward.category?.name}
-                            </div>
-                          </td>
-                          {/* <td className="px-6 py-4 whitespace-nowrap">
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="text-sm text-gray-500">
+                                {new Date(
+                                  reward.earnedDate
+                                ).toLocaleDateString()}
+                              </div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="text-sm text-gray-500">
+                                {reward.department?.name}
+                              </div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="text-sm text-gray-500">
+                                {reward.category?.name}
+                              </div>
+                            </td>
+                            {/* <td className="px-6 py-4 whitespace-nowrap">
                             <div className="text-sm text-gray-500">
                               {reward.departmentHead?.firstName}{" "}
                               {reward.departmentHead?.lastName}
                             </div>
                           </td> */}
-                          {/* <td className="px-6 py-4 whitespace-nowrap">
+                            {/* <td className="px-6 py-4 whitespace-nowrap">
                             <span
                               className={
                                 employee.status === "Present"
@@ -415,34 +436,35 @@ function Page() {
                               {employee.status}
                             </span>
                           </td> */}
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm text-[#FFA100]">
-                              {reward.pointsEarned}
-                            </div>{" "}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div style={{ width: 35, height: 35 }}>
-                              <CircularProgressbar
-                                value={reward.progress}
-                                text={`${reward.progress}%`}
-                                strokeWidth={15}
-                                styles={buildStyles({
-                                  rotation: 0,
-                                  strokeLinecap: "round",
-                                  textSize: "28px",
-                                  pathTransitionDuration: 0.5,
-                                  pathTransition:
-                                    "stroke-dashoffset 0.5s ease 0s",
-                                  pathColor: `#FFA100`,
-                                  textColor: "#1E1E1E",
-                                  trailColor: "rgba(30, 30, 30, 0.102)",
-                                })}
-                              />
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="text-sm text-[#FFA100]">
+                                {reward.pointsEarned}
+                              </div>{" "}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div style={{ width: 35, height: 35 }}>
+                                <CircularProgressbar
+                                  value={reward?.progress ?? 0}
+                                  text={`${reward.progress}%`}
+                                  strokeWidth={15}
+                                  styles={buildStyles({
+                                    rotation: 0,
+                                    strokeLinecap: "round",
+                                    textSize: "28px",
+                                    pathTransitionDuration: 0.5,
+                                    pathTransition:
+                                      "stroke-dashoffset 0.5s ease 0s",
+                                    pathColor: `#FFA100`,
+                                    textColor: "#1E1E1E",
+                                    trailColor: "rgba(30, 30, 30, 0.102)",
+                                  })}
+                                />
+                              </div>
+                            </td>
+                          </tr>
+                        )
+                      )}{" "}
+                    </tbody>{" "}
                   </table>
                 </div>
                 <Pagination

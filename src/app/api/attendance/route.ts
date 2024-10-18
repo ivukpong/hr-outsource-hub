@@ -1,7 +1,7 @@
 // File: app/api/attendance/route.ts
 
-import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/utils/db';
+import { NextRequest, NextResponse } from 'next/server';
 
 // Retrieve all attendance records
 export async function GET() {
@@ -14,6 +14,7 @@ export async function GET() {
         });
         return NextResponse.json(attendanceRecords);
     } catch (error) {
+        console.log(error)
         return NextResponse.json({ error: 'Failed to retrieve attendance records.' }, { status: 500 });
     }
 }
@@ -45,9 +46,10 @@ export async function POST(req: NextRequest) {
         });
 
         return NextResponse.json(attendanceRecord, { status: 201 });
-    } catch (error: any) {
+    } catch (error) {
         console.error("Error creating attendance record:", error); // Log the error
-        return NextResponse.json({ error: 'Failed to create attendance record.', details: error.message }, { status: 500 });
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+        return NextResponse.json({ error: 'Failed to create attendance record.', details: errorMessage }, { status: 500 });
     }
 }
 
@@ -67,14 +69,14 @@ export async function PUT(req: NextRequest) {
         });
 
         return NextResponse.json(updatedAttendanceRecord);
-    } catch (error: any) {
-        if (error.code === 'P2025') {
+    } catch (error) {
+        if (error instanceof Error && 'code' in error && error.code === 'P2025') {
             return NextResponse.json({ error: 'Attendance record not found.' }, { status: 404 });
         }
-        return NextResponse.json({ error: 'Failed to update attendance record.', details: error.message }, { status: 500 });
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+        return NextResponse.json({ error: 'Failed to update attendance record.', details: errorMessage }, { status: 500 });
     }
 }
-
 // Delete an attendance record by ID
 export async function DELETE(req: NextRequest) {
     const { searchParams } = new URL(req.url);
@@ -89,10 +91,11 @@ export async function DELETE(req: NextRequest) {
             where: { id: Number(id) },
         });
         return NextResponse.json({ message: 'Attendance record deleted successfully.' });
-    } catch (error: any) {
-        if (error.code === 'P2025') {
+    } catch (error) {
+        if (error instanceof Error && 'code' in error && error.code === 'P2025') {
             return NextResponse.json({ error: 'Attendance record not found.' }, { status: 404 });
         }
-        return NextResponse.json({ error: 'Failed to delete attendance record.', details: error.message }, { status: 500 });
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+        return NextResponse.json({ error: 'Failed to delete attendance record.', details: errorMessage }, { status: 500 });
     }
 }

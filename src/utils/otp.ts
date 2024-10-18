@@ -18,6 +18,6 @@ export async function sendOtpToEmail(email: string, otp: number) {
     };
 
     // // Send email
-    const resp = await transporter.sendMail(mailOptions);
+    await transporter.sendMail(mailOptions);
 
 }

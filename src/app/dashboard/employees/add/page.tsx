@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import DashContainer from "@/app/components/DashContainer";
 import CustomInput from "@/app/components/Input";
 import Layout from "@/app/components/Layout";
@@ -12,6 +12,7 @@ import toast from "react-hot-toast";
 import CustomSelect from "@/app/components/Select";
 import { useEffect } from "react";
 import { Department, Team } from "@prisma/client";
+import Image from "next/image";
 
 export default function Page() {
   const [firstName, setFirstName] = useState("");
@@ -53,13 +54,13 @@ export default function Page() {
     setDepartments(data);
   }
 
-  async function fetchTeams() {
+  const fetchTeams = useCallback(async () => {
     const res = await fetch("/api/teams");
     const data = await res.json();
     setTeams(
       data.filter((team: Team) => team.departmentId === parseInt(department))
     );
-  }
+  }, [department]);
 
   useEffect(() => {
     fetchDepartments();
@@ -67,7 +68,7 @@ export default function Page() {
 
   useEffect(() => {
     fetchTeams();
-  }, [department]);
+  }, [department, fetchTeams]);
 
   const router = useRouter();
 
@@ -80,6 +81,7 @@ export default function Page() {
     if (event.target.files) {
       const selectedFile = event.target.files[0];
       setFile(selectedFile);
+      console.log(image);
 
       // Create a local URL for the selected image
       const reader = new FileReader();
@@ -220,8 +222,8 @@ export default function Page() {
               <div className="flex items-center mb-6">
                 <div>
                   <div className="w-24 h-24 bg-[#A2A2A833] rounded flex items-center justify-center relative">
-                    {image ? (
-                      <img
+                    {imagePreview ? (
+                      <Image
                         src={imagePreview} // Display the uploaded image preview
                         alt="Uploaded"
                         className="w-full h-full rounded"

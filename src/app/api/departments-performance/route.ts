@@ -1,12 +1,12 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { prisma } from '@/utils/db';
-import { Reward } from '@prisma/client';
+import { Reward, Department } from '@prisma/client';
 
 // Get rewards grouped by month and department
 export async function GET() {
     try {
         // Fetch departments with their rewards created after a specific date
-        const departments = await prisma.department.findMany({
+        const departments: (Department & { rewards: Reward[] })[] = await prisma.department.findMany({
             include: {
                 rewards: {
                     where: {
@@ -31,36 +31,53 @@ export async function GET() {
     }
 }
 
-// Helper function to group rewards by month and department
-function groupByMonthAndDepartment(departments: any[]) {
-    const groupedData = {};
-    const departmentNames = new Set();
+// Define the type for the sorted data entries
+interface MonthlyDepartmentData {
+    name: string; // Name of the month
+    [key: string]: number | string; // Allow additional keys with numeric values
+}
 
-    // Collect all department names
+// Helper function to group rewards by month and department
+function groupByMonthAndDepartment(departments: (Department & { rewards: Reward[] })[]): MonthlyDepartmentData[] {
+    const groupedData: { [month: string]: { [departmentName: string]: number } } = {};
+    const departmentNames = new Set<string>();
+
+    // Collect all department names and group rewards by month
     departments.forEach((department) => {
         departmentNames.add(department.name);
+
         department.rewards.forEach((reward: Reward) => {
-            const month = new Date(reward.earnedDate).toLocaleString('default', { month: 'long' });
+            const month = reward.earnedDate
+                ? new Date(reward.earnedDate).toLocaleString('default', { month: 'long' })
+                : 'Unknown';
 
             if (!groupedData[month]) {
-                groupedData[month] = { name: month };
+                groupedData[month] = {};
             }
 
             // Aggregate pointsEarned for each department
             if (!groupedData[month][department.name]) {
-                groupedData[month][department.name] = 0; // Default to 0 if not present
+                groupedData[month][department.name] = 0;
             }
+
             groupedData[month][department.name] += reward.pointsEarned || 0;
         });
     });
 
-    // Add default entries for each department for each month
-    const monthsOrder = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    const sortedData = monthsOrder.map(month => {
-        const entry = { name: month };
-        departmentNames.forEach(departmentName => {
-            entry[departmentName] = groupedData[month]?.[departmentName] || 0; // Default to 0
+    // Define months in the correct order
+    const monthsOrder = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ];
+
+    // Create sorted data and fill in default values (0) for missing departments
+    const sortedData: MonthlyDepartmentData[] = monthsOrder.map((month) => {
+        const entry: MonthlyDepartmentData = { name: month }; // Explicitly define type
+
+        departmentNames.forEach((departmentName) => {
+            entry[departmentName] = groupedData[month]?.[departmentName] || 0;
         });
+
         return entry;
     });
 

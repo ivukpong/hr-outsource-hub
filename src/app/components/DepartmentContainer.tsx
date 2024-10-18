@@ -1,8 +1,12 @@
-import { Team } from "@prisma/client";
+import { Department, Employee, Team } from "@prisma/client";
 import Link from "next/link";
 import React from "react";
 
-function DepartmentContainer({ department }: { department: any }) {
+function DepartmentContainer({
+  department,
+}: {
+  department: Department & { teams: Team[]; employees: Employee[] };
+}) {
   const { name } = department;
   return (
     <div className="w-full mx-auto rounded-[5px] p-6 border-[#A2A1A833] border">

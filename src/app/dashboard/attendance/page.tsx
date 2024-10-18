@@ -9,17 +9,19 @@ import Modal from "@/app/components/Modal";
 
 import Pagination from "@/app/components/Pagination";
 import { CircularProgress } from "@mui/material";
-import { Employee } from "@prisma/client";
+import { Attendance, Employee, Team } from "@prisma/client";
+import Image from "next/image";
 
 import React, { useState } from "react";
 import { useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import FileUpload from "@/app/components/UploadButton";
 import { FaUpload } from "react-icons/fa6";
 
 function Page() {
   const [search, setSearch] = useState("");
-  const [attendance, setAttendance] = useState<any[]>([]);
+  const [attendance, setAttendance] = useState<
+    (Attendance & { team: Team; employee: Employee })[]
+  >([]);
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [filtered, setFiltered] = useState(attendance);
   const [loading, setLoading] = useState(true);
@@ -28,17 +30,24 @@ function Page() {
   const [employeeId, setEmployeeID] = useState("");
   const [checkInDate, setCheckInDate] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [file, setFile] = useState(null);
+  const [file, setFile] = useState<File | null>(null);
 
-  const handleFileUpload = async (event) => {
-    setFile(event.target.files[0]);
-    if (!event.target.files[0]) {
+  const handleFileUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const files = event.target.files;
+
+    // Check if any files are selected
+    if (!files || !files[0]) {
       toast.error("Please select a file");
       return;
     }
 
+    // Set the file state with the first file selected
+    setFile(files[0]);
+
     const formData = new FormData();
-    formData.append("file", event.target.files[0]);
+    formData.append("file", files[0]);
 
     try {
       const response = await fetch("/api/attendance-upload", {
@@ -54,9 +63,15 @@ function Page() {
       toast.success(result.message || "File uploaded successfully");
       setEmployeeID("");
       setCheckInDate("");
-    } catch (error) {
+    } catch (error: unknown) {
       console.error("Error uploading file:", error);
-      toast.error("Error uploading file: " + error.message);
+
+      // Handle the error correctly using type assertion
+      if (error instanceof Error) {
+        toast.error("Error uploading file: " + error.message);
+      } else {
+        toast.error("Error uploading file: An unknown error occurred.");
+      }
     }
   };
 
@@ -74,10 +89,11 @@ function Page() {
     setSearch(text);
     const filteredAttendace = attendance.filter(
       (data) =>
-        data.employee.name.includes(text) ||
+        data.employee.firstName?.includes(text) ||
+        data.employee.lastName?.includes(text) ||
         data.type.includes(text) ||
-        data.checkIn.includes(text) ||
-        data.designation?.includes(text) ||
+        data.checkIn.toLocaleString().includes(text) ||
+        data.team.name?.includes(text) ||
         data.status.includes(text)
     );
     setFiltered(filteredAttendace);
@@ -96,8 +112,8 @@ function Page() {
     setEmployees(data);
   }
 
-  const getFormat = (date) => {
-    const options = {
+  const getFormat = (date: Date) => {
+    const options: Intl.DateTimeFormatOptions = {
       year: "numeric",
       month: "2-digit",
       day: "2-digit",
@@ -124,7 +140,7 @@ function Page() {
     setIsModalOpen(false);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
     const attendanceData = {
@@ -279,10 +295,12 @@ function Page() {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap flex items-center">
-                        <img
+                        <Image
                           className="h-10 w-10 rounded-full"
-                          src={employee.employee.profilePic}
+                          src={employee?.employee?.profilePic ?? ""}
                           alt={`Profile of ${employee.employee.firstName}`}
+                          width={40}
+                          height={40}
                         />
                         <div className="ml-4">
                           <div className="text-sm  text-gray-900">

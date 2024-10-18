@@ -6,7 +6,6 @@ import Button from "@/app/components/Button";
 import Link from "next/link";
 import toast, { Toaster } from "react-hot-toast";
 import AuthContainer from "@/app/components/AuthContainer";
-import Modal from "@/app/components/Modal";
 
 export default function VerifyAccount() {
   const [otp, setOtp] = useState("");

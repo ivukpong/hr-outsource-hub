@@ -9,23 +9,26 @@ import Layout from "@/app/components/Layout";
 import Modal from "@/app/components/Modal";
 import CustomSelect from "@/app/components/Select";
 import { CircularProgress } from "@mui/material";
-import { Department, Employee } from "@prisma/client";
-import Link from "next/link";
+import { Department, Employee, Team } from "@prisma/client";
 import React, { useState } from "react";
 import { useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
 
-function page() {
+function Page() {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
-  const [departments, setDepartments] = useState<any[]>([]);
+  const [departments, setDepartments] = useState<
+    (Department & { teams: Team[]; employees: Employee[] })[]
+  >([]);
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [departmentHeadId, setDepartmentHeadId] = useState("");
   const [departmentName, setDepartmentName] = useState("");
   const [departmentId, setDepartmentId] = useState("");
   const [teamLeadId, setTeamLeadId] = useState("");
   const [teamName, setTeamName] = useState("");
-  const [filtered, setFiltered] = useState<Department[]>([]);
+  const [filtered, setFiltered] = useState<
+    (Department & { teams: Team[]; employees: Employee[] })[]
+  >([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAddTeam, setIsAddTeam] = useState(false);
 
@@ -257,4 +260,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;

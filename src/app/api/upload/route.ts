@@ -1,14 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse, NextRequest } from 'next/server';
 import { storage } from "@/utils/firebaseConfig";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 // Disable body parser
-export const config = {
-    api: {
-        bodyParser: false,
-    },
-};
-
 export async function POST(req: NextRequest) {
     try {
         // Parse the form data from the request

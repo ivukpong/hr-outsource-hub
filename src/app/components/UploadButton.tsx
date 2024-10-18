@@ -1,11 +1,17 @@
 import React, { useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 import { FaUpload } from "react-icons/fa";
 
 const FileUpload = () => {
-  const [file, setFile] = useState(null);
+  const [file, setFile] = useState<File | null>(null);
 
-  const handleFileChange = (event) => {
-    setFile(event.target.files[0]);
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files; // Get the files from the input
+    if (files && files.length > 0) {
+      setFile(files[0]); // Set the first file to the state
+    } else {
+      setFile(null); // Handle the case where no files are selected
+    }
   };
 
   const handleFileUpload = async () => {
@@ -28,15 +34,21 @@ const FileUpload = () => {
       }
 
       const result = await response.json();
-      alert(result.message || "File uploaded successfully");
+      toast.success(result.message || "File uploaded successfully");
     } catch (error) {
-      console.error("Error uploading file:", error);
-      alert("Error uploading file: " + error.message);
+      if (error instanceof Error) {
+        console.error("Error uploading file:", error);
+        toast.error("Error uploading file: " + error.message);
+      } else {
+        console.error("Unexpected error:", error);
+        toast.error("An unexpected error occurred.");
+      }
     }
   };
 
   return (
     <div className="flex flex-col items-center">
+      <Toaster />
       <label className="cursor-pointer mb-4">
         <button className="border border-grey text-[#16151C] px-4 py-2 rounded-[5px] flex gap-2 items-center relative">
           <FaUpload className="text-xl" />

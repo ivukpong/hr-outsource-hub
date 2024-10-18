@@ -1,6 +1,6 @@
 // File: app/api/departments/route.ts
 
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
 import { prisma } from '@/utils/db';
 
 // Get all departments

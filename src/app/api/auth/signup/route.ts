@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import { prisma } from "@/utils/db";
 import { sendOtpToEmail } from "@/utils/otp";
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
     const { name, email, password } = await request.json();
 
     // Check if the user already exists

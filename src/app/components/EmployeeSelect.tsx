@@ -6,9 +6,7 @@ import React, { useState } from "react";
 function EmployeeSelect({
   htmlFor,
   label,
-  id,
   options = [],
-  value,
   onChange = () => {},
   required = false,
 }: {
@@ -63,7 +61,9 @@ function EmployeeSelect({
                 <li
                   key={option.id}
                   onClick={() => {
-                    onChange({ target: { value: option.id } } as any);
+                    onChange({
+                      target: { value: option.id },
+                    } as unknown as React.ChangeEvent<HTMLSelectElement>);
                     setSearchQuery(`${option.firstName} ${option.lastName}`); // Update the search input with the selected option
                     setIsDropdownOpen(false); // Close the dropdown
                   }}

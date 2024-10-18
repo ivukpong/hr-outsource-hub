@@ -7,8 +7,9 @@ export const metadata: Metadata = {
   title: "API Docs",
   description: "API Documentation with Swagger for Next.js",
 };
+
 export default async function ApiDocPage() {
-  const spec = await getApiDocs();
+  const spec = await getApiDocs(); // This is now of type Record<string, unknown>
 
   return (
     <section className="!w-screen bg-white">

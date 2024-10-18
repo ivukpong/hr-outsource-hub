@@ -27,7 +27,8 @@ const Layout = ({
   ...props
 }: {
   children: React.ReactNode;
-  [key: string]: any;
+  header?: string;
+  desc?: string;
 }) => {
   const [user, setUser] = useState<User | null>(null);
 
@@ -82,5 +83,4 @@ const Layout = ({
     </div>
   );
 };
-
 export default Layout;

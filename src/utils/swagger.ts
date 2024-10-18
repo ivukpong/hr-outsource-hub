@@ -1,10 +1,23 @@
+// File: utils/swagger.ts
 import { createSwaggerSpec } from 'next-swagger-doc';
 
-export const getApiDocs = async () => {
+// Define a basic type for the Swagger spec (expand as needed)
+export interface SwaggerSpec {
+    openapi: string; // e.g., "3.0.0"
+    info: {
+        title: string;
+        version: string;
+        description?: string;
+    };
+    paths?: Record<string, unknown>; // Use unknown here for flexibility
+    components?: Record<string, unknown>; // Optional
+}
+
+export const getApiDocs = async (): Promise<Record<string, unknown>> => {
     const spec = createSwaggerSpec({
         apiFolder: 'app/api', // Root folder for your API routes
         definition: {
-            openapi: '3.0.0',
+            openapi: '3.0.0', // Add OpenAPI version
             info: {
                 title: 'Next.js API Documentation',
                 version: '1.0.0',
@@ -1585,5 +1598,5 @@ export const getApiDocs = async () => {
         },
     });
 
-    return spec;
+    return spec as Record<string, unknown>; // Cast to Record<string, unknown>
 };

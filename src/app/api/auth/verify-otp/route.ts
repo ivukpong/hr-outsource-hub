@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/utils/db";
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
     const { email, otp } = await request.json();
 
     // Find OTP

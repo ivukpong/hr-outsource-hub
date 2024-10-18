@@ -1,8 +1,8 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from 'next/server';
 import { sendOtpToEmail } from "@/utils/otp"; // Assuming this utility sends the OTP email
 import { prisma } from "@/utils/db"; // Import your Prisma client
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
     const { email } = await req.json();
 
     try {

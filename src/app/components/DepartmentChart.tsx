@@ -1,4 +1,3 @@
-import { CircularProgress } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import {
   AreaChart,
@@ -17,7 +16,7 @@ const DepartmentChart = () => {
     const fetchPerformanceData = async () => {
       try {
         const response = await fetch("/api/departments-performance");
-        const data: any = await response.json();
+        const data = await response.json();
         setChartData(data);
       } catch (error) {
         console.error("Error fetching performance data:", error);

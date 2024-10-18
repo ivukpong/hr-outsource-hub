@@ -10,7 +10,7 @@ function Button({
   loading,
   outline,
 }: {
-  text: any;
+  text: string;
   click?: () => void;
   type?: "button" | "submit" | "reset" | undefined;
   icon?: boolean;

@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
 import jwt from 'jsonwebtoken';
 
 export function middleware(request: NextRequest) {
@@ -10,13 +10,13 @@ export function middleware(request: NextRequest) {
 
     try {
         jwt.verify(token, process.env.JWT_SECRET as string);
-    } catch (error) {
+    } catch {
         return NextResponse.redirect(new URL('/auth/signin', request.url));
     }
 
     return NextResponse.next();
 }
-
 export const config = {
     matcher: ['/api/dashboard/:path*'],
 };
+

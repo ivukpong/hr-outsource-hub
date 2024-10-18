@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/utils/db";
 import { sendOtpToEmail } from "@/utils/otp";
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
     const { email } = await request.json();
 
 
@@ -11,11 +11,11 @@ export async function POST(request: Request) {
 
     // Store the OTP in the database
     await prisma.otp.update({
-            where: { email },
-            data: {
-                otp
-            },
-        });
+        where: { email },
+        data: {
+            otp
+        },
+    });
 
     await sendOtpToEmail(email, parseInt(otp))
 

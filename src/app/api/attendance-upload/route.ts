@@ -1,15 +1,10 @@
-import { NextRequest, NextResponse } from "next/server";
+// File: src/app/api/attendance-upload/route.ts
+
+import { NextRequest, NextResponse } from "next/server"; // Keep NextResponse
 import { storage } from "@/utils/firebaseConfig";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { prisma } from "@/utils/db";
 import { read, utils } from 'xlsx';
-
-// Disable body parser
-export const config = {
-    api: {
-        bodyParser: false,
-    },
-};
 
 // Helper function to parse Excel file
 async function parseExcel(buffer: ArrayBuffer) {
@@ -38,7 +33,8 @@ function getCheckInStatus(checkInTime: Date): string {
     return checkInTime > cutoffTime ? "Late" : "On Time";
 }
 
-export async function POST(req: NextRequest) {
+// Handle file upload and attendance processing
+export async function POST(req: NextRequest) { // Use the standard Request type
     try {
         // Parse the form data from the request
         const formData = await req.formData();
@@ -65,25 +61,39 @@ export async function POST(req: NextRequest) {
         const downloadURL = await getDownloadURL(snapshot.ref);
 
         // Parse the file content
-        let parsedData;
-        if (extension === 'xlsx') {
-            parsedData = await parseExcel(buffer);
-        } else if (extension === 'csv') {
-            parsedData = await parseCSV(buffer);
+        interface AttendanceRecord {
+            firstName: string;
+            lastName: string;
+            checkIn: string; // or Date if you are parsing it directly to a Date object
         }
 
-        // Process each record and insert attendance data
+        let parsedData: AttendanceRecord[] = []; // Initialize as an empty array
+
+        if (extension === 'xlsx') {
+            const rawData = await parseExcel(buffer) as Record<string, string>[];
+            parsedData = rawData.map(record => ({
+                firstName: record.firstName,
+                lastName: record.lastName,
+                checkIn: record.checkIn,
+            }));
+        } else if (extension === 'csv') {
+            const rawData = await parseCSV(buffer) as Record<string, string>[];
+            parsedData = rawData.map(record => ({
+                firstName: record.firstName,
+                lastName: record.lastName,
+                checkIn: record.checkIn,
+            }));
+        }
+
+        // Now you can safely use parsedData
         for (const record of parsedData) {
-            const firstName = record.firstName;
-            const lastName = record.lastName;
-            const checkIn = new Date(record.checkIn);
+            const { firstName, lastName, checkIn } = record;
+            const checkInDate = new Date(checkIn);
 
             // Find the employee using first and last name
             const employee = await prisma.employee.findFirst({
                 where: { firstName, lastName },
-                include: {
-                    teams: true,
-                },
+                include: { teams: true },
             });
 
             if (!employee) {
@@ -91,22 +101,14 @@ export async function POST(req: NextRequest) {
             }
 
             // Extract employee information
-            const employeeId = employee.id;
-            const teamId = employee.teamId;
-            const type = employee.officeLocation;
+            const { id: employeeId, teamId, officeLocation: type } = employee;
 
             // Determine the status based on check-in time
-            const status = getCheckInStatus(checkIn);
+            const status = getCheckInStatus(checkInDate);
 
             // Insert the attendance record
             await prisma.attendance.create({
-                data: {
-                    employeeId,
-                    teamId,
-                    checkIn,
-                    status,
-                    type,
-                },
+                data: { employeeId, teamId, checkIn: checkInDate, status, type: type || '' },
             });
         }
 

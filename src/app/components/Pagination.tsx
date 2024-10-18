@@ -7,7 +7,7 @@ const Pagination = ({
   setItemsPerPage,
   setCurrentPage,
 }: {
-  data: Array<Employee> | Array<Reward> | Array<any>;
+  data: Array<Employee> | Array<Reward> | Array<unknown>;
   itemsPerPage: number;
   currentPage: number;
   setItemsPerPage: (items: number) => void;

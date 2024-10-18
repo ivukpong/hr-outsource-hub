@@ -2,33 +2,29 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import {
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
 import { FaArrowTrendUp, FaArrowTrendDown } from "react-icons/fa6";
 
 import Layout from "../components/Layout";
 import DashContainer from "../components/DashContainer";
 import { User } from "@prisma/client";
-import { data } from "../data";
 import { CircularProgress } from "@mui/material";
 import DepartmentChart from "../components/DepartmentChart";
 
 const Dashboard = () => {
   const [user, setUser] = useState<User | null>(null);
-  const [stats, setStats] = useState<any>(null);
+  const [stats, setStats] = useState<{
+    totalEmployees: number;
+    totalTeams: number;
+    averageCheckInTime: string;
+    totalDepartments: number;
+  } | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
         const response = await fetch("/api/stats");
-        const data: any = await response.json();
+        const data = await response.json();
         setStats(data);
       } catch (error) {
         console.error("Error fetching stats:", error);

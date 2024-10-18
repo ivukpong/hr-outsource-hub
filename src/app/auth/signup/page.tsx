@@ -6,6 +6,7 @@ import CustomInput from "@/app/components/Input";
 import Button from "@/app/components/Button";
 import toast, { Toaster } from "react-hot-toast";
 import AuthContainer from "@/app/components/AuthContainer";
+import Image from "next/image";
 
 export default function SignUp() {
   const [name, setName] = useState("");
@@ -27,7 +28,7 @@ export default function SignUp() {
     });
 
     console.log(response);
-    
+
     const data = await response.json();
     console.log(data);
     if (response.ok) {
@@ -49,7 +50,13 @@ export default function SignUp() {
       <div className="w-full max-w-md">
         <Toaster />
         <div className="flex items-center mb-8">
-          <img src="/images/logo.png" alt="GTCO logo" className="mr-2" />
+          <Image
+            src="/images/logo.png"
+            alt="GTCO logo"
+            className="mr-2"
+            width={67}
+            height={67}
+          />
           <h1 className="text-3xl font-bold text-dark">GTCO</h1>
         </div>
         <h2 className="text-dark text-2xl font-semibold mb-2">

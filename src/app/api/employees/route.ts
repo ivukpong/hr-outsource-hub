@@ -1,7 +1,8 @@
 // File: app/api/employees/route.ts
 
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
 import { prisma } from '@/utils/db';
+import { Prisma } from '@prisma/client';
 
 // Retrieve all employees
 export async function GET() {
@@ -9,11 +10,12 @@ export async function GET() {
         const employees = await prisma.employee.findMany({
             include: {
                 department: true, // Include the department data for each employee
-                teams: true, // Include the department data for each employee
+                teams: true, // Include the teams data for each employee
             },
         });
         return NextResponse.json(employees);
     } catch (error) {
+        console.error('Error retrieving employees:', error);
         return NextResponse.json({ error: 'Failed to retrieve employees.' }, { status: 500 });
     }
 }
@@ -22,16 +24,16 @@ export async function GET() {
 export async function POST(req: NextRequest) {
     try {
         const body = await req.json();
-        console.log(body)
+        console.log('Creating employee:', body);
 
         const employee = await prisma.employee.create({
-            data: body
+            data: body,
         });
 
-        console.log(employee)
-
+        console.log('Employee created:', employee);
         return NextResponse.json(employee, { status: 201 });
     } catch (error) {
+        console.error('Error creating employee:', error);
         return NextResponse.json({ error: 'Failed to create employee.' }, { status: 500 });
     }
 }
@@ -52,10 +54,13 @@ export async function PUT(req: NextRequest) {
         });
 
         return NextResponse.json(updatedEmployee);
-    } catch (error: any) {
-        if (error.code === 'P2025') {
-            return NextResponse.json({ error: 'Employee not found.' }, { status: 404 });
+    } catch (error) {
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+            if (error.code === 'P2025') {
+                return NextResponse.json({ error: 'Employee not found.' }, { status: 404 });
+            }
         }
+        console.error('Error updating employee:', error);
         return NextResponse.json({ error: 'Failed to update employee.' }, { status: 500 });
     }
 }
@@ -74,10 +79,13 @@ export async function DELETE(req: NextRequest) {
             where: { id: Number(id) },
         });
         return NextResponse.json({ message: 'Employee deleted successfully.' });
-    } catch (error: any) {
-        if (error.code === 'P2025') {
-            return NextResponse.json({ error: 'Employee not found.' }, { status: 404 });
+    } catch (error) {
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+            if (error.code === 'P2025') {
+                return NextResponse.json({ error: 'Employee not found.' }, { status: 404 });
+            }
         }
+        console.error('Error deleting employee:', error);
         return NextResponse.json({ error: 'Failed to delete employee.' }, { status: 500 });
     }
 }

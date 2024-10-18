@@ -11,6 +11,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import Image from "next/image";
 
 export default function Page() {
   const [employee, setEmployee] = useState<Employee | null>(null);
@@ -37,11 +38,11 @@ export default function Page() {
   const [payrollSlipLink, setPayrollSlipLink] = useState<string | null>(null);
   const [cvLink, setCVLink] = useState<string | null>(null);
   const [idLink, setIDLink] = useState<string | null>(null);
-  const [image, setImage] = useState<File | null>(null);
   const [offerLetter, setOfferLetter] = useState<File | null>(null);
   const [payrollSlip, setPayrollSlip] = useState<File | null>(null);
   const [cv, setCV] = useState<File | null>(null);
   const [id, setID] = useState<File | null>(null);
+  const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [departments, setDepartments] = useState<Department[]>([]);
@@ -54,13 +55,13 @@ export default function Page() {
     setDepartments(data);
   }
 
-  async function fetchTeams() {
+  const fetchTeams = React.useCallback(async () => {
     const res = await fetch("/api/teams");
     const data = await res.json();
     setTeams(
       data.filter((team: Team) => team.departmentId === parseInt(departmentId))
     );
-  }
+  }, [departmentId]);
 
   useEffect(() => {
     fetchDepartments();
@@ -68,7 +69,7 @@ export default function Page() {
 
   useEffect(() => {
     fetchTeams();
-  }, [departmentId]);
+  }, [departmentId, fetchTeams]);
 
   useEffect(() => {
     setLoading(true);
@@ -93,7 +94,6 @@ export default function Page() {
       setWorkingDays(parsedEmployee.workingDays || "");
       setStartDate(parsedEmployee.startDate || "");
       setLocation(parsedEmployee.officeLocation || "");
-      setImage(parsedEmployee.profilePic || "");
       setImagePreview(parsedEmployee.profilePic || "");
       setImageLink(parsedEmployee.profilePic || "");
       setOfferLetterLink(parsedEmployee.offerLetter || "");
@@ -116,6 +116,7 @@ export default function Page() {
       const selectedFile = event.target.files[0];
       setFile(selectedFile);
 
+      console.log(image);
       // Create a local URL for the selected image
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -255,11 +256,13 @@ export default function Page() {
               <div className="flex items-center mb-6">
                 <div>
                   <div className="w-24 h-24 bg-[#A2A2A833] rounded flex items-center justify-center relative">
-                    {image ? (
-                      <img
+                    {imagePreview ? (
+                      <Image
                         src={imagePreview} // Display the uploaded image preview
                         alt="Uploaded"
                         className="w-full h-full rounded"
+                        height={96}
+                        width={96}
                       />
                     ) : (
                       <i className="fas fa-camera text-2xl text-gray-400"></i>

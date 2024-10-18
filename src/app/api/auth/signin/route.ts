@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { prisma } from "@/utils/db";
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
     const { email, password } = await request.json();
 
     // Find the user
