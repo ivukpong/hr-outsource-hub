@@ -162,7 +162,7 @@ export default function Page() {
       lastName,
       mobileNumber,
       emailAddress,
-      dateOfBirth,
+      dateOfBirth: new Date(dateOfBirth).toISOString(),
       maritalStatus,
       gender,
       nationality,
@@ -172,7 +172,7 @@ export default function Page() {
       state,
       zipCode,
       workingDays: parseInt(workingDays),
-      startDate,
+      startDate: new Date(startDate).toISOString(),
       officeLocation:
         location === "1" ? "Remote" : location === "2" ? "Hybrid" : "On-site",
       offerLetter: offerLetterLink,
