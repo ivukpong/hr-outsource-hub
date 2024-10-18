@@ -1,13 +1,14 @@
 "use client";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import OTPInput from "react-otp-input";
 import Button from "@/app/components/Button";
 import Link from "next/link";
 import toast, { Toaster } from "react-hot-toast";
 import AuthContainer from "@/app/components/AuthContainer";
+import { CircularProgress } from "@mui/material";
 
-export default function VerifyAccount() {
+function FormFunction() {
   const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -49,45 +50,56 @@ export default function VerifyAccount() {
   };
 
   return (
+    <div className="w-full max-w-md">
+      <Link
+        href="/auth/signin"
+        className="text-gray-500 text-sm mb-4 inline-block"
+      >
+        <i className="fas fa-chevron-left"></i> Back to Log in
+      </Link>
+      <h2 className="text-dark text-2xl font-semibold mb-2">Forgot Password</h2>
+      <p className="text-gray-500 mb-6">
+        Enter your the OTP sent to your email address {email}{" "}
+      </p>
+      <form onSubmit={handleSubmit}>
+        <OTPInput
+          value={otp}
+          onChange={setOtp}
+          numInputs={6}
+          containerStyle="w-full flex gap-[23px] mb-10"
+          inputStyle="flex justify-center item-center !w-[55px] h-[55px] rounded-[5px] border-[#EBEBEB] border"
+          renderInput={(props) => <input {...props} />}
+        />
+        <Button text="Verify" type="submit" loading={loading} />
+        <div className="text-center">
+          <p className="text-gray-700">
+            {`Didn't get the code? `}
+            <span
+              onClick={resendOTP}
+              className="text-primary font-bold cursor-pointer"
+            >
+              Resend Code
+            </span>
+          </p>
+        </div>
+      </form>
+    </div>
+  );
+}
+
+export default function VerifyAccount() {
+  return (
     <AuthContainer>
       <Toaster />
-
-      <div className="w-full max-w-md">
-        <Link
-          href="/auth/signin"
-          className="text-gray-500 text-sm mb-4 inline-block"
-        >
-          <i className="fas fa-chevron-left"></i> Back to Log in
-        </Link>
-        <h2 className="text-dark text-2xl font-semibold mb-2">
-          Forgot Password
-        </h2>
-        <p className="text-gray-500 mb-6">
-          Enter your the OTP sent to your email address {email}{" "}
-        </p>
-        <form onSubmit={handleSubmit}>
-          <OTPInput
-            value={otp}
-            onChange={setOtp}
-            numInputs={6}
-            containerStyle="w-full flex gap-[23px] mb-10"
-            inputStyle="flex justify-center item-center !w-[55px] h-[55px] rounded-[5px] border-[#EBEBEB] border"
-            renderInput={(props) => <input {...props} />}
-          />
-          <Button text="Verify" type="submit" loading={loading} />
-          <div className="text-center">
-            <p className="text-gray-700">
-              {`Didn't get the code? `}
-              <span
-                onClick={resendOTP}
-                className="text-primary font-bold cursor-pointer"
-              >
-                Resend Code
-              </span>
-            </p>
+      <Suspense
+        fallback={
+          <div className="flex h-full w-full items-center justify-center text-primary">
+            <CircularProgress color="inherit" />
           </div>
-        </form>
-      </div>
+        }
+      >
+        <FormFunction />
+      </Suspense>
     </AuthContainer>
   );
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -20,6 +20,15 @@ const modalVariants = {
 };
 
 const Modal: React.FC<ModalProps> = ({ children, isOpen, onClose }) => {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+    return () => setIsMounted(false); // Cleanup on unmount
+  }, []);
+
+  if (!isMounted) return null; // Prevent rendering on the server
+
   return ReactDOM.createPortal(
     <AnimatePresence>
       {isOpen && (
