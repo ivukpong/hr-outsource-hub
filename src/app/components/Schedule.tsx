@@ -14,7 +14,7 @@ const Schedule: React.FC = () => {
 
   return (
     <div className="min-h-screen text-black dark:text-white">
-      <div className="mx-auto bg-white dark:bg-gray-800 rounded-lg p-6">
+      <div className="mx-auto bg-white dark:bg-gray-800 rounded-lg py-6 px-2">
         <h1 className="text-2xl font-bold mb-4">My Schedule</h1>
         <div className="">
           {/* Calendar */}

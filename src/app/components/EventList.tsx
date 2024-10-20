@@ -84,14 +84,14 @@ const EventList: React.FC<EventListProps> = ({ selectedDate }) => {
           >
             {/* Time */}
             <div className="flex items-center pr-2">
-              <div className="text-sm font-semibold text-gray-900">
+              <div className="text-sm font-semibold text-gray-900 dark:text-white">
                 {formatTime(event.startTime)}
               </div>
             </div>
             <div className="h-10 w-[2px] bg-gradient-to-b from-[#E04403] to-transparent" />
             {/* Event Info */}
             <div className="flex-grow pl-2">
-              <div className="text-sm font-bold text-gray-900">
+              <div className="text-sm font-bold text-gray-900 dark:text-white">
                 {event.title}
               </div>
               <div className="text-xs text-gray-500  dark:text-white">
