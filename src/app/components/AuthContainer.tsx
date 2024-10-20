@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import localFont from "next/font/local";
 import { motion } from "framer-motion"; // Import Framer Motion for animations
 
@@ -28,6 +28,22 @@ const formVariants = {
 };
 
 function AuthContainer({ children }: { children: React.ReactNode }) {
+  // This useEffect will initialize the theme based on system preference or user's saved preference
+  useEffect(() => {
+    const systemPrefersDark = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    ).matches;
+
+    // Check if user has saved a preference in localStorage
+    const savedTheme = localStorage.getItem("theme");
+
+    if (savedTheme === "dark" || (!savedTheme && systemPrefersDark)) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, []);
+
   return (
     <div className={`${satoshi.className} antialiased`}>
       <div className="flex flex-wrap items-center justify-center h-screen bg-white dark:bg-gray-800">
