@@ -52,7 +52,7 @@ function Page() {
                   <SurveyItem key={index} survey={survey} />
                 ))}
               </div>
-              <div className="bg-white dark:bg-gray-800 py-6 rounded-lg shadow">
+              <div className="bg-white dark:bg-gray-800 py-6 rounded-lg shadow dark:shadow-slate-400">
                 <div className="flex flex-col justify-between items-center mb-4">
                   <div className="w-[50%] h-3 bg-gray-100 rounded-lg mb-4"></div>
                   <div className="w-[70%] h-3 bg-gray-100 rounded-lg mb-4"></div>
