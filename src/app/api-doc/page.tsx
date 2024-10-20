@@ -12,7 +12,7 @@ export default async function ApiDocPage() {
   const spec = await getApiDocs(); // This is now of type Record<string, unknown>
 
   return (
-    <section className="!w-screen bg-white">
+    <section className="!w-screen bg-white dark:bg-gray-800">
       <ReactSwagger spec={spec} />
     </section>
   );

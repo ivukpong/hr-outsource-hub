@@ -13,6 +13,9 @@ import CustomSelect from "@/app/components/Select";
 import { useEffect } from "react";
 import { Department, Team } from "@prisma/client";
 import Image from "next/image";
+import { nationalities } from "@/app/data";
+import AddressInput from "@/app/components/AddressInput";
+import Modal from "@/app/components/Modal";
 
 export default function Page() {
   const [firstName, setFirstName] = useState("");
@@ -47,6 +50,15 @@ export default function Page() {
   const [departments, setDepartments] = useState<Department[]>([]);
   const [teams, setTeams] = useState<Team[]>([]);
   const [loading, setLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
 
   async function fetchDepartments() {
     const res = await fetch("/api/departments");
@@ -119,10 +131,50 @@ export default function Page() {
   };
 
   const handleSubmit = async () => {
+    // Reset loading state
     setLoading(true);
-    setLocation(
-      location === "1" ? "Remote" : location === "2" ? "Hybrid" : "On-site"
-    );
+
+    // Array to collect all validation errors
+    const errors = [];
+
+    // Basic validation: Ensure required fields are not empty
+    if (!imageLink) errors.push("Profile picture is required");
+    if (!firstName.trim()) errors.push("First name is required");
+    if (!lastName.trim()) errors.push("Last name is required");
+    if (!mobileNumber.trim()) errors.push("Mobile number is required");
+    if (!emailAddress.trim()) errors.push("Email address is required");
+    if (!dateOfBirth) errors.push("Date of birth is required");
+    if (!maritalStatus.trim()) errors.push("Marital status is required");
+    if (!gender.trim()) errors.push("Gender is required");
+    if (!nationality.trim()) errors.push("Nationality is required");
+    if (!address.trim()) errors.push("Address is required");
+    if (!city.trim()) errors.push("City is required");
+    if (!teamId) errors.push("Team ID is required");
+    if (!state.trim()) errors.push("State is required");
+    if (!workingDays) errors.push("Working days is required");
+    if (!startDate) errors.push("Start date is required");
+    if (!location) errors.push("Office location is required");
+    if (!offerLetterLink) errors.push("Offer letter is required");
+    if (!payrollSlipLink) errors.push("Payroll slip is required");
+    if (!cvLink) errors.push("CV is required");
+    if (!idLink) errors.push("Means of ID is required");
+    if (!department) errors.push("Department ID is required");
+
+    // Check if there are any validation errors
+    if (errors.length > 0) {
+      // Display all errors using toast
+      errors.forEach((error) => toast.error(error));
+
+      // Stop loading and return early since there are validation errors
+      setLoading(false);
+      return;
+    }
+
+    // Adjust location value based on input
+    const officeLocation =
+      location === "1" ? "Remote" : location === "2" ? "Hybrid" : "On-site";
+
+    // Prepare employee data
     const employeeData = {
       profilePic: imageLink,
       firstName,
@@ -137,10 +189,10 @@ export default function Page() {
       city,
       teamId: parseInt(teamId),
       state,
-      zipCode,
+      zipCode, // Optional, no validation
       workingDays: parseInt(workingDays),
       startDate: new Date(startDate).toISOString(),
-      officeLocation: location,
+      officeLocation,
       offerLetter: offerLetterLink,
       payrollSlip: payrollSlipLink,
       cv: cvLink,
@@ -148,6 +200,7 @@ export default function Page() {
       departmentId: parseInt(department),
     };
 
+    // Send data to the server
     const response = await fetch("/api/employees", {
       method: "POST",
       body: JSON.stringify(employeeData),
@@ -160,16 +213,37 @@ export default function Page() {
 
     if (response.ok) {
       toast.success("Employee added successfully!");
-      router.push("/dashboard/employees");
+      setIsModalOpen(true);
     } else {
       toast.error(data.error || "Failed to add employee.");
     }
+
     setLoading(false);
   };
 
   return (
     <DashContainer>
       <Layout header="Employees" desc="Employee Information">
+        <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+          <div className="p-8 rounded-lg text-center max-w-sm">
+            {/* Success Icon */}
+            <div className="text-[100px] mb-4">🎉</div>
+            {/* Success Message */}
+            <h2 className="text-2xl font-semibold mb-2">
+              Employee Added Successfully
+            </h2>
+            <p className="text-gray-600 mb-6">
+              This employee has been added successfully.
+            </p>
+            {/* Go Home Button */}
+            <Link
+              href="/dashboard/employees"
+              className="bg-primary hover:bg-orange-600 text-white py-2 px-4 rounded-lg w-full"
+            >
+              Go to Employees List
+            </Link>
+          </div>
+        </Modal>
         <motion.div
           initial="hidden"
           animate="visible"
@@ -180,7 +254,7 @@ export default function Page() {
               transition: { staggerChildren: 0.5 },
             },
           }}
-          className="w-full mx-auto p-8 border text-dark border-grey rounded-[10px]"
+          className="w-full mx-auto p-8 border text-dark dark:text-white border-grey rounded-[10px]"
         >
           <div className="flex items-center justify-between mb-8 overflow-auto">
             <div
@@ -217,7 +291,7 @@ export default function Page() {
           {page === 0 ? (
             <motion.div
               variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}
-              className="bg-white p-6 rounded-lg"
+              className="bg-white dark:bg-gray-800 p-6 rounded-lg"
             >
               <div className="flex items-center mb-6">
                 <div>
@@ -242,6 +316,7 @@ export default function Page() {
                         )
                       } // Handle file change
                       className="hidden"
+                      accept=".jpg,.jpeg,.png"
                       id="file-input"
                     />
                     <label
@@ -322,49 +397,52 @@ export default function Page() {
                   />
                   <i className="fas fa-calendar-alt right-3 absolute top-10 text-gray-400"></i>
                 </div>
-                <CustomInput
+                <CustomSelect
                   htmlFor="maritalStatus"
                   id="maritalStatus"
                   label="Marital Status"
-                  type="text"
-                  placeholder="Enter Marital Status"
                   value={maritalStatus}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setMaritalStatus(e.target.value)
-                  }
+                  type
+                  options={[
+                    { id: 1, name: "Single" },
+                    { id: 2, name: "Married" },
+                    { id: 3, name: "Divorced" },
+                  ]}
+                  onChange={(e) => setMaritalStatus(e.target.value)}
                   required
                 />
               </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
-                <CustomInput
+                <CustomSelect
                   htmlFor="gender"
                   id="gender"
                   label="Gender"
-                  type="text"
-                  placeholder="Enter Gender"
                   value={gender}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setGender(e.target.value)
-                  }
+                  type
+                  options={[
+                    { id: 1, name: "Male" },
+                    { id: 2, name: "Female" },
+                    { id: 3, name: "Other" },
+                  ]}
+                  onChange={(e) => setGender(e.target.value)}
                   required
                 />
-                <CustomInput
+
+                <CustomSelect
                   htmlFor="nationality"
                   id="nationality"
-                  label="Nationality"
-                  type="text"
-                  placeholder="Enter Nationality"
                   value={nationality}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setNationality(e.target.value)
-                  }
+                  label="Nationality"
+                  type
+                  options={nationalities}
+                  onChange={(e) => setNationality(e.target.value)}
                   required
                 />
               </div>
 
               <div className="mb-4">
-                <CustomInput
+                {/* <CustomInput
                   htmlFor="address"
                   id="address"
                   label="Address"
@@ -375,6 +453,17 @@ export default function Page() {
                     setAddress(e.target.value)
                   }
                   required
+                /> */}
+                <AddressInput
+                  htmlFor="address"
+                  id="address"
+                  label="Address"
+                  type="text"
+                  placeholder="Enter Address"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  required
+                  icon // Enables the search functionality and shows the search icon
                 />
               </div>
 
@@ -420,7 +509,7 @@ export default function Page() {
           ) : page === 1 ? (
             <motion.div
               variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}
-              className="bg-white p-6 rounded-lg"
+              className="bg-white dark:bg-gray-800 p-6 rounded-lg"
             >
               {/* <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
                 <CustomInput
@@ -475,17 +564,6 @@ export default function Page() {
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
                 <div className="relative">
-                  {/* <CustomInput
-                    htmlFor="department"
-                    id="department"
-                    type="text"
-                    placeholder="Enter Department"
-                    value={department}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                      setDepartment(e.target.value)
-                    }
-                    required
-                  /> */}
                   <CustomSelect
                     htmlFor="department"
                     id="department"
@@ -565,14 +643,14 @@ export default function Page() {
           ) : (
             <motion.div
               variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}
-              className="bg-white p-6 rounded-lg"
+              className="bg-white dark:bg-gray-800 p-6 rounded-lg"
             >
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 {/* Upload Offer Letter Section */}
                 <div>
                   <h2 className="mb-2">Upload Offer Letter</h2>
-                  <div className="border border-dashed border-orange-500 p-6 text-center mb-4">
-                    <i className="fas fa-upload text-2xl text-orange-500 mb-2"></i>
+                  <div className="border border-dashed border-[#E04403] p-6 text-center mb-4">
+                    <i className="fas fa-upload text-2xl text-[#E04403] mb-2"></i>
                     <input
                       type="file"
                       onChange={(e) =>
@@ -584,6 +662,7 @@ export default function Page() {
                         )
                       }
                       className="hidden"
+                      accept=".pdf,.docx,.jpg,.jpeg,.png"
                       id="offer-letter-input"
                     />
                     <label
@@ -595,14 +674,14 @@ export default function Page() {
                     >
                       {offerLetter ? (
                         <p>
-                          <span className="text-orange-500 underline">
+                          <span className="text-[#E04403] underline">
                             {offerLetter?.name}
                           </span>
                         </p>
                       ) : (
                         <p>
                           Drag & Drop or{" "}
-                          <span className="text-orange-500 underline">
+                          <span className="text-[#E04403] underline">
                             choose file
                           </span>{" "}
                           to upload
@@ -616,8 +695,8 @@ export default function Page() {
                 {/* Upload Payroll Slip Section */}
                 <div>
                   <h2 className="mb-2">Upload Payroll Slip</h2>
-                  <div className="border border-dashed border-orange-500 p-6 text-center mb-4">
-                    <i className="fas fa-upload text-2xl text-orange-500 mb-2"></i>
+                  <div className="border border-dashed border-[#E04403] p-6 text-center mb-4">
+                    <i className="fas fa-upload text-2xl text-[#E04403] mb-2"></i>
                     <input
                       type="file"
                       onChange={(e) =>
@@ -629,6 +708,7 @@ export default function Page() {
                         )
                       }
                       className="hidden"
+                      accept=".pdf,.docx,.jpg,.jpeg,.png"
                       id="payroll-slip-input"
                     />
                     <label
@@ -640,14 +720,14 @@ export default function Page() {
                     >
                       {payrollSlip ? (
                         <p>
-                          <span className="text-orange-500 underline">
+                          <span className="text-[#E04403] underline">
                             {payrollSlip?.name}
                           </span>
                         </p>
                       ) : (
                         <p>
                           Drag & Drop or{" "}
-                          <span className="text-orange-500 underline">
+                          <span className="text-[#E04403] underline">
                             choose file
                           </span>{" "}
                           to upload
@@ -661,14 +741,15 @@ export default function Page() {
                 {/* Upload Curriculum Vitae (CV) Section */}
                 <div>
                   <h2 className="mb-2">Upload Curriculum Vitae (CV)</h2>
-                  <div className="border border-dashed border-orange-500 p-6 text-center mb-4">
-                    <i className="fas fa-upload text-2xl text-orange-500 mb-2"></i>
+                  <div className="border border-dashed border-[#E04403] p-6 text-center mb-4">
+                    <i className="fas fa-upload text-2xl text-[#E04403] mb-2"></i>
                     <input
                       type="file"
                       onChange={(e) =>
                         handleFileChange(e, setCV, () => {}, setCVLink)
                       }
                       className="hidden"
+                      accept=".pdf,.docx,.jpg,.jpeg,.png"
                       id="cv-input"
                     />
                     <label
@@ -678,14 +759,14 @@ export default function Page() {
                     >
                       {cv ? (
                         <p>
-                          <span className="text-orange-500 underline">
+                          <span className="text-[#E04403] underline">
                             {cv?.name}
                           </span>
                         </p>
                       ) : (
                         <p>
                           Drag & Drop or{" "}
-                          <span className="text-orange-500 underline">
+                          <span className="text-[#E04403] underline">
                             choose file
                           </span>{" "}
                           to upload
@@ -699,14 +780,15 @@ export default function Page() {
                 {/* Upload Means of Identification Section */}
                 <div>
                   <h2 className="mb-2">Upload Means of Identification</h2>
-                  <div className="border border-dashed border-orange-500 p-6 text-center mb-4">
-                    <i className="fas fa-upload text-2xl text-orange-500 mb-2"></i>
+                  <div className="border border-dashed border-[#E04403] p-6 text-center mb-4">
+                    <i className="fas fa-upload text-2xl text-[#E04403] mb-2"></i>
                     <input
                       type="file"
                       onChange={(e) =>
                         handleFileChange(e, setID, () => {}, setIDLink)
                       }
                       className="hidden"
+                      accept=".pdf,.docx,.jpg,.jpeg,.png"
                       id="id-input"
                     />
                     <label
@@ -716,14 +798,14 @@ export default function Page() {
                     >
                       {id ? (
                         <p>
-                          <span className="text-orange-500 underline">
+                          <span className="text-[#E04403] underline">
                             {id?.name}
                           </span>
                         </p>
                       ) : (
                         <p>
                           Drag & Drop or{" "}
-                          <span className="text-orange-500 underline">
+                          <span className="text-[#E04403] underline">
                             choose file
                           </span>{" "}
                           to upload

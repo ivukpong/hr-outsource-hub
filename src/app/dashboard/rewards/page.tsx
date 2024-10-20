@@ -37,7 +37,15 @@ function Page() {
   const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
   const [itemsPerPage, setItemsPerPage] = useState(5); // Default items per page
   const [currentPage, setCurrentPage] = useState(1);
+  const [isDark, setIsDark] = useState(false);
 
+  function isDarkMode() {
+    console.log(document.documentElement.classList.contains("dark"));
+    setIsDark(document.documentElement.classList.contains("dark"));
+    // return document.documentElement.classList.contains("dark");
+  }
+
+  useEffect(() => isDarkMode());
   // Calculate the total number of pages
   const totalEmployees = filtered.length;
 
@@ -89,6 +97,7 @@ function Page() {
     const data = await res.json();
     setRewards(data);
     setFiltered(data);
+    setLoading(false);
   }
 
   async function fetchCategories() {
@@ -114,7 +123,6 @@ function Page() {
     fetchCategories();
     fetchEmployees();
     fetchRewards();
-    setLoading(false);
   }, []);
 
   const handleOpenModal = () => {
@@ -175,7 +183,7 @@ function Page() {
       <Layout header="Rewards" desc="Rewards and Incentives">
         <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
           <div className="w-full max-w-lg">
-            <h2 className="text-dark text-xl font-semibold mb-4">
+            <h2 className="text-dark dark:text-white text-xl font-semibold mb-4">
               Rewards Form
             </h2>
             <form onSubmit={handleSubmit}>
@@ -336,7 +344,7 @@ function Page() {
                 />
                 <button
                   onClick={() => setIsFilterOpen(true)}
-                  className="border mb-4 border-grey text-[#16151C] px-4 py-2 rounded-[5px] flex gap-2 items-center"
+                  className="border mb-4 border-grey text-[#16151C] dark:text-white px-4 py-2 rounded-[5px] flex gap-2 items-center"
                 >
                   <p>Filter</p>
                   <i className="fas fa-filter"></i>
@@ -375,7 +383,7 @@ function Page() {
                         </th>
                       </tr>
                     </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
+                    <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200">
                       {currentRewards.map(
                         (
                           reward: Reward & {
@@ -396,31 +404,31 @@ function Page() {
                                 height={40}
                               />
                               <div className="ml-4">
-                                <div className="text-sm  text-gray-900">
+                                <div className="text-sm  text-gray-500 dark:text-white">
                                   {reward.employee.firstName}{" "}
                                   {reward.employee.lastName}
                                 </div>
                               </div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="text-sm text-gray-500">
+                              <div className="text-sm text-gray-500  dark:text-white">
                                 {new Date(
                                   reward.earnedDate
                                 ).toLocaleDateString()}
                               </div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="text-sm text-gray-500">
+                              <div className="text-sm text-gray-500  dark:text-white">
                                 {reward.department?.name}
                               </div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="text-sm text-gray-500">
+                              <div className="text-sm text-gray-500  dark:text-white">
                                 {reward.category?.name}
                               </div>
                             </td>
                             {/* <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm text-gray-500">
+                            <div className="text-sm text-gray-500  dark:text-white">
                               {reward.departmentHead?.firstName}{" "}
                               {reward.departmentHead?.lastName}
                             </div>
@@ -444,8 +452,8 @@ function Page() {
                             <td className="px-6 py-4 whitespace-nowrap">
                               <div style={{ width: 35, height: 35 }}>
                                 <CircularProgressbar
-                                  value={reward?.progress ?? 0}
-                                  text={`${reward.progress}%`}
+                                  value={Math.floor(reward?.progress ?? 0)}
+                                  text={`${Math.floor(reward?.progress ?? 0)}%`}
                                   strokeWidth={15}
                                   styles={buildStyles({
                                     rotation: 0,
@@ -454,9 +462,11 @@ function Page() {
                                     pathTransitionDuration: 0.5,
                                     pathTransition:
                                       "stroke-dashoffset 0.5s ease 0s",
-                                    pathColor: `#FFA100`,
-                                    textColor: "#1E1E1E",
-                                    trailColor: "rgba(30, 30, 30, 0.102)",
+                                    pathColor: isDark ? "#FFA100" : "#FFA100", // Same color for both modes; adjust if needed
+                                    textColor: isDark ? "#FFFFFF" : "#1E1E1E", // White text in dark mode
+                                    trailColor: isDark
+                                      ? "rgba(255, 255, 255, 0.1)"
+                                      : "rgba(30, 30, 30, 0.102)", // Light trail in dark mode
                                   })}
                                 />
                               </div>

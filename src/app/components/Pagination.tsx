@@ -35,7 +35,7 @@ const Pagination = ({
       <div className="flex items-center">
         <span className="mr-2">Showing</span>
         <select
-          className="bg-white border appearance-none border-grey text-[#16151C] rounded-[5px] px-2 py-1"
+          className="bg-white dark:bg-gray-800 border appearance-none border-grey text-[#16151C] dark:text-white rounded-[5px] px-2 py-1"
           value={itemsPerPage}
           onChange={handleItemsPerPageChange}
         >
@@ -51,7 +51,7 @@ const Pagination = ({
         {Array.from({ length: totalPages }, (_, index) => (
           <button
             key={index + 1}
-            className={`text-[#16151C] px-3 py-1 rounded-full mr-2 ${
+            className={`text-[#16151C] dark:text-white px-3 py-1 rounded-full mr-2 ${
               currentPage === index + 1 ? "bg-primary text-white" : "border"
             }`}
             onClick={() => handlePageChange(index + 1)}

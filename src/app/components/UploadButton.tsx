@@ -50,7 +50,7 @@ const FileUpload = () => {
     <div className="flex flex-col items-center">
       <Toaster />
       <label className="cursor-pointer mb-4">
-        <button className="border border-grey text-[#16151C] px-4 py-2 rounded-[5px] flex gap-2 items-center relative">
+        <button className="border border-grey text-[#16151C] dark:text-white px-4 py-2 rounded-[5px] flex gap-2 items-center relative">
           <FaUpload className="text-xl" />
           <p>{file ? file.name : "Upload CSV/Excel"}</p>
           <input
@@ -63,7 +63,7 @@ const FileUpload = () => {
       </label>
       <button
         onClick={handleFileUpload}
-        className="border border-grey text-[#16151C] px-4 py-2 rounded-[5px] mt-2"
+        className="border border-grey text-[#16151C] dark:text-white px-4 py-2 rounded-[5px] mt-2"
         disabled={!file}
       >
         Submit

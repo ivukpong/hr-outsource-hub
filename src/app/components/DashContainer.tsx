@@ -33,7 +33,7 @@
 
 //   return (
 //     <div className={`${satoshi.className}`}>
-//       <div className="flex min-h-screen bg-white">
+//       <div className="flex min-h-screen bg-white dark:bg-gray-800">
 //         <aside className="w-64 bg-gray-100 shadow-md my-7 mx-4 rounded-[15px] flex flex-col items-center fixed h-[95%] md:w-48 lg:w-64 xl:w-80">
 //           <div className="p-6 flex gap-2 items-center justify-center">
 //             <div className="w-9 h-9 bg-gray-200 rounded-full overflow-hidden">
@@ -45,7 +45,7 @@
 //                 className="object-contain"
 //               />
 //             </div>
-//             <div className="text-2xl text-dark font-bold">GTCO</div>
+//             <div className="text-2xl text-dark dark:text-white font-bold">GTCO</div>
 //           </div>
 //           <nav className="mt-10 w-full px-8">
 //             <ul>
@@ -113,7 +113,7 @@
 
 //   return (
 //     <div className={`${satoshi.className}`}>
-//       <div className="flex min-h-screen bg-white text-ellipsis text-black">
+//       <div className="flex min-h-screen bg-white dark:bg-gray-800 text-ellipsis text-black dark:text-white">
 //         <button
 //           className="md:hidden absolute top-7 z-20 left-3 p-2 rounded-[5px]"
 //           onClick={() => setIsOpen(!isOpen)}
@@ -165,7 +165,7 @@
 //                 className="object-contain"
 //               />
 //             </div>
-//             <div className="text-2xl text-dark font-bold">GTCO</div>
+//             <div className="text-2xl text-dark dark:text-white font-bold">GTCO</div>
 //           </div>
 //           <nav className="mt-10 w-full px-6">
 //             <ul>
@@ -208,6 +208,8 @@ import Image from "next/image";
 import { navs } from "../data";
 import NavItem from "../components/NavItem";
 import { motion } from "framer-motion";
+import Modal from "./Modal";
+import Link from "next/link";
 
 const satoshi = localFont({
   src: "../fonts/Satoshi-Variable.ttf",
@@ -222,6 +224,15 @@ export default function DashContainer({
 }>) {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -251,7 +262,33 @@ export default function DashContainer({
 
   return (
     <div className={`${satoshi.className}`}>
-      <div className="flex min-h-screen bg-white text-black relative">
+      <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+        <div className="rounded-lg text-center max-w-sm">
+          {/* Success Icon */}
+          <img src="/images/warn.png" className="h-20 mb-4 mx-auto" />
+          {/* Success Message */}
+          <h2 className="text-2xl font-semibold mb-2">Log Out</h2>
+          <p className="text-gray-600 mb-6 w-[75%] mx-auto">
+            Are you sure you would like to log out at this time?
+          </p>
+          {/* Go Home Button */}
+          <div className="grid grid-cols-2 gap-6">
+            <Link
+              href="/auth/signin"
+              className="bg-[#D92D20] text-white py-2 cursor-pointer px-4 rounded-[5px] w-full"
+            >
+              Log Out
+            </Link>
+            <button
+              onClick={handleCloseModal}
+              className="border-[#D5D7DA] border text-[#666666] dark:text-white py-2 cursor-pointer px-4 rounded-[5px] w-full"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </Modal>
+      <div className="flex min-h-screen bg-white dark:bg-gray-800 text-black dark:text-white relative">
         {/* Hamburger button for mobile */}
         <motion.button
           className="md:hidden absolute top-7 z-20 left-3 p-2 rounded-[5px]"
@@ -295,7 +332,7 @@ export default function DashContainer({
 
         {/* Sidebar with Framer Motion for both opening and closing animations */}
         <motion.aside
-          className={`z-10 bg-gray-100 shadow-md my-7 mx-4 rounded-[15px] flex flex-col items-center fixed h-[93%] w-64 ${
+          className={`z-10 bg-gray-100 dark:bg-gray-700 shadow-md my-7 mx-4 rounded-[15px] flex flex-col items-center fixed h-[93%] w-64 ${
             isOpen ? "block" : "hidden"
           } md:block`}
           initial="hidden"
@@ -313,7 +350,9 @@ export default function DashContainer({
                 className="object-contain"
               />
             </div>
-            <div className="text-2xl text-dark font-bold">GTCO</div>
+            <div className="text-2xl text-dark dark:text-white font-bold">
+              GTCO
+            </div>
           </div>
 
           {/* Navigation Items */}
@@ -340,10 +379,18 @@ export default function DashContainer({
                   icon={nav.icon}
                 />
               ))}
+              <li
+                className={`px-4 py-2 h-12 my-1 rounded-r-[10px] dark:text-white  text-gray-700 hover:bg-secondary dark:hover:text-primary cursor-pointer`}
+                onClick={() => setIsModalOpen(true)}
+              >
+                <div className="flex gap-2 items-center">
+                  <i className={`fas fa-door-open mr-2`}></i>
+                  Logout
+                </div>
+              </li>
             </ul>
           </nav>
         </motion.aside>
-
         {/* Main content area */}
         <motion.div
           className="flex-1 overflow-y-auto px-0 md:pl-10 pt-12 xl:ml-0"

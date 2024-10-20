@@ -21,8 +21,8 @@ function Button({
     <div className="mb-4">
       <button
         onClick={click}
-        // className="flex items-center justify-center gap-3 font-medium bg-primary hover:border hover:border-primary hover:bg-white hover:text-primary text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
-        className={`flex items-center justify-center gap-3 font-medium ${outline ? "border border-[#A2A1A833] text-dark" : "bg-primary  text-white"} py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full`}
+        // className="flex items-center justify-center gap-3 font-medium bg-primary hover:border hover:border-primary hover:bg-white dark:bg-gray-800 hover:text-primary text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
+        className={`flex items-center justify-center gap-3 font-medium ${outline ? "border border-[#A2A1A833] text-dark dark:text-white" : "bg-primary  text-white"} py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full`}
         type={type}
         disabled={loading}
       >

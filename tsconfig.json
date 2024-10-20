@@ -1,17 +1,23 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
+    // "target": "esnext",
+    // "module": "esnext",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
+    // "skipLibCheck": true,
+    // "esModuleInterop": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
     "moduleResolution": "node",
     "noEmit": true,
     "incremental": true,
+    "target": "ESNext", // Set the JavaScript version
+    "module": "commonjs", // Use CommonJS module system
+    // "strict": true, // Enable strict type checking
+    "esModuleInterop": true, // Enable compatibility with CommonJS modules
+    "skipLibCheck": true, // Skip type checking of declaration files
+    // "forceConsistentCasingInFileNames": true // Ensure file names are consistent
     // "lib": ["dom", "dom.iterable", "esnext"],
     // "allowJs": true,
     // "skipLibCheck": true,
@@ -41,7 +47,9 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/app/api/auth/[...nextauth].js",
-    "src/@types"
-  ],
+    "src/@types",
+    "**/*.ts",
+    "prisma/**/*.ts"
+, "prisma/seed.js"  ],
   "exclude": ["node_modules"]
 }

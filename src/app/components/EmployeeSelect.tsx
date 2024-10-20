@@ -55,7 +55,7 @@ function EmployeeSelect({
 
         {/* Dropdown menu (shown only if dropdown is open) */}
         {isDropdownOpen && (
-          <ul className="absolute w-full border bg-white z-10 max-h-60 overflow-y-auto mt-1 rounded shadow-lg">
+          <ul className="absolute w-full border bg-white dark:bg-gray-800 z-10 max-h-60 overflow-y-auto mt-1 rounded shadow-lg">
             {filteredOptions.length > 0 ? (
               filteredOptions.map((option) => (
                 <li
@@ -73,7 +73,9 @@ function EmployeeSelect({
                 </li>
               ))
             ) : (
-              <li className="px-4 py-2 text-gray-500">No results found</li>
+              <li className="px-4 py-2 text-gray-500  dark:text-white">
+                No results found
+              </li>
             )}
           </ul>
         )}

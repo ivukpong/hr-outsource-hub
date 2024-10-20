@@ -42,14 +42,14 @@ export default function ForgotPassword() {
         <Toaster />
         <Link
           href="/auth/signin"
-          className="text-gray-500 text-sm mb-4 inline-block"
+          className="text-gray-500  dark:text-white text-sm mb-4 inline-block"
         >
           <i className="fas fa-chevron-left"></i> Back to Log in
         </Link>
-        <h2 className="text-dark text-2xl font-semibold mb-2">
+        <h2 className="text-dark dark:text-white text-2xl font-semibold mb-2">
           Forgot Password
         </h2>
-        <p className="text-gray-500 mb-6">
+        <p className="text-gray-500  dark:text-white mb-6">
           No worries! Enter your email below to recover your password
         </p>
         <form onSubmit={handleSubmit}>

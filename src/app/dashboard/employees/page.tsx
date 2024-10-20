@@ -24,9 +24,11 @@ function Employees() {
   const [departments, setDepartments] = useState<Department[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDelete, setIsDelete] = useState(false);
   const [selectedDepartments, setSelectedDepartments] = useState<number[]>([]);
   const [selectedType, setSelectedType] = useState<string>("");
   const [itemsPerPage, setItemsPerPage] = useState(5); // Default items per page
+  const [id, setId] = useState<number | null>(null); // Default items per page
   const [currentPage, setCurrentPage] = useState(1);
 
   // Calculate the total number of pages
@@ -74,6 +76,15 @@ function Employees() {
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
+  };
+
+  const handleDelete = (employeeId: number) => {
+    setId(employeeId);
+    setIsDelete(true);
+  };
+
+  const handleCancel = () => {
+    setIsDelete(false);
   };
 
   const onSearch = (text: string) => {
@@ -204,6 +215,35 @@ function Employees() {
           </div>
         </div>
       </Modal>
+      <Modal isOpen={isDelete} onClose={handleCancel}>
+        <div className="rounded-lg text-center max-w-sm">
+          {/* Success Icon */}
+          <img src="/images/trash.png" className="h-20 mb-4 mx-auto" />
+          {/* Success Message */}
+          <h2 className="text-2xl font-semibold mb-2">Delete Employee</h2>
+          <p className="text-gray-600 mb-6 w-[75%] mx-auto">
+            Are you sure you want to delete this employee? This action cannot be
+            undone.
+          </p>
+          {/* Go Home Button */}
+          {id && (
+            <div className="grid grid-cols-2 gap-6">
+              <button
+                onClick={() => deleteEmployee(id)}
+                className="bg-[#D92D20] text-white py-2 cursor-pointer px-4 rounded-[5px] w-full"
+              >
+                Log Out
+              </button>
+              <button
+                onClick={handleCancel}
+                className="border-[#D5D7DA] border text-[#666666] dark:text-white py-2 cursor-pointer px-4 rounded-[5px] w-full"
+              >
+                Cancel
+              </button>
+            </div>
+          )}
+        </div>
+      </Modal>
       <div className="flex flex-col lg:flex-row justify-between items-center mb-4">
         <div className="relative">
           <CustomInput
@@ -223,7 +263,7 @@ function Employees() {
           </Link>
           <button
             onClick={handleOpenModal}
-            className="border mb-4 border-grey text-[#16151C] px-4 py-2 rounded-[5px] flex gap-2 items-center"
+            className="border mb-4 border-grey text-[#16151C] dark:text-white px-4 py-2 rounded-[5px] flex gap-2 items-center"
           >
             <p>Filter</p>
             <i className="fas fa-filter"></i>
@@ -249,7 +289,7 @@ function Employees() {
                   <td className="py-2 whitespace-nowrap">Action</td>
                 </tr>
               </thead>
-              <tbody className="text-[#16151C] divide-y divide-gray-700">
+              <tbody className="text-[#16151C] dark:text-white divide-y divide-gray-700">
                 {currentEmployees.map((employee) => (
                   <tr key={employee.id}>
                     <td className="py-2 h-full flex items-center justify-start whitespace-nowrap">
@@ -274,10 +314,10 @@ function Employees() {
                     </td>
                     <td className="py-2 flex items-center h-full relative bottom-2">
                       <div onClick={() => handleNavigate(employee)}>
-                        <i className="fas fa-pen text-[#16151C] mr-2 cursor-pointer"></i>
+                        <i className="fas fa-pen text-[#16151C] dark:text-white mr-2 cursor-pointer"></i>
                       </div>
                       <i
-                        onClick={() => deleteEmployee(employee.id)}
+                        onClick={() => handleDelete(employee.id)}
                         className="fas fa-trash text-red-400 cursor-pointer"
                       ></i>
                     </td>

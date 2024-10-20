@@ -58,7 +58,7 @@ function FormFunction() {
           {/* Go Home Button */}
           <Link
             href="/auth/signin"
-            className="bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-lg w-full"
+            className="bg-primary hover:bg-orange-600 text-white py-2 px-4 rounded-lg w-full"
           >
             Go to Login
           </Link>
@@ -69,14 +69,16 @@ function FormFunction() {
 
         <Link
           href="/auth/signin"
-          className="text-gray-500 text-sm mb-4 inline-block"
+          className="text-gray-500  dark:text-white text-sm mb-4 inline-block"
         >
           <i className="fas fa-chevron-left"></i> Back to Log in
         </Link>
-        <h2 className="text-dark text-2xl font-semibold mb-2">
+        <h2 className="text-dark dark:text-white text-2xl font-semibold mb-2">
           Forgot Password
         </h2>
-        <p className="text-gray-500 mb-6">Enter your new password</p>
+        <p className="text-gray-500  dark:text-white mb-6">
+          Enter your new password
+        </p>
         <form onSubmit={handleSubmit}>
           <CustomInput
             htmlFor="password"

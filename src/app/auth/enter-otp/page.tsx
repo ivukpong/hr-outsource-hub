@@ -76,9 +76,9 @@ function FormFunction() {
           </p>
           <button
             onClick={() => router.push("/auth/signin")}
-            className="bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-lg w-full"
+            className="bg-primary text-white py-2 px-4 rounded-lg w-full font-bold"
           >
-            Go to Login
+            Go to Dashboard
           </button>
         </div>
       </Modal>
@@ -86,15 +86,15 @@ function FormFunction() {
         <Toaster />
         <Link
           href="/auth/signin"
-          className="text-gray-500 text-sm mb-4 inline-block"
+          className="text-gray-500  dark:text-white text-sm mb-4 inline-block"
         >
           <i className="fas fa-chevron-left"></i> Back to Sign Up
         </Link>
-        <h2 className="text-dark text-2xl font-semibold mb-2">
+        <h2 className="text-dark dark:text-white text-2xl font-semibold mb-2">
           Verify Account
         </h2>
       </div>
-      <p className="text-gray-500 mb-6">
+      <p className="text-gray-500  dark:text-white mb-6">
         Enter your the OTP sent to your email address {email}
       </p>
       <form onSubmit={handleSubmit}>
@@ -103,12 +103,12 @@ function FormFunction() {
           onChange={setOtp}
           numInputs={6}
           containerStyle="w-full flex gap-[23px] mb-10"
-          inputStyle="flex justify-center item-center !w-[55px] h-[55px] rounded-[5px] border-[#EBEBEB] border text-dark"
+          inputStyle="flex justify-center item-center !w-[55px] h-[55px] rounded-[5px] border-[#EBEBEB] border text-dark dark:text-white"
           renderInput={(props) => <input {...props} />}
         />
         <Button text="Verify" type="submit" loading={loading} />
         <div className="text-center">
-          <p className="text-gray-700">
+          <p className="text-gray-700 dark:text-white">
             {`Didn't get the code? `}
             <span
               onClick={resendOTP}

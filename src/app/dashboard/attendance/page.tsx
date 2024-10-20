@@ -110,6 +110,7 @@ function Page() {
     const res = await fetch("/api/employees");
     const data = await res.json();
     setEmployees(data);
+    setLoading(false);
   }
 
   const getFormat = (date: Date) => {
@@ -129,7 +130,6 @@ function Page() {
     setLoading(true);
     fetchAttendance();
     fetchEmployees();
-    setLoading(false);
   }, []);
 
   const handleOpenModal = () => {
@@ -181,7 +181,7 @@ function Page() {
         <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
           <Toaster />
           <div className="w-full max-w-lg">
-            <h2 className="text-dark text-xl font-semibold mb-4">
+            <h2 className="text-dark dark:text-white text-xl font-semibold mb-4">
               Attendance Form
             </h2>
             <form onSubmit={handleSubmit}>
@@ -228,7 +228,7 @@ function Page() {
         ) : (
           <div className="">
             <div className="flex w-full justify-center md:justify-between items-center mb-4">
-              <div className="relative flex w-full justify-start items-center ml-4">
+              <div className="relative flex w-full justify-start items-center">
                 <CustomInput
                   htmlFor="search"
                   label=""
@@ -248,7 +248,7 @@ function Page() {
                 />
                 <div className="flex flex-col items-center">
                   <label className="cursor-pointer mb-4">
-                    <button className="border border-grey text-[#16151C] px-4 py-2 rounded-[5px] flex gap-2 items-center relative">
+                    <button className="border border-grey text-[#16151C] dark:text-white px-4 py-2 rounded-[5px] flex gap-2 items-center relative">
                       <FaUpload className="text-xl" />
                       <p>{file ? file.name : "Upload CSV/Excel"}</p>
                       <input
@@ -286,11 +286,11 @@ function Page() {
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200">
                   {currentEmployees.map((employee, index) => (
                     <tr key={index}>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-500">
+                        <div className="text-sm text-gray-500  dark:text-white">
                           {getFormat(new Date(employee.checkIn)).split(",")[0]}
                         </div>
                       </td>
@@ -303,24 +303,24 @@ function Page() {
                           height={40}
                         />
                         <div className="ml-4">
-                          <div className="text-sm  text-gray-900">
+                          <div className="text-sm  text-gray-500  dark:text-white">
                             {employee.employee.firstName}{" "}
                             {employee.employee.lastName}
                           </div>
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-500">
+                        <div className="text-sm text-gray-500  dark:text-white">
                           {employee?.team?.name}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-500">
+                        <div className="text-sm text-gray-500  dark:text-white">
                           {employee.employee.officeLocation}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-500">
+                        <div className="text-sm text-gray-500  dark:text-white">
                           {getFormat(new Date(employee.checkIn)).split(",")[1]}
                         </div>
                       </td>

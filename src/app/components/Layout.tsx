@@ -2,6 +2,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { User } from "@prisma/client";
 import { motion } from "framer-motion"; // Import Framer Motion for animations
+import DarkModeToggle from "./DarkModeToggle";
 
 // Animation variants for the header and profile section
 const headerVariants = {
@@ -42,16 +43,18 @@ const Layout = ({
   }, []);
 
   return (
-    <div className="flex-1 p-4 md:ml-56 bg-white">
+    <div className="flex-1 p-4 md:ml-56 bg-white dark:bg-gray-800">
       {/* Header Section */}
       <motion.div
-        className="flex items-center justify-between mb-6 sm:mb-0 bg-white flex-col lg:flex-row pt-8 md:pt-0 md:px-2 lg:px-4 xl:px-6"
+        className="flex items-center justify-between mb-6 sm:mb-0 bg-white dark:bg-gray-800 flex-col lg:flex-row pt-8 md:pt-0 md:px-2 lg:px-4 xl:px-6"
         initial="hidden"
         animate="visible"
         variants={headerVariants}
       >
         <div className="md:mb-4">
-          <p className="text-3xl font-bold text-dark">{props.header}</p>
+          <p className="text-3xl font-bold text-dark dark:text-white">
+            {props.header}
+          </p>
           <p className="text-grey">{props.desc}</p>
         </div>
 
@@ -62,6 +65,7 @@ const Layout = ({
           animate="visible"
           variants={profileVariants}
         >
+          <DarkModeToggle />
           <div className="w-10 h-10 bg-gray-200 rounded-full overflow-hidden">
             <Image
               src={"/images/user.png"}
@@ -72,8 +76,12 @@ const Layout = ({
             />
           </div>
           <div>
-            <p className="text-dark font-medium">{user?.name}</p>
-            <p className="text-sm text-[#1E1E1E4F]">HR Manager</p>
+            <p className="text-dark dark:text-white font-medium">
+              {user?.name}
+            </p>
+            <p className="text-sm text-[#1E1E1E4F] dark:text-gray-400">
+              HR Manager
+            </p>
           </div>
         </motion.div>
       </motion.div>

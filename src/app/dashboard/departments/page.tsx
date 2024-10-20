@@ -121,7 +121,7 @@ function Page() {
         <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
           <Toaster />
           <div className="w-full max-w-lg">
-            <h2 className="text-dark text-xl font-semibold mb-4">
+            <h2 className="text-dark dark:text-white text-xl font-semibold mb-4">
               Add Department
             </h2>
             <form onSubmit={handleSubmit}>
@@ -163,7 +163,9 @@ function Page() {
         <Modal isOpen={isAddTeam} onClose={() => setIsAddTeam(false)}>
           <Toaster />
           <div className="w-full max-w-lg">
-            <h2 className="text-dark text-xl font-semibold mb-4">Add Team</h2>
+            <h2 className="text-dark dark:text-white text-xl font-semibold mb-4">
+              Add Team
+            </h2>
             <form onSubmit={addTeam}>
               <CustomInput
                 htmlFor="teamName"
@@ -216,7 +218,7 @@ function Page() {
         ) : (
           <div className="p-4">
             <div className="flex w-full justify-center md:justify-between items-center mb-4">
-              <div className="relative flex w-full justify-start items-center ml-4">
+              <div className="relative flex w-full justify-start items-center">
                 <CustomInput
                   htmlFor="search"
                   label=""
@@ -236,7 +238,7 @@ function Page() {
                 />
                 <button
                   onClick={() => setIsAddTeam(true)}
-                  className="border mb-4 text-[#16151C] px-4 py-2 rounded-[5px] flex gap-2 items-center"
+                  className="border mb-4 text-[#16151C] dark:text-white px-4 py-2 rounded-[5px] flex gap-2 items-center"
                 >
                   <div className="border rounded-full h-5 w-5 flex items-center justify-center p-2">
                     <i className="fas fa-plus text-xs"></i>
@@ -245,7 +247,7 @@ function Page() {
                 </button>
               </div>
             </div>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 text-dark">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 text-dark dark:text-white">
               {filtered.map((department) => (
                 <DepartmentContainer
                   department={department}

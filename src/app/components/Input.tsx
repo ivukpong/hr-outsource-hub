@@ -27,15 +27,17 @@ function CustomInput({
   return (
     <div className="mb-4">
       <label
-        className="block text-gray-700 text-sm font-bold mb-2"
+        className="block text-gray-700 dark:text-white text-sm font-bold mb-2"
         htmlFor={htmlFor}
       >
         {label}
       </label>
-      <div className="flex items-center shadow border rounded w-full py-2 px-3 gap-2 text-dark">
-        {icon && <i className="fas fa-search left-3 top-2.5 text-dark"></i>}
+      <div className="flex items-center shadow border rounded w-full py-2 px-3 gap-2 text-dark dark:text-white">
+        {icon && (
+          <i className="fas fa-search left-3 top-2.5 text-dark dark:text-white"></i>
+        )}
         <input
-          className=" appearance-none leading-tight focus:outline-none focus:shadow-outline w-full"
+          className=" appearance-none bg-transparent leading-tight focus:outline-none focus:shadow-outline w-full"
           id={id}
           type={show ? "text" : type}
           placeholder={placeholder}
@@ -47,12 +49,12 @@ function CustomInput({
         {type === "password" && !show ? (
           <i
             onClick={() => setShow(!show)}
-            className="cursor-pointer fas fa-eye text-dark "
+            className="cursor-pointer fas fa-eye text-dark dark:text-white "
           ></i>
         ) : type === "password" && show ? (
           <i
             onClick={() => setShow(!show)}
-            className="cursor-pointer fas fa-eye-slash text-dark"
+            className="cursor-pointer fas fa-eye-slash text-dark dark:text-white"
           ></i>
         ) : (
           ""

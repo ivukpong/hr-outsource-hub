@@ -1594,6 +1594,396 @@ export const getApiDocs = async (): Promise<Record<string, unknown>> => {
                         },
                     },
                 },
+                '/onboarding-stats': {
+                    get: {
+                        tags: ['Onboarding'],
+                        summary: 'Get employee onboarding statistics',
+                        description: 'Retrieve the number of employees onboarded, grouped by month and department.',
+                        responses: {
+                            200: {
+                                description: 'A list of monthly onboarding statistics',
+                                content: {
+                                    'application/json': {
+                                        schema: {
+                                            type: 'object',
+                                            properties: {
+                                                months: {
+                                                    type: 'array',
+                                                    description: 'The months with onboarding statistics',
+                                                    items: {
+                                                        type: 'object',
+                                                        properties: {
+                                                            month: {
+                                                                type: 'string',
+                                                                description: 'The name of the month (e.g., "Jan", "Feb", etc.)',
+                                                            },
+                                                            totalOnboarded: {
+                                                                type: 'integer',
+                                                                description: 'The total number of employees onboarded in that month',
+                                                            },
+                                                            departments: {
+                                                                type: 'array',
+                                                                description: 'Onboarding statistics per department for the month',
+                                                                items: {
+                                                                    type: 'object',
+                                                                    properties: {
+                                                                        departmentName: {
+                                                                            type: 'string',
+                                                                            description: 'The name of the department',
+                                                                        },
+                                                                        onboardedCount: {
+                                                                            type: 'integer',
+                                                                            description: 'The number of employees onboarded in the department',
+                                                                        },
+                                                                    },
+                                                                },
+                                                            },
+                                                        },
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                            500: {
+                                description: 'Failed to retrieve onboarding statistics',
+                                content: {
+                                    'application/json': {
+                                        schema: {
+                                            type: 'object',
+                                            properties: {
+                                                error: {
+                                                    type: 'string',
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+                "/announcements": {
+                    "get": {
+                        "tags": ["Announcements"],
+                        "summary": "Get all announcements",
+                        "description": "Retrieve a list of all announcements.",
+                        "responses": {
+                            "200": {
+                                "description": "A list of announcements",
+                                "content": {
+                                    "application/json": {
+                                        "schema": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Announcement"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "post": {
+                        "tags": ["Announcements"],
+                        "summary": "Create a new announcement",
+                        "description": "Add a new announcement.",
+                        "requestBody": {
+                            "required": true,
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "$ref": "#/components/schemas/AnnouncementInput"
+                                    }
+                                }
+                            }
+                        },
+                        "responses": {
+                            "201": {
+                                "description": "Announcement created successfully",
+                                "content": {
+                                    "application/json": {
+                                        "schema": {
+                                            "$ref": "#/components/schemas/Announcement"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "/announcements/{id}": {
+                    "get": {
+                        "tags": ["Announcements"],
+                        "summary": "Get an announcement by ID",
+                        "description": "Retrieve a single announcement by its ID.",
+                        "parameters": [
+                            {
+                                "name": "id",
+                                "in": "path",
+                                "required": true,
+                                "schema": {
+                                    "type": "integer"
+                                },
+                                "description": "ID of the announcement"
+                            }
+                        ],
+                        "responses": {
+                            "200": {
+                                "description": "Announcement details",
+                                "content": {
+                                    "application/json": {
+                                        "schema": {
+                                            "$ref": "#/components/schemas/Announcement"
+                                        }
+                                    }
+                                }
+                            },
+                            "404": {
+                                "description": "Announcement not found"
+                            }
+                        }
+                    },
+                    "put": {
+                        "tags": ["Announcements"],
+                        "summary": "Update an announcement by ID",
+                        "description": "Update an existing announcement by ID.",
+                        "parameters": [
+                            {
+                                "name": "id",
+                                "in": "path",
+                                "required": true,
+                                "schema": {
+                                    "type": "integer"
+                                },
+                                "description": "ID of the announcement"
+                            }
+                        ],
+                        "requestBody": {
+                            "required": true,
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "$ref": "#/components/schemas/AnnouncementUpdate"
+                                    }
+                                }
+                            }
+                        },
+                        "responses": {
+                            "200": {
+                                "description": "Announcement updated successfully",
+                                "content": {
+                                    "application/json": {
+                                        "schema": {
+                                            "$ref": "#/components/schemas/Announcement"
+                                        }
+                                    }
+                                }
+                            },
+                            "400": {
+                                "description": "Invalid ID"
+                            }
+                        }
+                    },
+                    "delete": {
+                        "tags": ["Announcements"],
+                        "summary": "Delete an announcement by ID",
+                        "description": "Delete an announcement by its ID.",
+                        "parameters": [
+                            {
+                                "name": "id",
+                                "in": "path",
+                                "required": true,
+                                "schema": {
+                                    "type": "integer"
+                                },
+                                "description": "ID of the announcement"
+                            }
+                        ],
+                        "responses": {
+                            "200": {
+                                "description": "Announcement deleted successfully",
+                                "content": {
+                                    "application/json": {
+                                        "schema": {
+                                            "type": "object",
+                                            "properties": {
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Announcement deleted successfully"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "400": {
+                                "description": "Invalid ID or Announcement not found"
+                            }
+                        }
+                    }
+                },
+                "/schedules": {
+                    "get": {
+                        "tags": ["Schedules"],
+                        "summary": "Get all schedules",
+                        "description": "Retrieve a list of all schedules.",
+                        "responses": {
+                            "200": {
+                                "description": "A list of schedules",
+                                "content": {
+                                    "application/json": {
+                                        "schema": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Schedule"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "post": {
+                        "tags": ["Schedules"],
+                        "summary": "Create a new schedule",
+                        "description": "Add a new schedule.",
+                        "requestBody": {
+                            "required": true,
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "$ref": "#/components/schemas/ScheduleInput"
+                                    }
+                                }
+                            }
+                        },
+                        "responses": {
+                            "201": {
+                                "description": "Schedule created successfully",
+                                "content": {
+                                    "application/json": {
+                                        "schema": {
+                                            "$ref": "#/components/schemas/Schedule"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "/schedules/{id}": {
+                    "get": {
+                        "tags": ["Schedules"],
+                        "summary": "Get a schedule by ID",
+                        "description": "Retrieve a single schedule by its ID.",
+                        "parameters": [
+                            {
+                                "name": "id",
+                                "in": "path",
+                                "required": true,
+                                "schema": {
+                                    "type": "integer"
+                                },
+                                "description": "ID of the schedule"
+                            }
+                        ],
+                        "responses": {
+                            "200": {
+                                "description": "Schedule details",
+                                "content": {
+                                    "application/json": {
+                                        "schema": {
+                                            "$ref": "#/components/schemas/Schedule"
+                                        }
+                                    }
+                                }
+                            },
+                            "404": {
+                                "description": "Schedule not found"
+                            }
+                        }
+                    },
+                    "put": {
+                        "tags": ["Schedules"],
+                        "summary": "Update a schedule by ID",
+                        "description": "Update an existing schedule by ID.",
+                        "parameters": [
+                            {
+                                "name": "id",
+                                "in": "path",
+                                "required": true,
+                                "schema": {
+                                    "type": "integer"
+                                },
+                                "description": "ID of the schedule"
+                            }
+                        ],
+                        "requestBody": {
+                            "required": true,
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "$ref": "#/components/schemas/ScheduleUpdate"
+                                    }
+                                }
+                            }
+                        },
+                        "responses": {
+                            "200": {
+                                "description": "Schedule updated successfully",
+                                "content": {
+                                    "application/json": {
+                                        "schema": {
+                                            "$ref": "#/components/schemas/Schedule"
+                                        }
+                                    }
+                                }
+                            },
+                            "400": {
+                                "description": "Invalid ID"
+                            }
+                        }
+                    },
+                    "delete": {
+                        "tags": ["Schedules"],
+                        "summary": "Delete a schedule by ID",
+                        "description": "Delete a schedule by its ID.",
+                        "parameters": [
+                            {
+                                "name": "id",
+                                "in": "path",
+                                "required": true,
+                                "schema": {
+                                    "type": "integer"
+                                },
+                                "description": "ID of the schedule"
+                            }
+                        ],
+                        "responses": {
+                            "200": {
+                                "description": "Schedule deleted successfully",
+                                "content": {
+                                    "application/json": {
+                                        "schema": {
+                                            "type": "object",
+                                            "properties": {
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Schedule deleted successfully"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "400": {
+                                "description": "Invalid ID or Schedule not found"
+                            }
+                        }
+                    }
+                }
             },
         },
     });

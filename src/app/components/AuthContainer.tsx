@@ -30,23 +30,25 @@ const formVariants = {
 function AuthContainer({ children }: { children: React.ReactNode }) {
   return (
     <div className={`${satoshi.className} antialiased`}>
-      <div className="flex flex-wrap items-center justify-center h-screen bg-white">
+      <div className="flex flex-wrap items-center justify-center h-screen bg-white dark:bg-gray-800">
         {/* Left Side Image Container */}
         <motion.div
-          className="h-screen p-[30px] bg-white hidden md:flex w-1/2"
+          className="h-screen p-[30px] bg-white dark:bg-gray-800 hidden md:flex w-1/2"
           initial="hidden"
           animate="visible"
           variants={containerVariants}
         >
           <motion.div
-            className="bg-secondary rounded-[30px] h-full w-full"
+            className="bg-secondary rounded-[30px] h-full w-full py-10 relative"
             layout // Animate layout change smoothly
-          ></motion.div>
+          >
+            <img src="/images/dash.png" className="h-[90%] absolute right-0" />
+          </motion.div>
         </motion.div>
 
         {/* Right Side Form Container */}
         <motion.div
-          className="bg-white h-screen flex flex-col justify-center items-center p-8 lg:w-1/2"
+          className="bg-white dark:bg-gray-800 h-screen flex flex-col justify-center items-center p-8 lg:w-1/2"
           initial="hidden"
           animate="visible"
           variants={formVariants}

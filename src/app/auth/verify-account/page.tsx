@@ -53,12 +53,14 @@ function FormFunction() {
     <div className="w-full max-w-md">
       <Link
         href="/auth/signin"
-        className="text-gray-500 text-sm mb-4 inline-block"
+        className="text-gray-500  dark:text-white text-sm mb-4 inline-block"
       >
         <i className="fas fa-chevron-left"></i> Back to Log in
       </Link>
-      <h2 className="text-dark text-2xl font-semibold mb-2">Forgot Password</h2>
-      <p className="text-gray-500 mb-6">
+      <h2 className="text-dark dark:text-white text-2xl font-semibold mb-2">
+        Forgot Password
+      </h2>
+      <p className="text-gray-500  dark:text-white mb-6">
         Enter your the OTP sent to your email address {email}{" "}
       </p>
       <form onSubmit={handleSubmit}>
@@ -72,7 +74,7 @@ function FormFunction() {
         />
         <Button text="Verify" type="submit" loading={loading} />
         <div className="text-center">
-          <p className="text-gray-700">
+          <p className="text-gray-700 dark:text-white">
             {`Didn't get the code? `}
             <span
               onClick={resendOTP}

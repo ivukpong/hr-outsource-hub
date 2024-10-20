@@ -57,15 +57,15 @@ export default function SignUp() {
             width={67}
             height={67}
           />
-          <h1 className="text-3xl font-bold text-dark">GTCO</h1>
+          <h1 className="text-3xl font-bold text-dark dark:text-white">GTCO</h1>
         </div>
-        <h2 className="text-dark text-2xl font-semibold mb-2">
+        <h2 className="text-dark dark:text-white text-2xl font-semibold mb-2">
           Welcome
           <span role="img" aria-label="wave">
             👋
           </span>
         </h2>
-        <p className="text-gray-500 mb-6">
+        <p className="text-gray-500  dark:text-white mb-6">
           Enter your details to create your account and get started
         </p>
         <form onSubmit={handleSubmit}>
@@ -111,7 +111,7 @@ export default function SignUp() {
           />
           <Button text="Sign up" type="submit" loading={loading} />
           <div className="text-center">
-            <p className="text-gray-700">
+            <p className="text-gray-700 dark:text-white">
               Already have an account?{" "}
               <a
                 href="/auth/signin"

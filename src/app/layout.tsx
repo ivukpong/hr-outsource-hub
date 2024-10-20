@@ -26,8 +26,11 @@ export default function RootLayout({
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
         ></link>
+        <link rel="icon" type="image/png" href="/images/logo.png" />
       </head>
-      <body className={`${satoshi.className} antialiased text-dark`}>
+      <body
+        className={`${satoshi.className} antialiased text-dark dark:text-white`}
+      >
         <div id="modal-root"></div>
         {children}
       </body>

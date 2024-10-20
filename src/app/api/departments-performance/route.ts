@@ -48,7 +48,7 @@ function groupByMonthAndDepartment(departments: (Department & { rewards: Reward[
 
         department.rewards.forEach((reward: Reward) => {
             const month = reward.earnedDate
-                ? new Date(reward.earnedDate).toLocaleString('default', { month: 'long' })
+                ? new Date(reward.earnedDate).toLocaleString('default', { month: 'short' })
                 : 'Unknown';
 
             if (!groupedData[month]) {
@@ -66,8 +66,8 @@ function groupByMonthAndDepartment(departments: (Department & { rewards: Reward[
 
     // Define months in the correct order
     const monthsOrder = [
-        "January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"
     ];
 
     // Create sorted data and fill in default values (0) for missing departments

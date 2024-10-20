@@ -15,8 +15,9 @@ const DepartmentChart = () => {
   useEffect(() => {
     const fetchPerformanceData = async () => {
       try {
-        const response = await fetch("/api/departments-performance");
+        const response = await fetch("/api/onboarding-stats");
         const data = await response.json();
+        console.log(data);
         setChartData(data);
       } catch (error) {
         console.error("Error fetching performance data:", error);
@@ -30,8 +31,21 @@ const DepartmentChart = () => {
   return loading ? null : (
     <ResponsiveContainer width="100%" height={400}>
       <AreaChart data={chartData}>
-        <XAxis dataKey="name" />
-        <YAxis />
+        <defs>
+          <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="5%" stopColor={getRandomColor()} stopOpacity={0.7} />
+            <stop offset="95%" stopColor={getRandomColor()} stopOpacity={0} />
+          </linearGradient>
+        </defs>
+        <XAxis
+          dataKey="name"
+          stroke="#bbb"
+          tick={{ fill: "#666666", fontSize: 14, fontWeight: "bold" }}
+        />
+        <YAxis
+          stroke="#bbb"
+          tick={{ fill: "#666666", fontSize: 14, fontWeight: "bold" }}
+        />
         <Tooltip />
         {/* Dynamically add an Area for each department */}
         {chartData.length > 0 &&
@@ -44,7 +58,7 @@ const DepartmentChart = () => {
                 dataKey={department}
                 stroke={getRandomColor()} // Assign a color to each department
                 fillOpacity={0.2}
-                fill={getRandomColor()} // Use consistent color for the area fill
+                fill="url(#colorValue)"
               />
             ))}
       </AreaChart>

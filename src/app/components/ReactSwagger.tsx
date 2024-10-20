@@ -13,7 +13,7 @@ type Props = {
 
 function ReactSwagger({ spec }: Props) {
   return (
-    <div className="w-screen bg-white">
+    <div className="w-screen bg-white dark:bg-gray-800">
       <DynamicSwaggerUI spec={spec} />;
     </div>
   );
