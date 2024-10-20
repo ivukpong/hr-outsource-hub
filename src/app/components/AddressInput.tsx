@@ -79,9 +79,14 @@ function CustomInput({
               key={index}
               className="cursor-pointer px-4 py-2 hover:bg-gray-200"
               onClick={() => {
-                onChange({
-                  target: { value: suggestion.display_name },
-                } as any);
+                const inputElement = document.querySelector(
+                  "input"
+                ) as HTMLInputElement; // Target your specific input element if necessary
+                if (inputElement) {
+                  const inputEvent = new Event("input", { bubbles: true });
+                  inputElement.value = suggestion.display_name;
+                  inputElement.dispatchEvent(inputEvent); // Manually dispatch the input event
+                }
                 setIsDropdownVisible(false); // Hide dropdown after selecting
               }}
             >
