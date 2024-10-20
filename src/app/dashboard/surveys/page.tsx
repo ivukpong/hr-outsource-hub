@@ -14,9 +14,9 @@ function Page() {
     <DashContainer>
       <Layout header="Survey" desc="Feedback Survey">
         <div className="flex-1 p-6">
-          <div className="grid grid-cols-5 gap-6">
-            <div className="col-span-3">
-              <div className="grid grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-5 gap-6">
+            <div className="md:col-span-3">
+              <div className="grid md:grid-cols-3 gap-6">
                 {statsData.map((item) => (
                   <StatCard item={item} key={item.id} />
                 ))}
@@ -40,8 +40,8 @@ function Page() {
                 ))}
               </div>
             </div>
-            <div className="col-span-2">
-              <div className="bg-white dark:bg-gray-800 md:pl-6 mb-6">
+            <div className="md:col-span-2 w-full">
+              <div className="bg-white dark:bg-gray-800 md:pl-6 mb-6 !w-full">
                 <div className="flex justify-between items-center mb-4">
                   <h2 className="text-lg font-semibold">Recent Surveys</h2>
                   <span className="text-gray-500  dark:text-white cursor-pointer">
@@ -52,7 +52,7 @@ function Page() {
                   <SurveyItem key={index} survey={survey} />
                 ))}
               </div>
-              <div className="bg-white dark:bg-gray-800 py-6 rounded-lg shadow dark:shadow-slate-400">
+              <div className="bg-white dark:bg-gray-800 py-6 rounded-lg shadow dark:shadow-slate-400 md:ml-6 !w-full">
                 <div className="flex flex-col justify-between items-center mb-4">
                   <div className="w-[50%] h-3 bg-gray-100 rounded-lg mb-4"></div>
                   <div className="w-[70%] h-3 bg-gray-100 rounded-lg mb-4"></div>

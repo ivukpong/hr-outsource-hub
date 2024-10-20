@@ -244,8 +244,8 @@ function Employees() {
           )}
         </div>
       </Modal>
-      <div className="flex flex-col lg:flex-row justify-between items-center mb-4">
-        <div className="relative">
+      <div className="flex w-full justify-center md:justify-between items-center mb-4 flex-wrap">
+        <div className="relative flex w-full justify-center md:justify-start items-center">
           <CustomInput
             htmlFor="search"
             label=""
@@ -257,7 +257,7 @@ function Employees() {
             onChange={(e) => onSearch(e.target.value)}
           />
         </div>
-        <div className="flex items-center gap-4">
+        <div className="grid md:grid-cols-2 w-full items-center gap-4 justify-center md:justify-end">
           <Link href={"/dashboard/employees/add"}>
             <Button icon text={"Add New Employee"} />
           </Link>

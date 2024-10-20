@@ -291,7 +291,7 @@ export default function DashContainer({
       <div className="flex min-h-screen bg-white dark:bg-gray-800 text-black dark:text-white relative">
         {/* Hamburger button for mobile */}
         <motion.button
-          className="md:hidden absolute top-7 z-20 left-3 p-2 rounded-[5px]"
+          className="md:hidden fixed top-7 z-20 left-3 p-2 rounded-[5px]"
           onClick={() => setIsOpen(!isOpen)}
           initial="hidden"
           animate="visible"
@@ -329,7 +329,6 @@ export default function DashContainer({
             </svg>
           )}
         </motion.button>
-
         {/* Sidebar with Framer Motion for both opening and closing animations */}
         <motion.aside
           className={`z-10 bg-gray-100 dark:bg-gray-700 shadow-md my-7 mx-4 rounded-[15px] flex flex-col items-center fixed h-[93%] w-64 ${
