@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/utils/db';
 
 // Get all announcements
-export async function GET(req: NextRequest) {
+export async function GET() {
     try {
         const announcements = await prisma.announcement.findMany({
             orderBy: {
@@ -11,6 +11,7 @@ export async function GET(req: NextRequest) {
         });
         return NextResponse.json(announcements);
     } catch (error) {
+        console.log(error)
         return NextResponse.json({ error: 'Failed to fetch announcements' }, { status: 500 });
     }
 }
@@ -36,6 +37,7 @@ export async function POST(req: NextRequest) {
 
         return NextResponse.json(announcement, { status: 201 });
     } catch (error) {
+        console.log(error)
         return NextResponse.json({ error: 'Failed to create announcement' }, { status: 500 });
     }
 }
@@ -62,6 +64,7 @@ export async function PUT(req: NextRequest) {
 
         return NextResponse.json(updatedAnnouncement);
     } catch (error) {
+        console.log(error)
         return NextResponse.json({ error: 'Failed to update announcement' }, { status: 500 });
     }
 }
@@ -82,6 +85,7 @@ export async function DELETE(req: NextRequest) {
 
         return NextResponse.json({ message: 'Announcement deleted successfully' });
     } catch (error) {
+        console.log(error)
         return NextResponse.json({ error: 'Failed to delete announcement' }, { status: 500 });
     }
 }

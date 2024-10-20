@@ -32,7 +32,7 @@ const EventList: React.FC<EventListProps> = ({ selectedDate }) => {
         const data = await response.json(); // Await the JSON response
         setEvents(data); // Set the events from the fetched data
         console.log(data);
-      } catch (err: any) {
+      } catch (err) {
         setError(err.message); // Set the error message if fetch fails
       } finally {
         setLoading(false); // Set loading to false after fetching
@@ -78,7 +78,10 @@ const EventList: React.FC<EventListProps> = ({ selectedDate }) => {
         </p>
       ) : (
         filteredEvents.map((event) => (
-          <div className="flex items-center justify-between mb-4">
+          <div
+            key={event.id}
+            className="flex items-center justify-between mb-4"
+          >
             {/* Time */}
             <div className="flex items-center pr-2">
               <div className="text-sm font-semibold text-gray-900">
@@ -100,7 +103,10 @@ const EventList: React.FC<EventListProps> = ({ selectedDate }) => {
             <div className="flex items-center">
               {/* Placeholder avatars */}
               {event.participants.slice(0, 2).map((participant) => (
-                <div className="w-6 h-6 bg-gray-300 rounded-full overflow-hidden -ml-2">
+                <div
+                  key={participant.Employee.id}
+                  className="w-6 h-6 bg-gray-300 rounded-full overflow-hidden -ml-2"
+                >
                   {/* Image placeholder for avatars */}
                   <img
                     src={participant.Employee.profilePic || ""}

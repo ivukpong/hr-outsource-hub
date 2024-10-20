@@ -381,7 +381,7 @@ export default function DashContainer({
               ))}
               <li
                 className={`px-4 py-2 h-12 my-1 rounded-r-[10px] dark:text-white  text-gray-700 hover:bg-secondary dark:hover:text-primary cursor-pointer`}
-                onClick={() => setIsModalOpen(true)}
+                onClick={handleOpenModal}
               >
                 <div className="flex gap-2 items-center">
                   <i className={`fas fa-door-open mr-2`}></i>

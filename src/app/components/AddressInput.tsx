@@ -21,7 +21,9 @@ function CustomInput({
   required?: boolean;
   icon?: boolean;
 }) {
-  const [suggestions, setSuggestions] = useState<any[]>([]);
+  const [suggestions, setSuggestions] = useState<{ display_name: string }[]>(
+    []
+  );
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
 
   const handleSearch = async (searchTerm: string) => {

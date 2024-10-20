@@ -6,7 +6,6 @@ import CustomInput from "@/app/components/Input";
 import Layout from "@/app/components/Layout";
 import Link from "next/link";
 import SyncLoader from "react-spinners/ClipLoader";
-import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
 import CustomSelect from "@/app/components/Select";
@@ -81,8 +80,6 @@ export default function Page() {
   useEffect(() => {
     fetchTeams();
   }, [department, fetchTeams]);
-
-  const router = useRouter();
 
   const handleFileChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -213,7 +210,7 @@ export default function Page() {
 
     if (response.ok) {
       toast.success("Employee added successfully!");
-      setIsModalOpen(true);
+      handleOpenModal();
     } else {
       toast.error(data.error || "Failed to add employee.");
     }

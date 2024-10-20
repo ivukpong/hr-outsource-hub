@@ -15,7 +15,7 @@ import { prisma } from '@/utils/db';
 //     }
 // }
 
-export async function GET(req: NextRequest) {
+export async function GET() {
     try {
         const schedules = await prisma.schedule.findMany({
             include: {
@@ -65,6 +65,7 @@ export async function POST(req: NextRequest) {
 
         return NextResponse.json(schedule, { status: 201 });
     } catch (error) {
+        console.log(error)
         return NextResponse.json({ error: 'Failed to create schedule' }, { status: 500 });
     }
 }
@@ -103,6 +104,7 @@ export async function PUT(req: NextRequest) {
 
         return NextResponse.json(updatedSchedule);
     } catch (error) {
+        console.log(error)
         return NextResponse.json({ error: 'Failed to update schedule' }, { status: 500 });
     }
 }
@@ -122,6 +124,7 @@ export async function DELETE(req: NextRequest) {
 
         return NextResponse.json({ message: 'Schedule deleted successfully' });
     } catch (error) {
+        console.log(error)
         return NextResponse.json({ error: 'Failed to delete schedule' }, { status: 500 });
     }
 }
