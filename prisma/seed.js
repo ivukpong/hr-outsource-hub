@@ -278,7 +278,7 @@ async function main() {
       })),
     });
 
-    console.log(`Created schedule: ${schedule.name}`);
+    console.log(`Created schedule: ${schedule.title}`);
   }
 
   // Step 8: Create a Single Attendance Record for Each Employee

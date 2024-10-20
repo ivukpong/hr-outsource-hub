@@ -33,7 +33,7 @@ function AuthContainer({ children }: { children: React.ReactNode }) {
       <div className="flex flex-wrap items-center justify-center h-screen bg-white dark:bg-gray-800">
         {/* Left Side Image Container */}
         <motion.div
-          className="h-screen p-[30px] bg-white dark:bg-gray-800 hidden md:flex w-1/2"
+          className="h-screen p-[30px] bg-white dark:bg-gray-800 hidden lg:flex w-1/2"
           initial="hidden"
           animate="visible"
           variants={containerVariants}

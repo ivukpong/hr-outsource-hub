@@ -6,7 +6,7 @@ function ResponseItem({
   response: { name: string; time: string; survey: string };
 }) {
   return (
-    <div className="flex items-center justify-between p-3 mb-2 border rounded-lg">
+    <div className="flex items-center justify-between p-3 mb-2 border dark:border-gray-500 rounded-lg">
       <div className="flex items-center">
         <img
           src="https://placehold.co/40x40"
@@ -19,10 +19,10 @@ function ResponseItem({
         </div>
       </div>
       <div className="flex items-center">
-        <span className="bg-[#F0F3F7] text-[#656565] border-[#D5D7DA] border-[0.5px] px-3 py-1 rounded-[5px] text-xs mr-3">
+        <span className="bg-[#F0F3F7] text-[#656565] dark:text-white  dark:border-gray-500 border-[#D5D7DA] border-[0.5px] px-3 py-1 rounded-[5px] text-xs mr-3">
           {response.survey}
         </span>
-        <i className="fas fa-ellipsis-v text-[#1E1E1E]"></i>
+        <i className="fas fa-ellipsis-v text-[#1E1E1E] dark:text-white"></i>
       </div>
     </div>
   );

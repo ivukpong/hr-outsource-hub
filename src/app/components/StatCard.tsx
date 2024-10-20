@@ -19,7 +19,7 @@ function StatCard({
   return (
     <div
       key={item.id}
-      className="p-4 rounded-lg shadow-md flex flex-col justify-between border-[#E3E3E3] border-[0.5px]"
+      className="p-4 rounded-lg shadow-md flex flex-col justify-between border-[#E3E3E3]  dark:border-gray-500 border-[0.5px]"
     >
       <div className="flex items-center justify-between text-[#D5D7DA]">
         <FontAwesomeIcon icon={item.icon} size="lg" />

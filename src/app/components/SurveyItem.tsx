@@ -13,7 +13,7 @@ function SurveyItem({
   };
 }) {
   return (
-    <div className="flex items-center justify-between p-4 mb-4 bg-transparent border-[0.5px] border-[#E3E3E3] rounded-[5px]">
+    <div className="flex items-center justify-between p-4 mb-4 bg-transparent border-[0.5px] border-[#E3E3E3] dark:border-gray-500 rounded-[5px]">
       {/* Left Section */}
       <div className="w-full">
         <div className="flex justify-between items-center w-full">
