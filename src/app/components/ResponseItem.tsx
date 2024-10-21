@@ -12,7 +12,7 @@ function ResponseItem({
     <div className="flex items-center justify-between p-3 mb-2 border dark:border-gray-500 rounded-lg">
       <div className="flex items-center">
         <Image
-          src={`https://i.pravatar.cc/${randomId}`} // Random avatar image
+          src={`https://i.pravatar.cc/512?img=${randomId}`} // Random avatar image
           alt={`Avatar of ${response.name}`}
           width={40}
           height={40}
