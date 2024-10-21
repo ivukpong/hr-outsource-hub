@@ -6,15 +6,18 @@ function ResponseItem({
 }: {
   response: { name: string; time: string; survey: string };
 }) {
+  const randomId = Math.floor(Math.random() * 70) + 1; // Generate a random number between 1 and 70
+
   return (
     <div className="flex items-center justify-between p-3 mb-2 border dark:border-gray-500 rounded-lg">
       <div className="flex items-center">
         <Image
-          src="https://placehold.co/40x40" // Image URL
-          alt={`Avatar of ${response.name}`} // Alt text
-          width={40} // Set the width of the image
-          height={40} // Set the height of the image
-          className="rounded-full mr-3" // Apply existing styles
+          src={`https://i.pravatar.cc/${randomId}`} // Random avatar image
+          alt={`Avatar of ${response.name}`}
+          width={40}
+          height={40}
+          className="rounded-full mr-3"
+          priority // Optional: use priority if this image is critical to load first
         />
         <div>
           <p className="font-medium text-sm text-[#16151C] dark:text-white">
