@@ -6,7 +6,7 @@ import CustomInput from "@/app/components/Input";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -39,7 +39,6 @@ export default function ForgotPassword() {
   return (
     <AuthContainer>
       <div className="w-full max-w-md">
-        <Toaster />
         <Link
           href="/auth/signin"
           className="text-gray-500  dark:text-white text-sm mb-4 inline-block"

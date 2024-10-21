@@ -14,7 +14,7 @@ import Image from "next/image";
 
 import React, { useState } from "react";
 import { useEffect } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { FaUpload } from "react-icons/fa6";
 
 function Page() {
@@ -177,9 +177,7 @@ function Page() {
   return (
     <DashContainer>
       <Layout header="Attendance" desc="Employee Attendance">
-        <Toaster />
         <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-          <Toaster />
           <div className="w-full max-w-lg">
             <h2 className="text-dark dark:text-white text-xl font-semibold mb-4">
               Attendance Form

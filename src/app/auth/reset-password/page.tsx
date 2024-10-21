@@ -65,8 +65,6 @@ function FormFunction() {
         </div>
       </Modal>
       <div className="w-full max-w-md">
-        <Toaster />
-
         <Link
           href="/auth/signin"
           className="text-gray-500  dark:text-white text-sm mb-4 inline-block"

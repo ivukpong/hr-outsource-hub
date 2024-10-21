@@ -10,7 +10,7 @@ import React, { useState } from "react";
 import Button from "@/app/components/Button";
 import Modal from "@/app/components/Modal";
 import CustomSelect from "@/app/components/Select";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { useEffect } from "react";
 import { Category, Department, Employee, Reward } from "@prisma/client";
 import EmployeeSelect from "@/app/components/EmployeeSelect";
@@ -179,7 +179,6 @@ function Page() {
   };
   return (
     <DashContainer>
-      <Toaster />
       <Layout header="Rewards" desc="Rewards and Incentives">
         <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
           <div className="w-full max-w-lg">

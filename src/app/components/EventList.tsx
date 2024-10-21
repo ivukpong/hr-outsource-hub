@@ -33,7 +33,13 @@ const EventList: React.FC<EventListProps> = ({ selectedDate }) => {
         setEvents(data); // Set the events from the fetched data
         console.log(data);
       } catch (err) {
-        setError(err.message); // Set the error message if fetch fails
+        if (err instanceof Error) {
+          // Now TypeScript knows err is an Error
+          setError(err.message);
+        } else {
+          // Handle non-Error types if necessary
+          console.error("Unknown error:", err);
+        }
       } finally {
         setLoading(false); // Set loading to false after fetching
       }

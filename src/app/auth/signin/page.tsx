@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Button from "@/app/components/Button";
 import CustomInput from "@/app/components/Input";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import Link from "next/link";
 import AuthContainer from "@/app/components/AuthContainer";
 import Image from "next/image";
@@ -28,7 +28,7 @@ export default function SignIn() {
     const data = await response.json();
     console.log(data);
     if (response.status === 200) {
-      // const storage = rememberMe ? localStorage : sessionStorage;
+      const storage = rememberMe ? localStorage : sessionStorage;
       localStorage.removeItem("token");
       localStorage.removeItem("user");
       localStorage.setItem("token", data.token);
@@ -44,7 +44,6 @@ export default function SignIn() {
   return (
     <AuthContainer>
       <div className="w-full max-w-md">
-        <Toaster />
         <div className="flex items-center mb-8">
           <Image
             src="/images/logo.png"

@@ -12,7 +12,7 @@ import { CircularProgress } from "@mui/material";
 import { Department, Employee, Team } from "@prisma/client";
 import React, { useState } from "react";
 import { useEffect } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 function Page() {
   const [search, setSearch] = useState("");
@@ -117,9 +117,7 @@ function Page() {
   return (
     <DashContainer>
       <Layout header="Departments" desc="Department Information">
-        <Toaster />
         <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-          <Toaster />
           <div className="w-full max-w-lg">
             <h2 className="text-dark dark:text-white text-xl font-semibold mb-4">
               Add Department
@@ -161,7 +159,6 @@ function Page() {
           </div>
         </Modal>
         <Modal isOpen={isAddTeam} onClose={() => setIsAddTeam(false)}>
-          <Toaster />
           <div className="w-full max-w-lg">
             <h2 className="text-dark dark:text-white text-xl font-semibold mb-4">
               Add Team

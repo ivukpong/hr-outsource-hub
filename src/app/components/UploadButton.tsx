@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { FaUpload } from "react-icons/fa";
 
 const FileUpload = () => {
@@ -48,7 +48,6 @@ const FileUpload = () => {
 
   return (
     <div className="flex flex-col items-center">
-      <Toaster />
       <label className="cursor-pointer mb-4">
         <button className="border border-grey text-[#16151C] dark:text-white px-4 py-2 rounded-[5px] flex gap-2 items-center relative">
           <FaUpload className="text-xl" />

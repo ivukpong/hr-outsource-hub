@@ -8,7 +8,7 @@ import { Department, Employee, Team } from "@prisma/client";
 import Link from "next/link";
 import React, { Suspense, useCallback, useEffect, useState } from "react";
 import { CircularProgress } from "@mui/material";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { useRouter, useSearchParams } from "next/navigation";
 import Modal from "@/app/components/Modal";
 import Pagination from "@/app/components/Pagination";
@@ -343,8 +343,6 @@ function Page() {
   return (
     <DashContainer>
       <Layout header="Employees" desc="Employee Information">
-        <Toaster />
-
         <Suspense
           fallback={
             <div className="flex h-full w-full items-center justify-center text-primary">

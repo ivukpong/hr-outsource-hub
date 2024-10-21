@@ -6,7 +6,7 @@ const Announcements = () => {
     { id: number; title: string; description: string }[]
   >([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchAnnouncements = async () => {
@@ -18,7 +18,13 @@ const Announcements = () => {
         const data = await response.json();
         setAnnouncements(data);
       } catch (error) {
-        setError(error.message);
+        if (error instanceof Error) {
+          // Now TypeScript knows err is an Error
+          setError(error.message);
+        } else {
+          // Handle non-Error types if necessary
+          console.error("Unknown error:", error);
+        }
       } finally {
         setLoading(false);
       }

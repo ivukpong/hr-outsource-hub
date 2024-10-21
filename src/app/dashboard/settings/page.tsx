@@ -5,17 +5,19 @@ import Layout from "@/app/components/Layout";
 import SettingPills from "@/app/components/SettingPills";
 import CustomInput from "@/app/components/Input"; // Assuming you have this component
 import { headings } from "@/app/data";
-import { Switch } from "@mui/material";
+import SyncLoader from "react-spinners/ClipLoader";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import toast from "react-hot-toast";
 import { User } from "@prisma/client";
+import toast from "react-hot-toast";
 
 function Page() {
-  const [timezone, setTimezone] = useState("GMT +01:00");
-  const [language, setLanguage] = useState("en");
+  // const [timezone, setTimezone] = useState("GMT +01:00");
+  // const [language, setLanguage] = useState("en");
+  // const [checked, setChecked] = React.useState(true);
   const [active, setActive] = useState("General");
-  const [checked, setChecked] = React.useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isChanging, setIsChanging] = useState(false);
   const [user, setUser] = useState<User>();
 
   // Profile details
@@ -26,18 +28,21 @@ function Page() {
     user?.designation ?? ""
   );
   const [profilePic, setProfilePic] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string>(
+  const [imagePreview, setImagePreview] = useState<string | null>(
     user?.profilePic ?? ""
   );
   const [imageLink, setImageLink] = useState<string | null>(
     user?.profilePic ?? ""
   );
   const [image, setImage] = useState<File | null>(null);
+  const [oldPassword, setOldPassword] = useState<string>("");
+  const [newPassword, setNewPassword] = useState<string>("");
 
   useEffect(() => {
     const getUser = async () => {
       const data = localStorage.getItem("user");
       const temp = data ? JSON.parse(data) : null;
+      setUser(temp);
       setId(temp?.id);
       setName(temp?.name);
       setEmail(temp?.email);
@@ -94,12 +99,14 @@ function Page() {
 
   // Handle form submission for profile update
   const handleSubmit = async () => {
+    setIsLoading(true);
+
     const formData = new FormData();
     formData.append("id", id.toString());
     formData.append("name", name);
     formData.append("email", email);
     formData.append("designation", designation);
-    formData.append("profilePic", imageLink);
+    imageLink && formData.append("profilePic", imageLink);
     if (profilePic) {
       formData.append("file", profilePic); // Ensure this matches the backend expectation
     }
@@ -118,13 +125,48 @@ function Page() {
     } catch (error) {
       toast.error("An error occurred while updating profile.");
     }
+    setIsLoading(false);
+  };
+
+  const handleChange = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsChanging(true);
+
+    try {
+      const response = await fetch("/api/auth/change-password", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: id, // Replace this with the actual user ID or fetch it from the session
+          oldPassword: oldPassword,
+          newPassword: newPassword,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        toast.success("Password updated successfully!");
+        // Optionally reset form inputs
+        setOldPassword("");
+        setNewPassword("");
+      } else {
+        toast.error(data.error || "Failed to update password");
+      }
+    } catch (error) {
+      toast.error("An error occurred while updating password");
+    } finally {
+      setIsChanging(false);
+    }
   };
 
   return (
     <DashContainer>
       <Layout header="Settings" desc="User Settings">
         <div className="mx-auto px-2 py-6">
-          <div className="flex gap-4 text-sm mb-8 overflow-x-auto">
+          {/* <div className="flex gap-4 text-sm mb-8 overflow-x-auto">
             {headings.map((heading) => (
               <SettingPills
                 key={heading}
@@ -133,10 +175,10 @@ function Page() {
                 setActive={setActive}
               />
             ))}
-          </div>
-          {/* Basics Section */}
+          </div> */}
+          {/* General Section */}
           <section className="mb-6">
-            <h2 className="text-lg font-semibold mb-4">Basics</h2>
+            <h2 className="text-lg font-semibold mb-4">General</h2>
             <hr className="my-3" />
             {/* Profile Photo */}
             <div className="mb-4 flex w-full !justify-between">
@@ -215,15 +257,65 @@ function Page() {
               }
               required
             />
+            <div className="flex justify-end mt-6">
+              <button
+                onClick={handleSubmit}
+                className="bg-primary text-white px-6 py-2 rounded-lg"
+              >
+                {isLoading ? (
+                  <SyncLoader color={"#FFFFFF"} />
+                ) : (
+                  "Update Profile"
+                )}
+              </button>
+            </div>
           </section>
 
-          {/* Preferences Section */}
+          {/* Security Section */}
           <section className="mt-9">
-            <h2 className="text-lg font-semibold mb-4">Preferences</h2>
+            <h2 className="text-lg font-semibold mb-4">Security</h2>
             <hr className="my-3" />
 
+            <CustomInput
+              htmlFor="password"
+              label="Old Password"
+              id="password"
+              type="password"
+              placeholder="Enter your password"
+              value={oldPassword}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setOldPassword(e.target.value)
+              }
+              required
+            />
+            <hr className="my-3" />
+            <CustomInput
+              htmlFor="password"
+              label="Password"
+              id="password"
+              type="password"
+              placeholder="Enter your password"
+              value={newPassword}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setNewPassword(e.target.value)
+              }
+              required
+            />
+            <div className="flex justify-end mt-6">
+              <button
+                onClick={handleChange}
+                className="bg-primary text-white px-6 py-2 rounded-lg"
+              >
+                {isChanging ? (
+                  <SyncLoader color={"#FFFFFF"} />
+                ) : (
+                  "Change Password"
+                )}
+              </button>
+            </div>
+
             {/* Automatic Time Zone */}
-            <div className="mb-4 flex w-full !justify-between items-center">
+            {/* <div className="mb-4 flex w-full !justify-between items-center">
               <label className="w-[200px] md:w-[520px] dark:text-white text-gray-700 font-bold">
                 Automatic Time Zone
               </label>
@@ -238,10 +330,10 @@ function Page() {
                 </span>
               </div>
             </div>
-            <hr className="my-3" />
+            <hr className="my-3" /> */}
 
             {/* Language Selector */}
-            <div className="mb-4 flex w-full !justify-between items-center">
+            {/* <div className="mb-4 flex w-full !justify-between items-center">
               <label className="block w-[200px] md:w-[520px] dark:text-white text-gray-700 font-bold">
                 Language
               </label>
@@ -253,21 +345,12 @@ function Page() {
                 >
                   <option value="en">English</option>
                   <option value="fr">French</option>
-                  {/* Add more language options as needed */}
                 </select>
               </div>
-            </div>
+            </div> */}
           </section>
 
           {/* Save Button */}
-          <div className="flex justify-end mt-6">
-            <button
-              onClick={handleSubmit}
-              className="bg-blue-500 text-white px-6 py-2 rounded-lg"
-            >
-              Save Changes
-            </button>
-          </div>
         </div>
       </Layout>
     </DashContainer>

@@ -4,7 +4,7 @@ import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import OTPInput from "react-otp-input";
 import Button from "@/app/components/Button";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import Link from "next/link";
 import AuthContainer from "@/app/components/AuthContainer";
 import Modal from "@/app/components/Modal";
@@ -83,7 +83,6 @@ function FormFunction() {
         </div>
       </Modal>
       <div className="w-full max-w-md">
-        <Toaster />
         <Link
           href="/auth/signin"
           className="text-gray-500  dark:text-white text-sm mb-4 inline-block"

@@ -4,7 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import OTPInput from "react-otp-input";
 import Button from "@/app/components/Button";
 import Link from "next/link";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import AuthContainer from "@/app/components/AuthContainer";
 import { CircularProgress } from "@mui/material";
 
@@ -92,7 +92,6 @@ function FormFunction() {
 export default function VerifyAccount() {
   return (
     <AuthContainer>
-      <Toaster />
       <Suspense
         fallback={
           <div className="flex h-full w-full items-center justify-center text-primary">

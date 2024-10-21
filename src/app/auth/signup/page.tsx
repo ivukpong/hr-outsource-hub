@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import CustomInput from "@/app/components/Input";
 import Button from "@/app/components/Button";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import AuthContainer from "@/app/components/AuthContainer";
 import Image from "next/image";
 
@@ -48,7 +48,6 @@ export default function SignUp() {
   return (
     <AuthContainer>
       <div className="w-full max-w-md">
-        <Toaster />
         <div className="flex items-center mb-8">
           <Image
             src="/images/logo.png"
