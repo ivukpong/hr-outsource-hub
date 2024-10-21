@@ -24,7 +24,11 @@ const nextConfig = {
         pathname: "/**",
       },
     ],
-    domains: ["avatars.githubusercontent.com", "i.pravatar.cc"],
+    domains: [
+      "avatars.githubusercontent.com",
+      "i.pravatar.cc",
+      "https://placehold.co",
+    ],
   },
   typescript: {
     // !! WARN !!
