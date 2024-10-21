@@ -1,15 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import { prisma } from "@/utils/db";
-import { getToken } from "next-auth/jwt";
 
 export async function PATCH(request: NextRequest) {
-    // const token = await getToken({ req: request });
-
-    // if (!token) {
-    //     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    // }
-
     const { id, oldPassword, newPassword } = await request.json();
 
     const user = await prisma.user.findUnique({ where: { id: id } });

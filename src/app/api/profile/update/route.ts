@@ -15,20 +15,18 @@ export async function PATCH(req: NextRequest) {
         if (!id) {
             return NextResponse.json({ error: 'User ID is required.' }, { status: 400 });
         }
-
-        const updateData: any = {
-            name,
-            email,
-            designation,
-            profilePic
+        const updateData: { name?: string; email?: string; designation?: string; profilePic?: string } = {
+            name: typeof name === 'string' ? name : undefined,
+            email: typeof email === 'string' && email.trim() !== '' ? email : undefined,
+            designation: typeof designation === 'string' ? designation : undefined,
+            profilePic: typeof profilePic === 'string' ? profilePic : undefined, // Ensure it's a string or undefined
         };
 
-
+        // Update the user in the database
         const updatedUser = await prisma.user.update({
             where: { id: Number(id) },
             data: updateData,
         });
-
         return NextResponse.json({ message: 'Profile updated successfully.', user: updatedUser });
     } catch (error) {
         if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -39,22 +37,4 @@ export async function PATCH(req: NextRequest) {
         console.error('Error updating profile:', error);
         return NextResponse.json({ error: 'Failed to update profile.' }, { status: 500 });
     }
-}
-
-// Function to handle file upload (you can adjust this as per your upload service)
-async function handleFileUpload(file: File) {
-    const formData = new FormData();
-    formData.append("file", file);
-
-    const response = await fetch("/api/upload", { // Adjust the upload API endpoint as needed
-        method: "POST",
-        body: formData,
-    });
-
-    if (!response.ok) {
-        throw new Error('File upload failed.');
-    }
-
-    const result = await response.json();
-    return result.fileUrl; // Return the uploaded file URL
 }

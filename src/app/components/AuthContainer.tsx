@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import localFont from "next/font/local";
 import { motion } from "framer-motion"; // Import Framer Motion for animations
+import Image from "next/image";
 
 const satoshi = localFont({
   src: "../fonts/Satoshi-Variable.ttf",
@@ -58,7 +59,13 @@ function AuthContainer({ children }: { children: React.ReactNode }) {
             className="bg-secondary rounded-[30px] h-full w-full py-10 relative"
             layout // Animate layout change smoothly
           >
-            <img src="/images/test.png" className="h-[90%] absolute right-0" />
+            <Image
+              src="/images/test.png"
+              alt="Test Image"
+              layout="fill" // Ensures the image fills the container
+              objectFit="contain" // Ensures the image maintains aspect ratio
+              className="h-[90%] absolute right-0"
+            />
           </motion.div>
         </motion.div>
 

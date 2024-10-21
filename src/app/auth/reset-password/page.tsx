@@ -4,7 +4,6 @@ import { useSearchParams } from "next/navigation";
 import Button from "@/app/components/Button";
 import CustomInput from "@/app/components/Input";
 import Link from "next/link";
-import { Toaster } from "react-hot-toast";
 import AuthContainer from "@/app/components/AuthContainer";
 import Modal from "@/app/components/Modal";
 import { CircularProgress } from "@mui/material";

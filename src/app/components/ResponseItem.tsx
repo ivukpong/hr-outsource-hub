@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React from "react";
 
 function ResponseItem({
@@ -8,13 +9,15 @@ function ResponseItem({
   return (
     <div className="flex items-center justify-between p-3 mb-2 border dark:border-gray-500 rounded-lg">
       <div className="flex items-center">
-        <img
-          src="https://placehold.co/40x40"
-          alt={`Avatar of ${response.name}`}
-          className="rounded-full mr-3"
+        <Image
+          src="https://placehold.co/40x40" // Image URL
+          alt={`Avatar of ${response.name}`} // Alt text
+          width={40} // Set the width of the image
+          height={40} // Set the height of the image
+          className="rounded-full mr-3" // Apply existing styles
         />
         <div>
-          <p className="font-medium text-sm text-[#16151C]  dark:text-white ">
+          <p className="font-medium text-sm text-[#16151C] dark:text-white">
             {response.name}
           </p>
           <p className="text-[#D9D9D9] text-xs">{response.time}</p>

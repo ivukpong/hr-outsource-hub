@@ -1,205 +1,3 @@
-// "use client"; // Marking this component as a client component
-// import React from "react";
-
-// import { useEffect } from "react";
-// import { usePathname, useRouter } from "next/navigation";
-// import localFont from "next/font/local";
-// import Image from "next/image";
-// import { navs } from "../data";
-// import NavItem from "../components/NavItem";
-
-// const satoshi = localFont({
-//   src: "../fonts/Satoshi-Variable.ttf",
-//   variable: "--font-satoshi",
-//   weight: "100 200 300 400 500 600 700 800 900",
-// });
-
-// export default function DashContainer({
-//   children,
-// }: Readonly<{
-//   children: React.ReactNode;
-// }>) {
-//   const router = useRouter();
-
-//   useEffect(() => {
-//     const token = localStorage.getItem("token");
-
-//     if (!token) {
-//       router.push("/auth/signin");
-//     }
-//   }, [router]);
-
-//   const pathname = usePathname();
-
-//   return (
-//     <div className={`${satoshi.className}`}>
-//       <div className="flex min-h-screen bg-white dark:bg-gray-800">
-//         <aside className="w-64 bg-gray-100 shadow-md my-7 mx-4 rounded-[15px] flex flex-col items-center fixed h-[95%] md:w-48 lg:w-64 xl:w-80">
-//           <div className="p-6 flex gap-2 items-center justify-center">
-//             <div className="w-9 h-9 bg-gray-200 rounded-full overflow-hidden">
-//               <Image
-//                 src="/images/logo.png"
-//                 alt="logo"
-//                 width={36}
-//                 height={36}
-//                 className="object-contain"
-//               />
-//             </div>
-//             <div className="text-2xl text-dark dark:text-white font-bold">GTCO</div>
-//           </div>
-//           <nav className="mt-10 w-full px-8">
-//             <ul>
-//               {navs.map((nav, index) => (
-//                 <NavItem
-//                   text={nav.name}
-//                   key={index}
-//                   href={
-//                     nav.name === "Dashboard"
-//                       ? "/dashboard"
-//                       : `/dashboard/${nav.name.toLowerCase()}`
-//                   }
-//                   active={
-//                     (pathname === "/dashbaord" && nav.name === "Dashboard") ||
-//                     pathname
-//                       .split("/")
-//                       .splice(2)
-//                       .includes(nav.name.toLowerCase())
-//                   }
-//                   icon={nav.icon}
-//                 />
-//               ))}
-//             </ul>
-//           </nav>
-//         </aside>
-//         <div className="flex-1 overflow-y-auto md:p-4 lg:p-8 xl:p-12">
-//           {children}
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
-
-// import React, { useState } from "react";
-// import { useEffect } from "react";
-// import { usePathname, useRouter } from "next/navigation";
-// import localFont from "next/font/local";
-// import Image from "next/image";
-// import { navs } from "../data";
-// import NavItem from "../components/NavItem";
-
-// const satoshi = localFont({
-//   src: "../fonts/Satoshi-Variable.ttf",
-//   variable: "--font-satoshi",
-//   weight: "100 200 300 400 500 600 700 800 900",
-// });
-
-// export default function DashContainer({
-//   children,
-// }: Readonly<{
-//   children: React.ReactNode;
-// }>) {
-//   const router = useRouter();
-//   const [isOpen, setIsOpen] = useState(false);
-
-//   useEffect(() => {
-//     const token = localStorage.getItem("token");
-
-//     if (!token) {
-//       router.push("/auth/signin");
-//     }
-//   }, [router]);
-
-//   const pathname = usePathname();
-
-//   return (
-//     <div className={`${satoshi.className}`}>
-//       <div className="flex min-h-screen bg-white dark:bg-gray-800 text-ellipsis text-black dark:text-white">
-//         <button
-//           className="md:hidden absolute top-7 z-20 left-3 p-2 rounded-[5px]"
-//           onClick={() => setIsOpen(!isOpen)}
-//         >
-//           {isOpen ? (
-//             <svg
-//               xmlns="http://www.w3.org/2000/svg"
-//               className="h-6 w-6"
-//               fill="none"
-//               viewBox="0 0 24 24"
-//               stroke="currentColor"
-//               strokeWidth={2}
-//             >
-//               <path
-//                 strokeLinecap="round"
-//                 strokeLinejoin="round"
-//                 d="M6 18L18 6M6 6l12 12"
-//               />
-//             </svg>
-//           ) : (
-//             <svg
-//               xmlns="http://www.w3.org/2000/svg"
-//               className="h-6 w-6"
-//               fill="none"
-//               viewBox="0 0 24 24"
-//               stroke="currentColor"
-//               strokeWidth={2}
-//             >
-//               <path
-//                 strokeLinecap="round"
-//                 strokeLinejoin="round"
-//                 d="M4 6h16M4 12h16M4 18h16"
-//               />
-//             </svg>
-//           )}
-//         </button>
-//         <aside
-//           className={`${
-//             isOpen ? "block" : "hidden"
-//           } md:block z-10 bg-gray-100 shadow-md my-7 mx-4 rounded-[10px] flex flex-col items-center fixed h-[93%] w-64 `}
-//         >
-//           <div className="p-6 flex gap-2 items-center justify-center">
-//             <div className="w-9 h-9 bg-gray-200 rounded-full overflow-hidden">
-//               <Image
-//                 src="/images/logo.png"
-//                 alt="logo"
-//                 width={36}
-//                 height={36}
-//                 className="object-contain"
-//               />
-//             </div>
-//             <div className="text-2xl text-dark dark:text-white font-bold">GTCO</div>
-//           </div>
-//           <nav className="mt-10 w-full px-6">
-//             <ul>
-//               {navs.map((nav, index) => (
-//                 <NavItem
-//                   text={nav.name}
-//                   key={index}
-//                   href={
-//                     nav.name === "Dashboard"
-//                       ? "/dashboard"
-//                       : nav.name === "Logout"
-//                         ? "/auth/signin"
-//                         : `/dashboard/${nav.name.toLowerCase()}`
-//                   }
-//                   active={
-//                     (pathname === "/dashbaord" && nav.name === "Dashboard") ||
-//                     pathname
-//                       .split("/")
-//                       .splice(2)
-//                       .includes(nav.name.toLowerCase())
-//                   }
-//                   icon={nav.icon}
-//                 />
-//               ))}
-//             </ul>
-//           </nav>
-//         </aside>
-//         <div className="flex-1 overflow-y-auto px-0 md:pl-10 pt-12 xl:ml-0">
-//           {children}
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
@@ -209,7 +7,6 @@ import { navs } from "../data";
 import NavItem from "../components/NavItem";
 import { motion } from "framer-motion";
 import Modal from "./Modal";
-import Link from "next/link";
 
 const satoshi = localFont({
   src: "../fonts/Satoshi-Variable.ttf",
@@ -265,7 +62,13 @@ export default function DashContainer({
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
         <div className="rounded-lg text-center max-w-sm">
           {/* Success Icon */}
-          <img src="/images/warn.png" className="h-20 mb-4 mx-auto" />
+          <Image
+            src="/images/warn.png"
+            alt="Warning Icon"
+            className="h-20 mb-4 mx-auto"
+            width={80} // Set an explicit width (adjust as needed)
+            height={80} // Set an explicit height (adjust as needed)
+          />
           {/* Success Message */}
           <h2 className="text-2xl font-semibold mb-2">Log Out</h2>
           <p className="text-gray-600 mb-6 w-[75%] mx-auto">

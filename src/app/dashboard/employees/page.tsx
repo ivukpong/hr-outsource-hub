@@ -218,7 +218,13 @@ function Employees() {
       <Modal isOpen={isDelete} onClose={handleCancel}>
         <div className="rounded-lg text-center max-w-sm">
           {/* Success Icon */}
-          <img src="/images/trash.png" className="h-20 mb-4 mx-auto" />
+          <Image
+            src="/images/trash.png" // Path to the image
+            alt="Trash Icon" // Alt text for accessibility
+            width={80} // Set the width (adjust based on your design)
+            height={80} // Set the height (adjust based on your design)
+            className="h-20 mb-4 mx-auto" // Apply existing styles
+          />{" "}
           {/* Success Message */}
           <h2 className="text-2xl font-semibold mb-2">Delete Employee</h2>
           <p className="text-gray-600 mb-6 w-[75%] mx-auto">

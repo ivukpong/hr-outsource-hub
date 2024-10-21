@@ -2,9 +2,7 @@
 
 import DashContainer from "@/app/components/DashContainer";
 import Layout from "@/app/components/Layout";
-import SettingPills from "@/app/components/SettingPills";
 import CustomInput from "@/app/components/Input"; // Assuming you have this component
-import { headings } from "@/app/data";
 import SyncLoader from "react-spinners/ClipLoader";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
@@ -15,7 +13,7 @@ function Page() {
   // const [timezone, setTimezone] = useState("GMT +01:00");
   // const [language, setLanguage] = useState("en");
   // const [checked, setChecked] = React.useState(true);
-  const [active, setActive] = useState("General");
+  // const [active, setActive] = useState("General");
   const [isLoading, setIsLoading] = useState(false);
   const [isChanging, setIsChanging] = useState(false);
   const [user, setUser] = useState<User>();
@@ -27,7 +25,6 @@ function Page() {
   const [designation, setDesignation] = useState<string>(
     user?.designation ?? ""
   );
-  const [profilePic, setProfilePic] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(
     user?.profilePic ?? ""
   );
@@ -89,6 +86,9 @@ function Page() {
     const result = await response.json();
     setLink(result.fileUrl);
 
+    console.log(image);
+    console.log(imagePreview);
+
     // Set upload status based on response
     if (response.ok) {
       toast.success(`File uploaded successfully!`);
@@ -106,13 +106,10 @@ function Page() {
     formData.append("name", name);
     formData.append("email", email);
     formData.append("designation", designation);
-    imageLink && formData.append("profilePic", imageLink);
-    if (profilePic) {
-      formData.append("file", profilePic); // Ensure this matches the backend expectation
-    }
+    if (imageLink) formData.append("profilePic", imageLink);
 
     try {
-      const response = await fetch("/api/auth/profile-update", {
+      const response = await fetch("/api/profile/update", {
         method: "PATCH", // Make sure the method matches your backend implementation
         body: formData,
       });
@@ -123,6 +120,7 @@ function Page() {
         toast.error("Failed to update profile.");
       }
     } catch (error) {
+      console.error(error);
       toast.error("An error occurred while updating profile.");
     }
     setIsLoading(false);
@@ -133,7 +131,7 @@ function Page() {
     setIsChanging(true);
 
     try {
-      const response = await fetch("/api/auth/change-password", {
+      const response = await fetch("/api/profile/change-password", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -156,6 +154,7 @@ function Page() {
         toast.error(data.error || "Failed to update password");
       }
     } catch (error) {
+      console.error(error);
       toast.error("An error occurred while updating password");
     } finally {
       setIsChanging(false);

@@ -28,7 +28,7 @@ export default function SignIn() {
     const data = await response.json();
     console.log(data);
     if (response.status === 200) {
-      const storage = rememberMe ? localStorage : sessionStorage;
+      // const storage = rememberMe ? localStorage : sessionStorage;
       localStorage.removeItem("token");
       localStorage.removeItem("user");
       localStorage.setItem("token", data.token);

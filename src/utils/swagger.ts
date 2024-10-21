@@ -664,7 +664,8 @@ export const getApiDocs = async (): Promise<Record<string, unknown>> => {
                     },
                 },
 
-                "/auth/profile": {
+                // Profile Routes
+                "/profile/update": {
                     "patch": {
                         "tags": ["User"],
                         "summary": "Update user profile",
@@ -718,7 +719,7 @@ export const getApiDocs = async (): Promise<Record<string, unknown>> => {
                     }
                 },
 
-                "/auth/change-password": {
+                "/profile/change-password": {
                     "patch": {
                         "tags": ["Auth"],
                         "summary": "Change user password",

@@ -1,5 +1,6 @@
 import { CircularProgress } from "@mui/material";
 import { Employee, ScheduleParticipants } from "@prisma/client";
+import Image from "next/image";
 import React, { useEffect, useState } from "react";
 
 interface Event {
@@ -114,10 +115,15 @@ const EventList: React.FC<EventListProps> = ({ selectedDate }) => {
                   className="w-6 h-6 bg-gray-300 rounded-full overflow-hidden -ml-2"
                 >
                   {/* Image placeholder for avatars */}
-                  <img
-                    src={participant.Employee.profilePic || ""}
+                  <Image
+                    src={
+                      participant.Employee.profilePic ||
+                      "https://firebasestorage.googleapis.com/v0/b/hr-dashboard-18e9e.appspot.com/o/uploads%2FGTCO_logo.svg%201.png?alt=media&token=ae6be633-7c3c-4497-b895-7f63f261177d"
+                    } // Provide a default image if profilePic is empty
                     alt="attendee avatar"
-                    className="w-full h-full object-cover"
+                    width={24} // Set width (should be the same as the height)
+                    height={24} // Set height (should be the same as the width)
+                    className="object-cover" // Apply any additional styling
                   />
                 </div>
               ))}
