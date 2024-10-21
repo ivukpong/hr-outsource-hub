@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { prisma } from "@/utils/db";
@@ -10,6 +10,7 @@ export async function POST(request: NextRequest) {
     const user = await prisma.user.findUnique({
         where: { email },
     });
+
 
     if (!user) {
         return NextResponse.json({ error: "User not found" }, { status: 404 });
@@ -34,6 +35,9 @@ export async function POST(request: NextRequest) {
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET as string, {
         expiresIn: "1h",
     });
+
+    console.log(email)
+
 
 
     return NextResponse.json(

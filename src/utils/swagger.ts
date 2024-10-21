@@ -663,6 +663,112 @@ export const getApiDocs = async (): Promise<Record<string, unknown>> => {
                         },
                     },
                 },
+
+                "/auth/profile": {
+                    "patch": {
+                        "tags": ["User"],
+                        "summary": "Update user profile",
+                        "description": "Updates the user's profile information including profile image, name, email, and designation.",
+                        "requestBody": {
+                            "required": true,
+                            "content": {
+                                "multipart/form-data": {
+                                    "schema": {
+                                        "type": "object",
+                                        "properties": {
+                                            "name": { "type": "string" },
+                                            "email": { "type": "string" },
+                                            "designation": { "type": "string" },
+                                            "file": { "type": "string", "format": "binary" },
+                                            "profileImageUrl": { "type": "string" }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "responses": {
+                            "200": {
+                                "description": "Profile updated successfully",
+                                "content": {
+                                    "application/json": {
+                                        "schema": {
+                                            "type": "object",
+                                            "properties": {
+                                                "message": { "type": "string" },
+                                                "user": { "type": "object" }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "500": {
+                                "description": "Failed to update profile",
+                                "content": {
+                                    "application/json": {
+                                        "schema": {
+                                            "type": "object",
+                                            "properties": {
+                                                "error": { "type": "string" }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+
+                "/auth/change-password": {
+                    "patch": {
+                        "tags": ["Auth"],
+                        "summary": "Change user password",
+                        "description": "Allows users to change their password.",
+                        "requestBody": {
+                            "required": true,
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "type": "object",
+                                        "properties": {
+                                            "oldPassword": { "type": "string" },
+                                            "newPassword": { "type": "string" }
+                                        },
+                                        "required": ["oldPassword", "newPassword"]
+                                    }
+                                }
+                            }
+                        },
+                        "responses": {
+                            "200": {
+                                "description": "Password changed successfully",
+                                "content": {
+                                    "application/json": {
+                                        "schema": {
+                                            "type": "object",
+                                            "properties": {
+                                                "message": { "type": "string" }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "403": {
+                                "description": "Incorrect old password",
+                                "content": {
+                                    "application/json": {
+                                        "schema": {
+                                            "type": "object",
+                                            "properties": {
+                                                "error": { "type": "string" }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+
                 // Upload Routes
                 '/upload/file': {
                     post: {

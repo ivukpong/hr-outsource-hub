@@ -273,12 +273,18 @@ export default function DashContainer({
           </p>
           {/* Go Home Button */}
           <div className="grid grid-cols-2 gap-6">
-            <Link
-              href="/auth/signin"
+            <button
+              onClick={() => {
+                localStorage.removeItem("token");
+                localStorage.removeItem("user");
+                sessionStorage.removeItem("token");
+                sessionStorage.removeItem("user");
+                router.push("/auth/signin");
+              }}
               className="bg-[#D92D20] text-white py-2 cursor-pointer px-4 rounded-[5px] w-full"
             >
               Log Out
-            </Link>
+            </button>
             <button
               onClick={handleCloseModal}
               className="border-[#D5D7DA] border text-[#666666] dark:text-white py-2 cursor-pointer px-4 rounded-[5px] w-full"
@@ -333,7 +339,7 @@ export default function DashContainer({
         <motion.aside
           className={`z-10 bg-gray-100 dark:bg-gray-700 shadow-md my-7 mx-4 rounded-[15px] flex flex-col items-center fixed h-[93%] w-64 ${
             isOpen ? "block" : "hidden"
-          } md:block`}
+          } sm:block`}
           initial="hidden"
           animate={isOpen ? "visible" : "hidden"}
           variants={sidebarVariants}

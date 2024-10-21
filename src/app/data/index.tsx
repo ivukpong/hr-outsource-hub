@@ -4,6 +4,14 @@ import {
   faFileAlt,
 } from "@fortawesome/free-solid-svg-icons";
 
+export const headings = [
+  "General",
+  "Security",
+  "Appearance",
+  "Reports",
+  "Apps",
+];
+
 export const navs = [
   { name: "Dashboard", icon: "fas fa-home" },
   { name: "Employees", icon: "fas fa-users" },

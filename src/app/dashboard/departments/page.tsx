@@ -218,7 +218,7 @@ function Page() {
         ) : (
           <div className="p-4">
             <div className="flex w-full justify-center md:justify-between items-center mb-4 flex-wrap">
-              <div className="relative flex w-full justify-center md:justify-start items-center">
+              <div className="relative flex justify-center md:justify-start items-center">
                 <CustomInput
                   htmlFor="search"
                   label=""
@@ -230,7 +230,7 @@ function Page() {
                   onChange={(e) => onSearch(e.target.value)}
                 />
               </div>
-              <div className="grid md:grid-cols-2 w-full items-center gap-4 justify-center md:justify-end">
+              <div className="flex items-center gap-4 justify-center md:justify-end">
                 <Button
                   icon
                   text={"Create new department"}
@@ -238,7 +238,7 @@ function Page() {
                 />
                 <button
                   onClick={() => setIsAddTeam(true)}
-                  className="border mb-4 text-[#16151C] dark:text-white px-4 py-2 rounded-[5px] flex gap-2 items-center"
+                  className="w-fit border mb-4 text-[#16151C] dark:text-white px-4 py-2 rounded-[5px] flex gap-2 items-center"
                 >
                   <div className="border rounded-full h-5 w-5 flex items-center justify-center p-2">
                     <i className="fas fa-plus text-xs"></i>

@@ -38,6 +38,7 @@ const Layout = ({
       const data = localStorage.getItem("user");
       const temp = data ? JSON.parse(data) : null;
       setUser(temp);
+      console.log(temp);
     };
     getUser();
   }, []);
@@ -68,7 +69,10 @@ const Layout = ({
           <DarkModeToggle />
           <div className="w-10 h-10 bg-gray-200 rounded-full overflow-hidden">
             <Image
-              src={"/images/user.png"}
+              src={
+                user?.profilePic ??
+                "https://firebasestorage.googleapis.com/v0/b/hr-dashboard-18e9e.appspot.com/o/uploads%2FGTCO_logo.svg%201.png?alt=media&token=ae6be633-7c3c-4497-b895-7f63f261177d"
+              }
               alt="User Image"
               width={40}
               height={40}
@@ -80,7 +84,7 @@ const Layout = ({
               {user?.name}
             </p>
             <p className="text-sm text-[#1E1E1E4F] dark:text-gray-400">
-              HR Manager
+              {user?.designation}
             </p>
           </div>
         </motion.div>

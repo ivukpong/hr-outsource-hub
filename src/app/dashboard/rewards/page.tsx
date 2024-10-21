@@ -324,7 +324,7 @@ function Page() {
         ) : (
           <div className="">
             <div className="flex w-full justify-center md:justify-between items-center mb-4 flex-wrap">
-              <div className="relative flex w-full justify-center md:justify-start items-center">
+              <div className="relative flex justify-center md:justify-start items-center">
                 <CustomInput
                   htmlFor="search"
                   label=""
@@ -336,7 +336,7 @@ function Page() {
                   onChange={(e) => onSearch(e.target.value)}
                 />
               </div>
-              <div className="grid md:grid-cols-2 items-center gap-4 justify-center md:justify-end">
+              <div className="flex items-center gap-4 justify-center md:justify-end">
                 <Button
                   icon
                   text={"Create Reward Campaign"}
@@ -344,7 +344,7 @@ function Page() {
                 />
                 <button
                   onClick={() => setIsFilterOpen(true)}
-                  className="border mb-4 border-grey text-[#16151C] dark:text-white px-4 py-2 rounded-[5px] flex gap-2 items-center w-fit mx-auto"
+                  className="border mb-4 border-grey text-[#16151C] dark:text-white px-4 py-2 rounded-[5px] flex gap-2 items-center w-fit "
                 >
                   <p>Filter</p>
                   <i className="fas fa-filter"></i>

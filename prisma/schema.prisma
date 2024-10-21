@@ -4,8 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
-  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+  url = env("DATABASE_URL") // uses connection pooling
 }
 
 model User {
@@ -18,7 +17,10 @@ model User {
   isVerified           Boolean   @default(false)
   otps                 Otp[]     @relation("UserOtp")
   createdAt            DateTime  @default(now())
+  designation          String?   // Already added
+  profilePic      String?   // New field for storing profile image URL
 }
+
 
 model Otp {
   id        Int      @id @default(autoincrement())

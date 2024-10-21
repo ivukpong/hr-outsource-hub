@@ -58,7 +58,7 @@ function AuthContainer({ children }: { children: React.ReactNode }) {
             className="bg-secondary rounded-[30px] h-full w-full py-10 relative"
             layout // Animate layout change smoothly
           >
-            <img src="/images/dash.png" className="h-[90%] absolute right-0" />
+            <img src="/images/test.png" className="h-[90%] absolute right-0" />
           </motion.div>
         </motion.div>
 

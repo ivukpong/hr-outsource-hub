@@ -26,11 +26,13 @@ export default function SignIn() {
       headers: { "Content-Type": "application/json" },
     });
     const data = await response.json();
-
+    console.log(data);
     if (response.status === 200) {
-      const storage = rememberMe ? localStorage : sessionStorage;
-      storage.setItem("token", data.token);
-      storage.setItem("user", JSON.stringify(data.user));
+      // const storage = rememberMe ? localStorage : sessionStorage;
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
       toast.success(data.message);
       router.push("/dashboard");
     } else {

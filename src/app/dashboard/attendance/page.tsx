@@ -228,7 +228,7 @@ function Page() {
         ) : (
           <div className="">
             <div className="flex w-full justify-center md:justify-between items-center mb-4 flex-wrap">
-              <div className="relative flex w-full justify-center md:justify-start items-center">
+              <div className="relative flex justify-center md:justify-start items-center">
                 <CustomInput
                   htmlFor="search"
                   label=""
@@ -240,7 +240,7 @@ function Page() {
                   onChange={(e) => onSearch(e.target.value)}
                 />
               </div>
-              <div className="grid md:grid-cols-2 w-full items-center gap-4 justify-center md:justify-end">
+              <div className="flex items-center gap-4 justify-center md:justify-end">
                 <Button
                   icon
                   text={"Upload Employee Attendance"}

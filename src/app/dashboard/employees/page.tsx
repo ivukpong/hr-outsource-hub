@@ -245,7 +245,7 @@ function Employees() {
         </div>
       </Modal>
       <div className="flex w-full justify-center md:justify-between items-center mb-4 flex-wrap">
-        <div className="relative flex w-full justify-center md:justify-start items-center">
+        <div className="relative flex justify-center md:justify-start items-center">
           <CustomInput
             htmlFor="search"
             label=""
@@ -257,13 +257,13 @@ function Employees() {
             onChange={(e) => onSearch(e.target.value)}
           />
         </div>
-        <div className="grid md:grid-cols-2 w-full items-center gap-4 justify-center md:justify-end">
+        <div className="flex items-center gap-4 justify-center md:justify-end">
           <Link href={"/dashboard/employees/add"}>
             <Button icon text={"Add New Employee"} />
           </Link>
           <button
             onClick={handleOpenModal}
-            className="border mb-4 border-grey text-[#16151C] dark:text-white px-4 py-2 rounded-[5px] flex gap-2 items-center"
+            className="border mb-4 border-grey text-[#16151C] dark:text-white px-4 py-2 rounded-[5px] flex gap-2 items-center w-fit mx-auto"
           >
             <p>Filter</p>
             <i className="fas fa-filter"></i>
