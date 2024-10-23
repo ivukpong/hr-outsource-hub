@@ -125,7 +125,7 @@ const Dashboard = () => {
                 </div>
               </div>
               <div className="flex w-full flex-col mb-10 pl-2">
-                <h2 className="text-xl font-bold !text-left">
+                <h2 className="dark:text-white text-xl font-bold text-dark !text-left">
                   Onboarding Statistics
                 </h2>
                 <DepartmentChart />
