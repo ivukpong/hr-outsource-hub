@@ -4,8 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
-  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+  url = env("DATABASE_URL") // uses connection pooling
 }
 
 model User {
@@ -72,6 +71,8 @@ model Employee {
   schedules        ScheduleParticipants[] @relation("EmployeeSchedules") // Relation name added
   
   createdAt        DateTime?    @default(now())
+  responses   SurveyResponse[]  @relation("EmployeeResponses") // Relation to SurveyResponse
+
 }
 
 model Department {
@@ -165,4 +166,58 @@ model Announcement {
     date        DateTime
     isPinned    Boolean   @default(false) // Whether the announcement is pinned
     createdAt   DateTime  @default(now()) 
+}
+model Survey {
+  id             Int              @id @default(autoincrement())
+  title          String
+  description    String
+  category       SurveyCategory
+  questions      SurveyQuestion[] @relation("SurveyQuestions")
+  sentToEmails   String[]         @default([]) 
+  completedCount Int              @default(0) // Track how many have completed the survey
+  seenCount      Int              @default(0) // Track how many have completed the survey
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  responses      SurveyResponse[]  @relation("SurveyResponses") // Relation to SurveyResponse
+
+}
+
+model SurveyQuestion {
+  id         Int              @id @default(autoincrement())
+  survey     Survey           @relation("SurveyQuestions", fields: [surveyId], references: [id])
+  surveyId   Int
+  text       String
+  type       QuestionType
+  options    String[] 
+  responses  SurveyResponse[]  @relation("QuestionResponses") // Link to SurveyResponse
+}
+
+model SurveyResponse {
+  id            Int       @id @default(autoincrement())
+  surveyId      Int
+  employeeEmail String    // Store the email of the employee
+  response      String[]
+  createdAt     DateTime  @default(now())
+
+  // Define relationships
+  survey        Survey     @relation("SurveyResponses", fields: [surveyId], references: [id], onDelete: Cascade) // Link to Survey
+  employee      Employee   @relation("EmployeeResponses", fields: [employeeEmail], references: [emailAddress], onDelete: Cascade) // Link to Employee
+  question      SurveyQuestion? @relation("QuestionResponses", fields: [questionId], references: [id]) // Optional relation to SurveyQuestion
+  questionId    Int?  // Optional foreign key to SurveyQuestion
+}
+
+// Define your enums as needed
+enum SurveyCategory {
+  LEAD_TO_LEAD
+  LEAD_TO_EMPLOYEE
+  EMPLOYEE_TO_LEAD
+  EMPLOYEE_TO_EMPLOYEE
+  EMPLOYEE_TO_COMPANY
+}
+
+enum QuestionType {
+  TEXT
+  RADIO
+  CHECKBOX
+  SCALE
 }

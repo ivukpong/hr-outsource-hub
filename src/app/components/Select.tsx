@@ -15,7 +15,7 @@ function CustomSelect({
   htmlFor?: string;
   label?: string;
   id?: string;
-  options: { id: number; name: string }[]; // Define options array
+  options: { id: number | string; name: string }[]; // Define options array
   value?: string;
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   required?: boolean;

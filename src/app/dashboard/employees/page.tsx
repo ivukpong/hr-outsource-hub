@@ -219,7 +219,7 @@ function Employees() {
         <div className="rounded-lg text-center max-w-sm">
           {/* Success Icon */}
           <Image
-            src="/images/trash.png" // Path to the image
+            src="/images/delete.png" // Path to the image
             alt="Trash Icon" // Alt text for accessibility
             width={80} // Set the width (adjust based on your design)
             height={80} // Set the height (adjust based on your design)
@@ -238,7 +238,7 @@ function Employees() {
                 onClick={() => deleteEmployee(id)}
                 className="bg-[#D92D20] text-white py-2 cursor-pointer px-4 rounded-[5px] w-full"
               >
-                Log Out
+                Delete
               </button>
               <button
                 onClick={handleCancel}

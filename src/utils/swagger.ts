@@ -663,7 +663,6 @@ export const getApiDocs = async (): Promise<Record<string, unknown>> => {
                         },
                     },
                 },
-
                 // Profile Routes
                 "/profile/update": {
                     "patch": {
@@ -718,7 +717,6 @@ export const getApiDocs = async (): Promise<Record<string, unknown>> => {
                         }
                     }
                 },
-
                 "/profile/change-password": {
                     "patch": {
                         "tags": ["Auth"],
@@ -769,7 +767,6 @@ export const getApiDocs = async (): Promise<Record<string, unknown>> => {
                         }
                     }
                 },
-
                 // Upload Routes
                 '/upload/file': {
                     post: {
@@ -1460,7 +1457,6 @@ export const getApiDocs = async (): Promise<Record<string, unknown>> => {
                         }
                     }
                 },
-
                 '/attendance': {
                     get: {
                         tags: ['Attendance'],
@@ -2090,7 +2086,396 @@ export const getApiDocs = async (): Promise<Record<string, unknown>> => {
                             }
                         }
                     }
-                }
+                },
+                // Swagger documentation for the survey routes
+                '/surveys': {
+                    get: {
+                        tags: ['Surveys'],
+                        summary: 'Get all surveys',
+                        description: 'Retrieve a list of all surveys from the database.',
+                        responses: {
+                            200: {
+                                description: 'A list of surveys',
+                                content: {
+                                    'application/json': {
+                                        schema: {
+                                            type: 'array',
+                                            items: {
+                                                type: 'object',
+                                                properties: {
+                                                    id: { type: 'integer' },
+                                                    title: { type: 'string' },
+                                                    description: { type: 'string' },
+                                                    category: { type: 'string' },
+                                                    createdAt: { type: 'string', format: 'date-time' },
+                                                    updatedAt: { type: 'string', format: 'date-time' },
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    post: {
+                        tags: ['Surveys'],
+                        summary: 'Create a new survey',
+                        description: 'Add a new survey to the database.',
+                        requestBody: {
+                            required: true,
+                            content: {
+                                'application/json': {
+                                    schema: {
+                                        type: 'object',
+                                        properties: {
+                                            title: { type: 'string' },
+                                            description: { type: 'string' },
+                                            category: { type: 'string' },
+                                            questions: {
+                                                type: 'array',
+                                                items: {
+                                                    type: 'object',
+                                                    properties: {
+                                                        text: { type: 'string' },
+                                                        type: { type: 'string' }, // Example: 'text', 'radio', 'checkbox', 'scale'
+                                                        options: {
+                                                            type: 'array',
+                                                            items: { type: 'string' },
+                                                        },
+                                                    },
+                                                },
+                                            },
+                                        },
+                                        required: ['title', 'description', 'category', 'questions'],
+                                    },
+                                },
+                            },
+                        },
+                        responses: {
+                            201: {
+                                description: 'The newly created survey',
+                                content: {
+                                    'application/json': {
+                                        schema: {
+                                            type: 'object',
+                                            properties: {
+                                                id: { type: 'integer' },
+                                                title: { type: 'string' },
+                                                description: { type: 'string' },
+                                                category: { type: 'string' },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                            400: {
+                                description: 'Invalid input',
+                                content: {
+                                    'application/json': {
+                                        schema: {
+                                            type: 'object',
+                                            properties: {
+                                                error: { type: 'string' },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+                '/surveys/{id}': {
+                    get: {
+                        tags: ['Surveys'],
+                        summary: 'Get a survey by ID',
+                        description: 'Retrieve details of a survey by its ID.',
+                        parameters: [
+                            {
+                                name: 'id',
+                                in: 'path',
+                                required: true,
+                                schema: { type: 'integer' },
+                                description: 'ID of the survey to retrieve',
+                            },
+                        ],
+                        responses: {
+                            200: {
+                                description: 'Survey details',
+                                content: {
+                                    'application/json': {
+                                        schema: {
+                                            type: 'object',
+                                            properties: {
+                                                id: { type: 'integer' },
+                                                title: { type: 'string' },
+                                                description: { type: 'string' },
+                                                category: { type: 'string' },
+                                                questions: {
+                                                    type: 'array',
+                                                    items: {
+                                                        type: 'object',
+                                                        properties: {
+                                                            text: { type: 'string' },
+                                                            type: { type: 'string' },
+                                                            options: {
+                                                                type: 'array',
+                                                                items: { type: 'string' },
+                                                            },
+                                                        },
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                            404: {
+                                description: 'Survey not found',
+                                content: {
+                                    'application/json': {
+                                        schema: {
+                                            type: 'object',
+                                            properties: {
+                                                error: { type: 'string' },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    put: {
+                        tags: ['Surveys'],
+                        summary: 'Update a survey',
+                        description: 'Update a survey by its ID.',
+                        parameters: [
+                            {
+                                name: 'id',
+                                in: 'path',
+                                required: true,
+                                schema: { type: 'integer' },
+                                description: 'ID of the survey to update',
+                            },
+                        ],
+                        requestBody: {
+                            required: true,
+                            content: {
+                                'application/json': {
+                                    schema: {
+                                        type: 'object',
+                                        properties: {
+                                            title: { type: 'string' },
+                                            description: { type: 'string' },
+                                            category: { type: 'string' },
+                                            questions: {
+                                                type: 'array',
+                                                items: {
+                                                    type: 'object',
+                                                    properties: {
+                                                        text: { type: 'string' },
+                                                        type: { type: 'string' },
+                                                        options: {
+                                                            type: 'array',
+                                                            items: { type: 'string' },
+                                                        },
+                                                    },
+                                                },
+                                            },
+                                        },
+                                        required: ['title', 'description', 'category', 'questions'],
+                                    },
+                                },
+                            },
+                        },
+                        responses: {
+                            200: {
+                                description: 'The updated survey',
+                                content: {
+                                    'application/json': {
+                                        schema: {
+                                            type: 'object',
+                                            properties: {
+                                                id: { type: 'integer' },
+                                                title: { type: 'string' },
+                                                description: { type: 'string' },
+                                                category: { type: 'string' },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                            404: {
+                                description: 'Survey not found',
+                                content: {
+                                    'application/json': {
+                                        schema: {
+                                            type: 'object',
+                                            properties: {
+                                                error: { type: 'string' },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    delete: {
+                        tags: ['Surveys'],
+                        summary: 'Delete a survey',
+                        description: 'Delete a survey by its ID.',
+                        parameters: [
+                            {
+                                name: 'id',
+                                in: 'path',
+                                required: true,
+                                schema: { type: 'integer' },
+                                description: 'ID of the survey to delete',
+                            },
+                        ],
+                        responses: {
+                            200: {
+                                description: 'Survey deleted successfully',
+                                content: {
+                                    'application/json': {
+                                        schema: {
+                                            type: 'object',
+                                            properties: {
+                                                message: { type: 'string' },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                            404: {
+                                description: 'Survey not found',
+                                content: {
+                                    'application/json': {
+                                        schema: {
+                                            type: 'object',
+                                            properties: {
+                                                error: { type: 'string' },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+                '/surveys/{surveyId}/responses': {
+                    post: {
+                        tags: ['Responses'],
+                        summary: 'Submit a survey response',
+                        description: 'Add a new response to a survey.',
+                        parameters: [
+                            {
+                                name: 'surveyId',
+                                in: 'path',
+                                required: true,
+                                schema: { type: 'integer' },
+                                description: 'ID of the survey to respond to',
+                            },
+                        ],
+                        requestBody: {
+                            required: true,
+                            content: {
+                                'application/json': {
+                                    schema: {
+                                        type: 'object',
+                                        properties: {
+                                            responses: {
+                                                type: 'array',
+                                                items: {
+                                                    type: 'object',
+                                                    properties: {
+                                                        questionId: { type: 'integer' },
+                                                        answer: { type: 'string' }, // Adjust based on the expected answer format
+                                                    },
+                                                },
+                                            },
+                                        },
+                                        required: ['responses'],
+                                    },
+                                },
+                            },
+                        },
+                        responses: {
+                            201: {
+                                description: 'Response submitted successfully',
+                                content: {
+                                    'application/json': {
+                                        schema: {
+                                            type: 'object',
+                                            properties: {
+                                                message: { type: 'string' },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                            404: {
+                                description: 'Survey not found',
+                                content: {
+                                    'application/json': {
+                                        schema: {
+                                            type: 'object',
+                                            properties: {
+                                                error: { type: 'string' },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+                '/surveys/{surveyId}/metrics': {
+                    get: {
+                        tags: ['Metrics'],
+                        summary: 'Get survey metrics',
+                        description: 'Retrieve metrics for a specific survey.',
+                        parameters: [
+                            {
+                                name: 'surveyId',
+                                in: 'path',
+                                required: true,
+                                schema: { type: 'integer' },
+                                description: 'ID of the survey to retrieve metrics for',
+                            },
+                        ],
+                        responses: {
+                            200: {
+                                description: 'Survey metrics',
+                                content: {
+                                    'application/json': {
+                                        schema: {
+                                            type: 'object',
+                                            properties: {
+                                                surveyId: { type: 'integer' },
+                                                responseCount: { type: 'integer' },
+                                                averageRating: { type: 'number' },
+                                                // Add additional metrics as needed
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                            404: {
+                                description: 'Survey not found',
+                                content: {
+                                    'application/json': {
+                                        schema: {
+                                            type: 'object',
+                                            properties: {
+                                                error: { type: 'string' },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
             },
         },
     });

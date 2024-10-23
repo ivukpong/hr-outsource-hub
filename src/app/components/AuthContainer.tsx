@@ -56,7 +56,7 @@ function AuthContainer({ children }: { children: React.ReactNode }) {
           variants={containerVariants}
         >
           <motion.div
-            className="bg-secondary rounded-[30px] h-full w-full py-10 relative"
+            className="bg-secondary rounded-[20px] h-full w-full relative"
             layout // Animate layout change smoothly
           >
             <Image
@@ -64,7 +64,7 @@ function AuthContainer({ children }: { children: React.ReactNode }) {
               alt="Test Image"
               layout="fill" // Ensures the image fills the container
               objectFit="contain" // Ensures the image maintains aspect ratio
-              className="h-[90%] absolute right-0"
+              className="absolute right-0 rounded-[30px] h-full w-full "
             />
           </motion.div>
         </motion.div>

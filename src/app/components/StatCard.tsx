@@ -10,7 +10,7 @@ function StatCard({
     icon: IconDefinition;
     title: string;
     trend: string;
-    value: string;
+    value: number | undefined;
     color: string;
     stat: string;
     trendText: string;

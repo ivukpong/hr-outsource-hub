@@ -195,6 +195,29 @@ export default function Page() {
 
     if (response.ok) {
       toast.success("Employee updated successfully!");
+      setFirstName("");
+      setLastName("");
+      setMobileNumber("");
+      setEmailAddress("");
+      setDateOfBirth("");
+      setMaritalStatus("");
+      setGender("");
+      setNationality("");
+      setAddress("");
+      setCity("");
+      setState("");
+      setZipCode("");
+      setDepartmentId("");
+      setTeamId("");
+      setWorkingDays("");
+      setStartDate("");
+      setLocation("");
+      setImagePreview("");
+      setImageLink("");
+      setOfferLetterLink("");
+      setPayrollSlipLink("");
+      setIDLink("");
+      setCVLink("");
       router.push("/dashboard/employees");
     } else {
       toast.error(data.error || "Failed to add employee.");

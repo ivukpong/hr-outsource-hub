@@ -56,9 +56,10 @@ function FormFunction() {
     });
 
     const data = await response.json();
-    if (response.ok) {
+    if (!response.ok) {
       toast.error(data.message);
     }
+    
   };
 
   const email = searchParams.get("email");

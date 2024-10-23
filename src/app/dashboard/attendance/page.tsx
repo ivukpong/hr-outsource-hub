@@ -165,6 +165,8 @@ function Page() {
       const result = await response.json();
       if (response.ok) {
         toast.success("Attendance recorded successfully");
+        setEmployeeID("");
+        setCheckInDate("");
         handleCloseModal(); // Close the modal after submission
       } else {
         toast.error(result.error || "Failed to submit attendance");

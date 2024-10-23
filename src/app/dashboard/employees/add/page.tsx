@@ -210,6 +210,29 @@ export default function Page() {
 
     if (response.ok) {
       toast.success("Employee added successfully!");
+      setFirstName("");
+      setLastName("");
+      setMobileNumber("");
+      setEmailAddress("");
+      setDateOfBirth("");
+      setMaritalStatus("");
+      setGender("");
+      setNationality("");
+      setAddress("");
+      setCity("");
+      setState("");
+      setZipCode("");
+      setDepartment("");
+      setTeamId("");
+      setWorkingDays("");
+      setStartDate("");
+      setLocation("");
+      setImagePreview("");
+      setImageLink("");
+      setOfferLetterLink("");
+      setPayrollSlipLink("");
+      setIDLink("");
+      setCVLink("");
       handleOpenModal();
     } else {
       toast.error(data.error || "Failed to add employee.");

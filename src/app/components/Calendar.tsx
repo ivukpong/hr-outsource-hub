@@ -25,7 +25,9 @@ const MyCalendar: FC<MyCalendarProps> = ({ selectedDate, onDateSelect }) => {
       const isSelected = date.toDateString() === selectedDate?.toDateString();
       return isSelected
         ? "!bg-[#E04403] text-white rounded-[5px]"
-        : "dark:!bg-gray-800"; // Active color for today
+        : date.toDateString() === new Date()?.toDateString()
+          ? "!bg-[#FFEDE5]"
+          : "dark:!bg-gray-800"; // Active color for today
     }
   };
 

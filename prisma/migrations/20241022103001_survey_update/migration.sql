@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Survey" ADD COLUMN     "completedCount" INTEGER NOT NULL DEFAULT 0,
+ADD COLUMN     "seenCount" INTEGER NOT NULL DEFAULT 0;

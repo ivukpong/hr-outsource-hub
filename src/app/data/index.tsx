@@ -1,8 +1,4 @@
-import {
-  faCommentDots,
-  faEye,
-  faFileAlt,
-} from "@fortawesome/free-solid-svg-icons";
+import { QuestionType } from "@prisma/client"; // Ensure the import matches your project structure
 
 export const headings = [
   "General",
@@ -18,7 +14,7 @@ export const navs = [
   { name: "Departments", icon: "fas fa-building" },
   { name: "Attendance", icon: "fas fa-calendar-check" },
   // { name: "Performance", icon: "fas fa-chart-line" },
-  { name: "Goals", icon: "fas fa-bullseye" },
+  { name: "Performance", icon: "fas fa-bullseye" },
   // { name: "Training", icon: "fas fa-chalkboard-teacher" },
   { name: "Rewards", icon: "fas fa-gift" },
   { name: "Surveys", icon: "fas fa-poll" },
@@ -481,38 +477,6 @@ export const responses = [
   },
 ];
 
-export const statsData = [
-  {
-    id: 1,
-    icon: faFileAlt,
-    title: "Surveys created",
-    stat: "4.5%",
-    trend: "up",
-    value: "1,780",
-    trendText: "vs last month",
-    color: "text-green-500",
-  },
-  {
-    id: 2,
-    icon: faCommentDots,
-    title: "Survey responses",
-    stat: "1.2%",
-    trend: "down",
-    value: "200",
-    trendText: "vs last month",
-    color: "text-red-500",
-  },
-  {
-    id: 3,
-    icon: faEye,
-    title: "Question views",
-    stat: "1.2%",
-    trend: "down",
-    value: "15,645",
-    trendText: "vs last month",
-    color: "text-red-500",
-  },
-];
 export const data = [
   {
     name: "April",
@@ -557,3 +521,152 @@ export const data = [
     percentage: 84.0,
   },
 ];
+
+// Define the possible categories
+export type SurveyCategory =
+  | "LEAD_TO_LEAD"
+  | "LEAD_TO_EMPLOYEE"
+  | "EMPLOYEE_TO_LEAD"
+  | "EMPLOYEE_TO_EMPLOYEE"
+  | "EMPLOYEE_TO_COMPANY";
+
+export const questionMapping: Record<
+  SurveyCategory,
+  { text: string; type: QuestionType; options: string[] }[]
+> = {
+  LEAD_TO_LEAD: [
+    {
+      text: "How effectively do you communicate with other leaders?",
+      type: QuestionType.SCALE,
+      options: ["1 - Not Effective", "2", "3", "4", "5 - Very Effective"],
+    },
+    {
+      text: "Do you feel supported by your fellow leaders in achieving your objectives?",
+      type: QuestionType.RADIO,
+      options: ["Yes", "No"],
+    },
+    {
+      text: "How often do you collaborate with other leaders on strategic initiatives?",
+      type: QuestionType.SCALE,
+      options: ["Rarely", "Sometimes", "Often", "Always"],
+    },
+    {
+      text: "What can be improved in terms of leadership collaboration? (Open-ended)",
+      type: QuestionType.TEXT,
+      options: [],
+    },
+    {
+      text: "Are there any barriers that hinder effective leadership communication? (Open-ended)",
+      type: QuestionType.TEXT,
+      options: [],
+    },
+  ],
+  LEAD_TO_EMPLOYEE: [
+    {
+      text: "How accessible is your leader when you need support?",
+      type: QuestionType.SCALE,
+      options: ["1 - Not Accessible", "2", "3", "4", "5 - Very Accessible"],
+    },
+    {
+      text: "Do you feel your leader provides you with sufficient feedback on your performance?",
+      type: QuestionType.RADIO,
+      options: ["Yes", "No"],
+    },
+    {
+      text: "How well does your leader recognize and appreciate your contributions?",
+      type: QuestionType.SCALE,
+      options: ["1 - Not Well", "2", "3", "4", "5 - Very Well"],
+    },
+    {
+      text: "What could your leader do differently to support your professional growth? (Open-ended)",
+      type: QuestionType.TEXT,
+      options: [],
+    },
+    {
+      text: "How often do you have one-on-one meetings with your leader?",
+      type: QuestionType.RADIO,
+      options: ["Weekly", "Monthly", "Quarterly", "Never"],
+    },
+  ],
+  EMPLOYEE_TO_LEAD: [
+    {
+      text: "Do you feel comfortable approaching your leader with concerns or suggestions?",
+      type: QuestionType.RADIO,
+      options: ["Yes", "No"],
+    },
+    {
+      text: "How would you rate your leader's ability to inspire and motivate you?",
+      type: QuestionType.SCALE,
+      options: ["1 - Not at All", "2", "3", "4", "5 - Extremely"],
+    },
+    {
+      text: "Does your leader clearly communicate team goals and expectations?",
+      type: QuestionType.RADIO,
+      options: ["Yes", "No"],
+    },
+    {
+      text: "What do you appreciate most about your leader's management style? (Open-ended)",
+      type: QuestionType.TEXT,
+      options: [],
+    },
+    {
+      text: "What improvements would you suggest for your leader? (Open-ended)",
+      type: QuestionType.TEXT,
+      options: [],
+    },
+  ],
+  EMPLOYEE_TO_EMPLOYEE: [
+    {
+      text: "How would you rate the level of collaboration within your team?",
+      type: QuestionType.SCALE,
+      options: ["1 - Poor", "2", "3", "4", "5 - Excellent"],
+    },
+    {
+      text: "Do you feel that team members support one another in achieving goals?",
+      type: QuestionType.RADIO,
+      options: ["Yes", "No"],
+    },
+    {
+      text: "How effectively does your team resolve conflicts?",
+      type: QuestionType.SCALE,
+      options: ["1 - Not Effectively", "2", "3", "4", "5 - Very Effectively"],
+    },
+    {
+      text: "What could improve teamwork among your peers? (Open-ended)",
+      type: QuestionType.TEXT,
+      options: [],
+    },
+    {
+      text: "Do you feel comfortable giving feedback to your colleagues?",
+      type: QuestionType.RADIO,
+      options: ["Yes", "No"],
+    },
+  ],
+  EMPLOYEE_TO_COMPANY: [
+    {
+      text: "How satisfied are you with your overall experience at the company?",
+      type: QuestionType.SCALE,
+      options: ["1 - Very Dissatisfied", "2", "3", "4", "5 - Very Satisfied"],
+    },
+    {
+      text: "Do you feel the company culture aligns with your values?",
+      type: QuestionType.RADIO,
+      options: ["Yes", "No"],
+    },
+    {
+      text: "How well does the company provide opportunities for professional development?",
+      type: QuestionType.SCALE,
+      options: ["1 - Poorly", "2", "3", "4", "5 - Excellent"],
+    },
+    {
+      text: "What improvements would you suggest for the company? (Open-ended)",
+      type: QuestionType.TEXT,
+      options: [],
+    },
+    {
+      text: "Would you recommend the company as a great place to work?",
+      type: QuestionType.RADIO,
+      options: ["Yes", "No"],
+    },
+  ],
+};
