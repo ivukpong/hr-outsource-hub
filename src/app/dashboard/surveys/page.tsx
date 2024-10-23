@@ -42,7 +42,7 @@ function Page() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState<SurveyCategory | "">("");
-  const [sentToEmails, setSentToEmails] = useState("");
+  const [sentToEmails, setSentToEmails] = useState<(string | null)[]>([]);
   const [loading, setLoading] = useState(false);
 
   async function fetchSurveys() {
@@ -91,7 +91,7 @@ function Page() {
       const data = await response.json(); // Parse the JSON response
       setTitle("");
       setDescription("");
-      setSentToEmails("");
+      setSentToEmails([]);
       setCategory("");
       handleCloseModal();
       setLoading(false);
