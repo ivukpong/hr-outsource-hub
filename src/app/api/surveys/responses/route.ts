@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
 }
 
 // GET method to retrieve all survey responses
-export async function GET(req: NextRequest) {
+export async function GET() {
     try {
         // Fetch responses for all surveys
         const responses = await prisma.surveyResponse.findMany({

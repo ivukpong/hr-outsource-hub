@@ -86,6 +86,9 @@ function Page() {
     const result = await response.json();
     setLink(result.fileUrl);
 
+    console.log(image);
+    console.log(imagePreview);
+
     // Set upload status based on response
     if (response.ok) {
       toast.success(`File uploaded successfully!`);
