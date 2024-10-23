@@ -1,10 +1,8 @@
 "use client";
 
-import Cards from "@/app/components/Cards";
 import DashContainer from "@/app/components/DashContainer";
 import CustomInput from "@/app/components/Input";
 import Layout from "@/app/components/Layout";
-import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
 
 import React, { useState } from "react";
 import Button from "@/app/components/Button";
@@ -12,7 +10,14 @@ import Modal from "@/app/components/Modal";
 import CustomSelect from "@/app/components/Select";
 import toast from "react-hot-toast";
 import { useEffect } from "react";
-import { Category, Department, Employee, Reward } from "@prisma/client";
+import {
+  Category,
+  Department,
+  Employee,
+  Kpi,
+  Performance,
+  Team,
+} from "@prisma/client";
 import EmployeeSelect from "@/app/components/EmployeeSelect";
 import { CircularProgress } from "@mui/material";
 import Pagination from "@/app/components/Pagination";
@@ -20,32 +25,24 @@ import Image from "next/image";
 
 function Page() {
   const [search, setSearch] = useState("");
-  const [rewards, setRewards] = useState([]);
-  const [filtered, setFiltered] = useState(rewards);
+  const [performance, setPerformance] = useState([]);
+  const [filtered, setFiltered] = useState(performance);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [departments, setDepartments] = useState<Department[]>([]);
+  const [kpis, setKpis] = useState<Category[]>([]);
+  const [teams, setTeams] = useState<Department[]>([]);
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [employeeId, setEmployeeID] = useState("");
   const [earnedDate, setDateEarned] = useState("");
-  const [department, setDepartment] = useState("");
+  const [team, setTeam] = useState("");
   const [pointsEarned, setPointsEarned] = useState("");
-  const [category, setCategory] = useState("");
-  const [selectedDepartments, setSelectedDepartments] = useState<number[]>([]);
-  const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
+  const [kpi, setKpi] = useState("");
+  const [selectedTeam, setSelectedTeams] = useState<number[]>([]);
+  const [selectedKpis, setSelectedKpis] = useState<number[]>([]);
   const [itemsPerPage, setItemsPerPage] = useState(5); // Default items per page
   const [currentPage, setCurrentPage] = useState(1);
-  const [isDark, setIsDark] = useState(false);
 
-  function isDarkMode() {
-    console.log(document.documentElement.classList.contains("dark"));
-    setIsDark(document.documentElement.classList.contains("dark"));
-    // return document.documentElement.classList.contains("dark");
-  }
-
-  useEffect(() => isDarkMode());
   // Calculate the total number of pages
   const totalEmployees = filtered.length;
 
@@ -54,19 +51,19 @@ function Page() {
   const endIndex = Math.min(startIndex + itemsPerPage, totalEmployees);
 
   // Slice the data to show only the current page's items
-  const currentRewards = filtered.slice(startIndex, endIndex);
+  const currentPerformance = filtered.slice(startIndex, endIndex);
 
   // Toggle department selection
-  const handleDepartmentChange = (departmentId: number) => {
-    setSelectedDepartments((prev) =>
-      prev.includes(departmentId)
-        ? prev.filter((id) => id !== departmentId)
-        : [...prev, departmentId]
+  const handleTeamChange = (teamId: number) => {
+    setSelectedTeams((prev) =>
+      prev.includes(teamId)
+        ? prev.filter((id) => id !== teamId)
+        : [...prev, teamId]
     );
   };
 
-  const handleCategoryChange = (categoryId: number) => {
-    setSelectedCategories((prev) =>
+  const handleKPiChange = (categoryId: number) => {
+    setSelectedKpis((prev) =>
       prev.includes(categoryId)
         ? prev.filter((id) => id !== categoryId)
         : [...prev, categoryId]
@@ -75,14 +72,13 @@ function Page() {
 
   // Handle apply filter
   const handleApplyFilter = () => {
-    const temp = rewards.filter(
-      (reward: { employee: { departmentId: number }; categoryId: number }) => {
+    const temp = performance.filter(
+      (reward: { employee: { teamId: number }; categoryId: number }) => {
         const matchesDepartment =
-          selectedDepartments.length === 0 ||
-          selectedDepartments.includes(reward.employee.departmentId);
+          selectedTeam.length === 0 ||
+          selectedTeam.includes(reward.employee.teamId);
         const matchesCategory =
-          selectedCategories.length === 0 ||
-          selectedCategories.includes(reward.categoryId);
+          selectedKpis.length === 0 || selectedKpis.includes(reward.categoryId);
 
         return matchesDepartment && matchesCategory;
       }
@@ -92,23 +88,23 @@ function Page() {
     setIsFilterOpen(false);
   };
 
-  async function fetchRewards() {
-    const res = await fetch("/api/rewards");
+  async function fetchPerformance() {
+    const res = await fetch("/api/performance");
     const data = await res.json();
-    setRewards(data);
+    setPerformance(data);
     setFiltered(data);
     setLoading(false);
   }
 
-  async function fetchCategories() {
-    const res = await fetch("/api/categories");
+  async function fetchKpis() {
+    const res = await fetch("/api/kpis");
     const data = await res.json();
-    setCategories(data);
+    setKpis(data);
   }
-  async function fetchDepartments() {
-    const res = await fetch("/api/departments");
+  async function fetchTeams() {
+    const res = await fetch("/api/teams");
     const data = await res.json();
-    setDepartments(data);
+    setTeams(data);
   }
 
   async function fetchEmployees() {
@@ -119,10 +115,10 @@ function Page() {
 
   useEffect(() => {
     setLoading(true);
-    fetchDepartments();
-    fetchCategories();
+    fetchTeams();
+    fetchKpis();
     fetchEmployees();
-    fetchRewards();
+    fetchPerformance();
   }, []);
 
   const handleOpenModal = () => {
@@ -135,17 +131,17 @@ function Page() {
 
   const onSearch = (text: string) => {
     setSearch(text);
-    const filteredEmployees = rewards.filter(
+    const filteredEmployees = performance.filter(
       (reward: {
         employee: { firstName: string | string[]; lastName: string | string[] };
-        department: { name: string | string[] };
-        category: { name: string | string[] };
+        kpi: { name: string | string[] };
+        team: { name: string | string[] };
         progress: { toString: () => string | string[] };
       }) =>
         reward.employee.firstName.includes(text) ||
         reward.employee.lastName.includes(text) ||
-        reward.department.name.includes(text) ||
-        reward.category.name.includes(text) ||
+        reward.kpi.name.includes(text) ||
+        reward.team.name.includes(text) ||
         reward.progress.toString().includes(text)
     );
     setFiltered(filteredEmployees);
@@ -156,14 +152,14 @@ function Page() {
 
     const formData = {
       employeeId,
-      earnedDate,
-      departmentId: parseInt(department),
-      pointsEarned: parseInt(pointsEarned),
-      categoryId: parseInt(category),
+      evaluationDate: earnedDate,
+      teamId: parseInt(team),
+      score: parseInt(pointsEarned),
+      kpiId: parseInt(kpi),
     };
 
     // Assuming you would send this data to an API endpoint
-    const response = await fetch("/api/rewards", {
+    const response = await fetch("/api/performance", {
       method: "POST",
       body: JSON.stringify(formData),
       headers: { "Content-Type": "application/json" },
@@ -171,7 +167,7 @@ function Page() {
 
     if (response.ok) {
       toast.success("Reward submitted successfully");
-      fetchRewards();
+      fetchPerformance();
     } else {
       toast.error("Failed to submit reward");
     }
@@ -226,23 +222,23 @@ function Page() {
               </div>
 
               <CustomSelect
-                htmlFor="department"
-                label="Select Department"
-                id="department"
-                value={department}
-                options={departments}
-                onChange={(e) => setDepartment(e.target.value)}
+                htmlFor="team"
+                label="Select Team"
+                id="team"
+                value={team}
+                options={teams}
+                onChange={(e) => setTeam(e.target.value)}
                 required
               />
 
               <div className="mt-4">
                 <CustomSelect
                   htmlFor="category"
-                  label="Select Category"
-                  id="category"
-                  value={category}
-                  options={categories}
-                  onChange={(e) => setCategory(e.target.value)}
+                  label="Select KPI"
+                  id="kpi"
+                  value={kpi}
+                  options={kpis}
+                  onChange={(e) => setKpi(e.target.value)}
                   required
                 />
               </div>
@@ -269,13 +265,13 @@ function Page() {
             <div className="mb-4">
               <h3 className="font-semibold mb-2">Department</h3>
               <div className="grid grid-cols-2 gap-2">
-                {departments.map((department: Department) => (
+                {teams.map((department: Department) => (
                   <label className="flex items-center" key={department.id}>
                     <input
                       type="checkbox"
                       className="form-checkbox appearance-none w-4 h-4 rounded border border-gray-300 checked:bg-orange-600 checked:border-orange-600 checked:text-white focus:outline-none transition duration-200"
-                      onChange={() => handleDepartmentChange(department.id)}
-                      checked={selectedDepartments.includes(department.id)}
+                      onChange={() => handleTeamChange(department.id)}
+                      checked={selectedTeam.includes(department.id)}
                     />
                     <span className="ml-2">{department.name}</span>
                   </label>
@@ -285,13 +281,13 @@ function Page() {
             <div className="mb-4">
               <h3 className="font-semibold mb-2">Categories</h3>
               <div className="grid grid-cols-2 gap-2">
-                {categories.map((category: Category) => (
+                {kpis.map((category: Category) => (
                   <label className="flex items-center" key={category.id}>
                     <input
                       type="checkbox"
                       className="form-checkbox appearance-none w-4 h-4 rounded border border-gray-300 checked:bg-orange-600 checked:border-orange-600 checked:text-white focus:outline-none transition duration-200"
-                      onChange={() => handleCategoryChange(category.id)}
-                      checked={selectedCategories.includes(category.id)}
+                      onChange={() => handleKPiChange(category.id)}
+                      checked={selectedKpis.includes(category.id)}
                     />
                     <span className="ml-2">{category.name}</span>
                   </label>
@@ -348,7 +344,7 @@ function Page() {
 
             {filtered.length === 0 ? (
               <div className="flex h-full w-full items-center justify-center text-primary">
-                <p>No rewards added</p>
+                <p>No performance record added</p>
               </div>
             ) : (
               <div>
@@ -374,18 +370,15 @@ function Page() {
                         <th className="px-6 py-3 text-left text-grey font-normal">
                           KPI Progress
                         </th>
-                        <th className="px-6 py-3 text-left text-grey font-normal">
-                          Action
-                        </th>
                       </tr>
                     </thead>
                     <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200">
-                      {currentRewards.map(
+                      {currentPerformance.map(
                         (
-                          reward: Reward & {
+                          perform: Performance & {
                             employee: Employee;
-                            category: Category;
-                            department: Department;
+                            kpi: Kpi;
+                            team: Team & { department: Department };
                             earnedDate: string;
                           },
                           index
@@ -394,54 +387,45 @@ function Page() {
                             <td className="px-6 py-4 whitespace-nowrap flex items-center">
                               <Image
                                 className="h-10 w-10 rounded-full"
-                                src={reward?.employee?.profilePic ?? ""}
-                                alt={`Profile of ${reward.employee.id}`}
+                                src={perform?.employee?.profilePic ?? ""}
+                                alt={`Profile of ${perform.employee.id}`}
                                 width={40}
                                 height={40}
                               />
                               <div className="ml-4">
                                 <div className="text-sm  text-gray-500 dark:text-white">
-                                  {reward.employee.firstName}{" "}
-                                  {reward.employee.lastName}
+                                  {perform.employee.firstName}{" "}
+                                  {perform.employee.lastName}
                                 </div>
                               </div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
                               <div className="text-sm text-gray-500  dark:text-white">
                                 {new Date(
-                                  reward.earnedDate
+                                  perform?.evaluationDate ?? ""
                                 ).toLocaleDateString()}
                               </div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
                               <div className="text-sm text-gray-500  dark:text-white">
-                                {reward.department?.name}
+                                {perform.team?.department?.name}
                               </div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
                               <div className="text-sm text-gray-500  dark:text-white">
-                                {reward.category?.name}
+                                {perform.team?.name}
                               </div>
                             </td>
 
                             <td className="px-6 py-4 whitespace-nowrap">
                               <div className="text-sm text-[#FFA100]">
-                                CSAT Score
+                                {perform.kpi?.name}
                               </div>{" "}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
                               <div className="font-bold text-sm text-[#129D44]">
-                                85%
+                                {perform.progress}%
                               </div>{" "}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap flex items-center h-full relative bottom-2">
-                              <div onClick={() => {}}>
-                                <i className="fas fa-pen text-[#16151C] dark:text-white mr-2 cursor-pointer"></i>
-                              </div>
-                              <i
-                                onClick={() => {}}
-                                className="fas fa-trash text-red-400 cursor-pointer"
-                              ></i>
                             </td>
                           </tr>
                         )

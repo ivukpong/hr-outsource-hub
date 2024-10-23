@@ -4,6 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+  // url = env("DATABASE_URL") // uses connection pooling
   url = env("POSTGRES_PRISMA_URL") // uses connection pooling
   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
@@ -55,39 +56,27 @@ model Employee {
   payrollSlip      String?
   cv               String?
   meansOfId        String?
-  
   teams            Team?       @relation("EmployeeTeam", fields: [teamId], references: [id], map: "EmployeeTeam_FK")
-  
   departmentId     Int?       
   department       Department? @relation("DepartmentEmployees", fields: [departmentId], references: [id], map: "EmployeeDepartment_FK")
-  
   departmentHeadOf Department? @relation("DepartmentHeads")
-  
   rewards          Reward[]    @relation("EmployeeRewards")
-  
-  teamLead         Team?       @relation("TeamLead")
-  
-  attendance       Attendance[] @relation("EmployeeAttendance")
-  
-  schedules        ScheduleParticipants[] @relation("EmployeeSchedules") // Relation name added
-  
+  teamLead         Team?       @relation("TeamLead")  
+  attendance       Attendance[] @relation("EmployeeAttendance")  
+  schedules        ScheduleParticipants[] @relation("EmployeeSchedules") // Relation name added  
   createdAt        DateTime?    @default(now())
   responses   SurveyResponse[]  @relation("EmployeeResponses") // Relation to SurveyResponse
-
+  performances   Performance[] @relation("EmployeePerformance")  // Relation to Performance model
 }
 
 model Department {
   id               Int        @id @default(autoincrement())
   name             String
   teams            Team[]     @relation("TeamDepartment")
-  
   departmentHeadId Int?       @unique 
   departmentHead   Employee?   @relation("DepartmentHeads", fields: [departmentHeadId], references: [id], map: "DepartmentHead_FK")
-  
   employees        Employee[]  @relation("DepartmentEmployees")
-  
   rewards          Reward[]    @relation("DepartmentRewards")
-  
   createdAt       DateTime    @default(now())
 }
 
@@ -100,6 +89,7 @@ model Team {
   teamLeadId   Int?        @unique
   employees    Employee[]  @relation("EmployeeTeam")
   attendances  Attendance[] @relation("TeamAttendance")
+  performances Performance[] @relation("TeamPerformance")  // Relation to Performance model
   createdAt    DateTime    @default(now())
 }
 
@@ -205,6 +195,30 @@ model SurveyResponse {
   employee      Employee   @relation("EmployeeResponses", fields: [employeeEmail], references: [emailAddress], onDelete: Cascade) // Link to Employee
   question      SurveyQuestion? @relation("QuestionResponses", fields: [questionId], references: [id]) // Optional relation to SurveyQuestion
   questionId    Int?  // Optional foreign key to SurveyQuestion
+}
+
+model Kpi {
+  id             Int          @id @default(autoincrement())
+  name           String
+  description    String?
+  performances   Performance[] @relation("PerformanceKpi")  // Relation to Performance model
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+}
+
+model Performance {
+  id             Int          @id @default(autoincrement())
+  employeeId     Int?
+  teamId         Int?         // Replace departmentId with teamId
+  kpiId         Int?         // Replace departmentId with teamId
+  score          Float?       // KPI score (e.g., 85 for 85%)
+  progress       Float?       // KPI progress as a percentage
+  evaluationDate DateTime?    @default(now()) // Date of KPI evaluation
+  employee       Employee?    @relation("EmployeePerformance", fields: [employeeId], references: [id], map: "PerformanceEmployee_FK")
+  team           Team?        @relation("TeamPerformance", fields: [teamId], references: [id], map: "PerformanceTeam_FK")  // Link to Team
+  kpi            Kpi?         @relation("PerformanceKpi", fields: [kpiId], references: [id], map: "PerformanceKpi_FK")     // Link to Kpi
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
 }
 
 // Define your enums as needed

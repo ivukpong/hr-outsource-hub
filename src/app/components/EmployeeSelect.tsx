@@ -35,7 +35,7 @@ function EmployeeSelect({
   return (
     <div className="mb-4">
       <label
-        className="block text-gray-700 text-sm font-bold mb-2"
+        className="block dark:text-white text-gray-700 text-sm font-bold mb-2"
         htmlFor={htmlFor}
       >
         {label}
@@ -49,13 +49,13 @@ function EmployeeSelect({
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           onFocus={toggleDropdown}
-          className="w-full border py-2 px-3 rounded leading-tight focus:outline-none focus:shadow-outline"
+          className="w-full border py-2 px-3 rounded leading-tight dark:text-dark focus:outline-none focus:shadow-outline"
           required={required}
         />
 
         {/* Dropdown menu (shown only if dropdown is open) */}
         {isDropdownOpen && (
-          <ul className="absolute w-full border bg-white dark:bg-gray-800 z-10 max-h-60 overflow-y-auto mt-1 rounded shadow-lg">
+          <ul className="absolute w-full border bg-white dark:bg-gray-800 dark:text- z-10 max-h-60 overflow-y-auto mt-1 rounded shadow-lg">
             {filteredOptions.length > 0 ? (
               filteredOptions.map((option) => (
                 <li
