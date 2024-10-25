@@ -17,7 +17,7 @@ const Schedule: React.FC = () => {
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [location, setLocation] = useState("");
-  const [participants, setParticipants] = useState([]);
+  const [participants, setParticipants] = useState<number[]>([]);
   const [loading, setLoading] = useState(false);
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -33,7 +33,7 @@ const Schedule: React.FC = () => {
     setLoading(true);
 
     try {
-      const announcementData = {
+      const scheduleData = {
         title,
         description,
         startTime,
@@ -41,18 +41,18 @@ const Schedule: React.FC = () => {
         location,
         participants,
       };
-      const response = await fetch("/api/announcements", {
+      const response = await fetch("/api/schedules", {
         method: "POST", // Use POST method for creating a new survey
         headers: {
           "Content-Type": "application/json", // Set the content type to JSON
         },
-        body: JSON.stringify(announcementData), // Convert surveyData to JSON string
+        body: JSON.stringify(scheduleData), // Convert surveyData to JSON string
       });
 
       if (!response.ok) {
         // Check if the response is not OK (status not in the range 200-299)
-        toast.error("Failed to create announcement");
-        throw Error("Failed to create announcement");
+        toast.error("Failed to create schedule");
+        throw Error("Failed to create schedule");
       }
 
       const data = await response.json(); // Parse the JSON response
@@ -64,10 +64,13 @@ const Schedule: React.FC = () => {
       setParticipants([]);
       handleCloseModal();
       setLoading(false);
+      toast.success("Schedule create successfully");
+
       toast.success(data.message);
       return data; // Return the created survey data or handle it as needed
     } catch (error) {
       setLoading(false);
+      toast.error("Failed to create schedule");
       console.error("Error creating survey:", error); // Log the error
       throw error; // Propagate error if needed
     }
@@ -93,9 +96,9 @@ const Schedule: React.FC = () => {
   return (
     <div className="min-h-screen text-black dark:text-white">
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-        <div className="w-full max-w-lg">
+        <div className="w-full">
           <h2 className="text-dark dark:text-white text-xl font-semibold mb-4">
-            Survey Form
+            Schedule Form
           </h2>
           <form onSubmit={handleSubmit}>
             <CustomInput
@@ -126,7 +129,7 @@ const Schedule: React.FC = () => {
               htmlFor="startTime"
               id="startTime"
               label="Start Time"
-              type="time"
+              type="datetime-local"
               placeholder="Enter Start Time"
               value={startTime}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -138,7 +141,7 @@ const Schedule: React.FC = () => {
               htmlFor="endTime"
               id="endTime"
               label="End Time"
-              type="time"
+              type="datetime-local"
               placeholder="Enter End Time"
               value={endTime}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -149,7 +152,7 @@ const Schedule: React.FC = () => {
             <CustomInput
               htmlFor="location"
               id="location"
-              label="Date of Birth"
+              label="Location"
               type="text"
               placeholder="Enter Location"
               value={location}
@@ -161,9 +164,12 @@ const Schedule: React.FC = () => {
 
             <EmployeeNames
               htmlFor="participants"
-              label="Select Emails"
+              label="Select Participants"
               options={employees}
-              onChange={(e) => setParticipants(e)}
+              onChange={(e) => {
+                setParticipants(e);
+                console.log(participants);
+              }}
               required
             />
 
@@ -193,7 +199,7 @@ const Schedule: React.FC = () => {
             +
           </button>
         </div>
-        <div className="">
+        <div className="flex flex-col justify-center w-full">
           {/* Calendar */}
           <MyCalendar
             selectedDate={selectedDate}

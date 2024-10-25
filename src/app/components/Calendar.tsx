@@ -33,7 +33,7 @@ const MyCalendar: FC<MyCalendarProps> = ({ selectedDate, onDateSelect }) => {
 
   return (
     <Calendar
-      className={"!border-0 dark:!bg-gray-800"}
+      className={"!border-0 dark:!bg-gray-800 !mx-auto"}
       tileClassName={tileClassName}
       // selectRange
       onChange={handleDateChange} // Updated to handle Date | Date[] | null

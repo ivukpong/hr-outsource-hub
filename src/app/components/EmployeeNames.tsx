@@ -11,21 +11,20 @@ function EmployeeNames({
   htmlFor?: string;
   label?: string;
   options: Employee[];
-  onChange: (selectedEmails: string[]) => void;
+  onChange: (selectedEmployeeIds: number[]) => void;
   required?: boolean;
 }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedEmployees, setSelectedEmployees] = useState<Employee[]>([]);
 
-  // Derive selectedEmails from selectedEmployees to contain only emails
-  const selectedEmails = selectedEmployees.map(
-    (employee) => employee.emailAddress
-  );
+  // Derive selectedEmployeeIds from selectedEmployees to contain only IDs
+  const selectedEmployeeIds = selectedEmployees.map((employee) => employee.id);
 
+  // Trigger onChange only when selectedEmployees updates
   useEffect(() => {
-    onChange(selectedEmails.filter((email): email is string => email !== null)); // Pass only non-null emails to parent component
-  }, [selectedEmails, onChange]);
+    onChange(selectedEmployeeIds);
+  }, [selectedEmployees]);
 
   // Filtered options based on search query
   const filteredOptions = options.filter(
@@ -35,17 +34,13 @@ function EmployeeNames({
       option.emailAddress?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Toggle email selection
-  const toggleEmailSelection = (employee: Employee) => {
+  // Toggle selection by employee ID
+  const toggleEmployeeSelection = (employee: Employee) => {
     setSelectedEmployees((prev) => {
-      const isAlreadySelected = prev.some(
-        (e) => e.emailAddress === employee.emailAddress
-      );
-      const newSelectedEmployees = isAlreadySelected
-        ? prev.filter((e) => e.emailAddress !== employee.emailAddress) // Remove if already selected
+      const isAlreadySelected = prev.some((e) => e.id === employee.id);
+      return isAlreadySelected
+        ? prev.filter((e) => e.id !== employee.id) // Remove if already selected
         : [...prev, employee]; // Add if not selected
-
-      return newSelectedEmployees;
     });
   };
 
@@ -67,7 +62,7 @@ function EmployeeNames({
   return (
     <div className="mb-4">
       <label
-        className="block text-gray-700 text-sm font-bold mb-2"
+        className="block text-gray-700 dark:text-white text-sm font-bold mb-2"
         htmlFor={htmlFor}
       >
         {label}
@@ -81,7 +76,6 @@ function EmployeeNames({
           onFocus={() => setIsDropdownOpen(true)}
           onBlur={handleBlur}
           className="w-full border py-2 px-3 rounded leading-tight focus:outline-none focus:shadow-outline"
-          required={required}
         />
 
         <div className="mt-2">
@@ -89,12 +83,12 @@ function EmployeeNames({
             <div className="flex flex-wrap">
               {selectedEmployees.map((employee) => (
                 <span
-                  key={employee.emailAddress}
+                  key={employee.id}
                   className="bg-blue-500 text-white rounded-full px-2 py-1 mr-2 mb-2"
                 >
                   {employee.firstName} {employee.lastName}
                   <button
-                    onClick={() => toggleEmailSelection(employee)}
+                    onClick={() => toggleEmployeeSelection(employee)}
                     className="ml-1 text-red-500"
                   >
                     &times;
@@ -113,11 +107,9 @@ function EmployeeNames({
               filteredOptions.map((option) => (
                 <li
                   key={option.id}
-                  onClick={() => toggleEmailSelection(option)}
+                  onClick={() => toggleEmployeeSelection(option)}
                   className={`px-4 py-2 cursor-pointer hover:bg-gray-200 ${
-                    selectedEmployees.some(
-                      (e) => e.emailAddress === option.emailAddress
-                    )
+                    selectedEmployees.some((e) => e.id === option.id)
                       ? "bg-gray-200"
                       : ""
                   }`}

@@ -32,6 +32,8 @@ export async function GET() {
         return NextResponse.json({ error: 'Failed to fetch schedules' }, { status: 500 });
     }
 }
+
+
 export async function POST(req: NextRequest) {
     try {
         const body = await req.json();
@@ -41,12 +43,12 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
         }
 
-        // Prepare participant data for connectOrCreate operation
-        const participantData = participants?.map((p: { name: string; email: string }) => ({
-            where: { email: p.email }, // Check if participant exists by email
-            create: { name: p.name, email: p.email }, // If not, create a new participant
-        }));
+        // Validate that participants is an array of employee IDs
+        if (!Array.isArray(participants) || !participants.every(id => typeof id === 'number')) {
+            return NextResponse.json({ error: 'Participants must be an array of employee IDs' }, { status: 400 });
+        }
 
+        // Create the schedule
         const schedule = await prisma.schedule.create({
             data: {
                 title,
@@ -55,20 +57,25 @@ export async function POST(req: NextRequest) {
                 endTime: new Date(endTime),
                 location,
                 participants: {
-                    connectOrCreate: participantData, // Add participants using connectOrCreate
+                    create: participants.map(employeeId => ({ employeeId })),
                 },
             },
             include: {
-                participants: true, // Return participants with the created schedule
+                participants: {
+                    include: {
+                        Employee: true, // Include employee details in response
+                    },
+                },
             },
         });
 
         return NextResponse.json(schedule, { status: 201 });
     } catch (error) {
-        console.log(error)
+        console.error(error);
         return NextResponse.json({ error: 'Failed to create schedule' }, { status: 500 });
     }
 }
+
 
 export async function PUT(req: NextRequest) {
     try {

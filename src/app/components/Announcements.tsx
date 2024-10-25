@@ -43,13 +43,14 @@ const Announcements = () => {
       const data = await response.json(); // Parse the JSON response
       setTitle("");
       setDescription("");
-      setDateOfBirth("");
+      setDate("");
       handleCloseModal();
       setLoading(false);
-      toast.success(data.message);
+      toast.success("Announcement created successfully");
       return data; // Return the created survey data or handle it as needed
     } catch (error) {
       setLoading(false);
+      toast.error("Failed to create announcement");
       console.error("Error creating survey:", error); // Log the error
       throw error; // Propagate error if needed
     }
@@ -101,7 +102,7 @@ const Announcements = () => {
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
         <div className="w-full max-w-lg">
           <h2 className="text-dark dark:text-white text-xl font-semibold mb-4">
-            Survey Form
+            Announcement Form
           </h2>
           <form onSubmit={handleSubmit}>
             <CustomInput
