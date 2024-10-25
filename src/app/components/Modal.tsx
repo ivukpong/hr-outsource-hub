@@ -34,7 +34,7 @@ const Modal: React.FC<ModalProps> = ({ children, isOpen, onClose }) => {
       {isOpen && (
         <motion.div
           onClick={onClose}
-          className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 backdrop-blur-sm z-50"
+          className=" fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 backdrop-blur-sm z-50"
           initial="hidden"
           animate="visible"
           exit="hidden"
@@ -42,7 +42,7 @@ const Modal: React.FC<ModalProps> = ({ children, isOpen, onClose }) => {
           transition={{ duration: 0.3 }}
         >
           <motion.div
-            className="mx-auto mt-10 p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md"
+            className="mx-auto mt-10 p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md min-w-[30%] items-center"
             variants={modalVariants}
             initial="hidden"
             animate="visible"

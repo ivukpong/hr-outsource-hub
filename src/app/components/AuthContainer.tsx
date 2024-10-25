@@ -56,7 +56,7 @@ function AuthContainer({ children }: { children: React.ReactNode }) {
           variants={containerVariants}
         >
           <motion.div
-            className="bg-secondary rounded-[20px] h-full w-full relative"
+            className="rounded-[20px] h-full w-full relative"
             layout // Animate layout change smoothly
           >
             <Image

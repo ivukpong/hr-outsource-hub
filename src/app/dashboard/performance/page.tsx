@@ -179,7 +179,7 @@ function Page() {
         <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
           <div className="w-full max-w-lg">
             <h2 className="text-dark dark:text-white text-xl font-semibold mb-4">
-              Rewards Form
+              Performance Form
             </h2>
             <form onSubmit={handleSubmit}>
               <EmployeeSelect
@@ -278,9 +278,9 @@ function Page() {
                 ))}
               </div>
             </div>
-            <div className="mb-4">
+            <div className="mb-4 max-h-[50%] ">
               <h3 className="font-semibold mb-2">Categories</h3>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-2 gap-2 overflow-y-auto">
                 {kpis.map((category: Category) => (
                   <label className="flex items-center" key={category.id}>
                     <input

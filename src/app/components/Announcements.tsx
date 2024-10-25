@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { BsPinAngleFill } from "react-icons/bs";
+import Modal from "./Modal";
+import CustomInput from "./Input";
+import Button from "./Button";
+import toast from "react-hot-toast";
 
 const Announcements = () => {
   const [announcements, setAnnouncements] = useState<
@@ -7,6 +11,57 @@ const Announcements = () => {
   >([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [date, setDate] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  async function handleSubmit(e: { preventDefault: () => void }) {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const announcementData = {
+        title,
+        description,
+        date,
+      };
+      const response = await fetch("/api/announcements", {
+        method: "POST", // Use POST method for creating a new survey
+        headers: {
+          "Content-Type": "application/json", // Set the content type to JSON
+        },
+        body: JSON.stringify(announcementData), // Convert surveyData to JSON string
+      });
+
+      if (!response.ok) {
+        // Check if the response is not OK (status not in the range 200-299)
+        toast.error("Failed to create announcement");
+        throw Error("Failed to create announcement");
+      }
+
+      const data = await response.json(); // Parse the JSON response
+      setTitle("");
+      setDescription("");
+      setDateOfBirth("");
+      handleCloseModal();
+      setLoading(false);
+      toast.success(data.message);
+      return data; // Return the created survey data or handle it as needed
+    } catch (error) {
+      setLoading(false);
+      console.error("Error creating survey:", error); // Log the error
+      throw error; // Propagate error if needed
+    }
+  }
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
 
   useEffect(() => {
     const fetchAnnouncements = async () => {
@@ -43,9 +98,71 @@ const Announcements = () => {
 
   return (
     <div className="pt-4 bg-white dark:bg-gray-800 rounded-[5px] text-black dark:text-white border border-[#ECEEF6] dark:border-gray-500">
+      <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+        <div className="w-full max-w-lg">
+          <h2 className="text-dark dark:text-white text-xl font-semibold mb-4">
+            Survey Form
+          </h2>
+          <form onSubmit={handleSubmit}>
+            <CustomInput
+              htmlFor="title"
+              label="Title"
+              id="title"
+              type="text"
+              placeholder="Enter Title"
+              value={title}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setTitle(e.target.value)
+              }
+              required
+            />
+            <CustomInput
+              htmlFor="description"
+              label="Description"
+              id="description"
+              type="text"
+              placeholder="Enter Description"
+              value={description}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setDescription(e.target.value)
+              }
+              required
+            />
+            <CustomInput
+              htmlFor="date"
+              id="date"
+              label="Date"
+              type="date"
+              placeholder="Enter Date"
+              value={date}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setDate(e.target.value)
+              }
+              required
+            />
+
+            <div className="flex justify-between mt-5 gap-5">
+              <div className="w-full">
+                <Button
+                  text="Cancel"
+                  type="button"
+                  outline
+                  click={handleCloseModal}
+                />
+              </div>
+              <div className="w-full">
+                <Button text="Create" loading={loading} type="submit" />
+              </div>
+            </div>
+          </form>
+        </div>
+      </Modal>
       <div className="flex justify-between items-center mb-4 px-4">
         <h2 className="text-lg font-semibold">Announcements</h2>
-        <button className="px-4 py-2 bg-[#E04403] text-white rounded-md">
+        <button
+          className="px-4 py-2 bg-[#E04403] text-white rounded-md"
+          onClick={handleOpenModal}
+        >
           Add New +
         </button>
       </div>
