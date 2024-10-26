@@ -129,19 +129,20 @@ function Page() {
     setIsModalOpen(false);
   };
 
-  const onSearch = (text: string) => {
+  const onSearch = (searched: string) => {
+    const text = searched.toLowerCase();
     setSearch(text);
     const filteredEmployees = performance.filter(
       (reward: {
-        employee: { firstName: string | string[]; lastName: string | string[] };
-        kpi: { name: string | string[] };
-        team: { name: string | string[] };
-        progress: { toString: () => string | string[] };
+        employee: { firstName: string; lastName: string };
+        kpi: { name: string };
+        team: { name: string };
+        progress: { toString: () => string };
       }) =>
-        reward.employee.firstName.includes(text) ||
-        reward.employee.lastName.includes(text) ||
-        reward.kpi.name.includes(text) ||
-        reward.team.name.includes(text) ||
+        reward.employee.firstName.toLowerCase().includes(text) ||
+        reward.employee.lastName.toLowerCase().includes(text) ||
+        reward.kpi.name.toLowerCase().includes(text) ||
+        reward.team.name.toLowerCase().includes(text) ||
         reward.progress.toString().includes(text)
     );
     setFiltered(filteredEmployees);

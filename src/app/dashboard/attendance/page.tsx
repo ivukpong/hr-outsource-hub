@@ -85,16 +85,17 @@ function Page() {
   // Slice the data to show only the current page's items
   const currentEmployees = filtered.slice(startIndex, endIndex);
 
-  const onSearch = (text: string) => {
+  const onSearch = (searched: string) => {
+    const text = searched.toLowerCase();
     setSearch(text);
     const filteredAttendace = attendance.filter(
       (data) =>
-        data.employee.firstName?.includes(text) ||
-        data.employee.lastName?.includes(text) ||
-        data.type.includes(text) ||
+        data.employee.firstName?.toLowerCase().includes(text) ||
+        data.employee.lastName?.toLowerCase().includes(text) ||
+        data.type?.toLowerCase().includes(text) ||
         data.checkIn.toLocaleString().includes(text) ||
-        data.team.name?.includes(text) ||
-        data.status.includes(text)
+        data.team.name?.toLowerCase().includes(text) ||
+        data.status?.toLowerCase().includes(text)
     );
     setFiltered(filteredAttendace);
   };

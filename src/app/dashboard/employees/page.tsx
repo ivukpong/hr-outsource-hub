@@ -87,14 +87,15 @@ function Employees() {
     setIsDelete(false);
   };
 
-  const onSearch = (text: string) => {
+  const onSearch = (searched: string) => {
+    const text = searched.toLowerCase();
     setSearch(text);
     const filteredEmployees = employees.filter(
       (employee) =>
-        employee.firstName?.includes(text) ||
-        employee.lastName?.includes(text) ||
-        employee.department?.name.includes(text) ||
-        employee.emailAddress?.includes(text)
+        employee.firstName?.toLowerCase().includes(text) ||
+        employee.lastName?.toLowerCase().includes(text) ||
+        employee.department?.name?.toLowerCase().includes(text) ||
+        employee.emailAddress?.toLowerCase().includes(text)
     );
     setFiltered(filteredEmployees);
   };

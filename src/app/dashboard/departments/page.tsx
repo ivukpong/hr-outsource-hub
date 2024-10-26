@@ -58,10 +58,11 @@ function Page() {
     setLoading(false);
   }, []);
 
-  const onSearch = (text: string) => {
+  const onSearch = (searched: string) => {
+    const text = searched.toLowerCase();
     setSearch(text);
     const filteredDepartments = departments.filter((department) =>
-      department.name.includes(text)
+      department.name.toLowerCase().includes(text)
     );
     setFiltered(filteredDepartments);
   };
