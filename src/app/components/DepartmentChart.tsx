@@ -1,3 +1,4 @@
+import { CircularProgress } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import {
   AreaChart,
@@ -20,11 +21,13 @@ const DepartmentChart = () => {
         const response = await fetch("/api/onboarding-stats");
         const data = await response.json();
 
+        console.log(data);
+
         // Transform data to match the chart requirements
         const formattedData = data.map(
-          (item: { month: string; employees: number }) => ({
+          (item: { month: string; count: number }) => ({
             month: item.month,
-            employees: item.employees,
+            employees: item.count,
           })
         );
 
@@ -60,18 +63,22 @@ const DepartmentChart = () => {
     return null;
   };
 
-  return loading ? null : (
+  return loading ? (
+    <div className="flex h-full w-full items-center justify-center text-primary">
+      <CircularProgress color="inherit" />
+    </div>
+  ) : (
     <ResponsiveContainer width="100%" height={400}>
       <AreaChart data={chartData}>
         <defs>
-          {/* <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
+          <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
             <stop offset="5%" stopColor={getRandomColor()} stopOpacity={0.7} />
             <stop offset="95%" stopColor={getRandomColor()} stopOpacity={0} />
-          </linearGradient> */}
-          <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%" stopColor="#007BFF" stopOpacity={0.2} />
-            <stop offset="95%" stopColor="#007BFF" stopOpacity={0} />
           </linearGradient>
+          {/* <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="5%" stopColor="#007BFF" stopOpacity={0.5} />
+            <stop offset="95%" stopColor="#007BFF" stopOpacity={0} />
+          </linearGradient> */}
         </defs>
         <XAxis
           dataKey="month"
@@ -86,7 +93,7 @@ const DepartmentChart = () => {
         <Area
           type="monotone"
           dataKey="employees"
-          stroke={"007BFF"}
+          stroke={getRandomColor()}
           fillOpacity={0.2}
           fill="url(#colorValue)"
         />
@@ -95,13 +102,13 @@ const DepartmentChart = () => {
   );
 };
 // Function to generate random color for the area fill
-// function getRandomColor() {
-//   const letters = "0123456789ABCDEF";
-//   let color = "#";
-//   for (let i = 0; i < 6; i++) {
-//     color += letters[Math.floor(Math.random() * 16)];
-//   }
-//   return color;
-// }
+function getRandomColor() {
+  const letters = "0123456789ABCDEF";
+  let color = "#";
+  for (let i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
 
 export default DepartmentChart;

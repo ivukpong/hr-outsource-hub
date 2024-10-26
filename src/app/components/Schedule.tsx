@@ -170,7 +170,6 @@ const Schedule: React.FC = () => {
                 setParticipants(e);
                 console.log(participants);
               }}
-              required
             />
 
             <div className="flex justify-between mt-5 gap-5">

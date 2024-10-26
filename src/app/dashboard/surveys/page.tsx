@@ -17,6 +17,7 @@ import {
   faEye,
   faFileAlt,
 } from "@fortawesome/free-solid-svg-icons";
+import { CircularProgress } from "@mui/material";
 import {
   Employee,
   Survey,
@@ -45,6 +46,7 @@ function Page() {
   const [category, setCategory] = useState<SurveyCategory | "">("");
   const [sentToEmails, setSentToEmails] = useState<(string | null)[]>([]);
   const [loading, setLoading] = useState(false);
+  const [fetching, setFetching] = useState(true);
   const [seeResponses, setSeeResponses] = useState(false);
   const [filteredResponses, setFilteredResponses] =
     useState<
@@ -85,6 +87,7 @@ function Page() {
 
     setResponses(data.reverse());
     setFilteredResponses(data.slice(0, 3).reverse());
+    setFetching(false);
   }
 
   useEffect(() => {
@@ -261,79 +264,85 @@ function Page() {
             </form>
           </div>
         </Modal>
-        <div className="flex-1 p-6">
-          <div className="grid lg:grid-cols-5 gap-6">
-            <div className="lg:col-span-3">
-              <div className="grid sm:grid-cols-3 gap-6">
-                {statsData.map((item) => (
-                  <StatCard item={item} key={item.id} />
-                ))}
-              </div>
-              <div className="bg-white dark:bg-gray-800 py-6 rounded-lg">
-                <div className="flex justify-between items-center mb-4">
-                  <h2 className="text-lg font-semibold">Surveys</h2>
-                  <div className="flex items-center">
-                    <span className="text-gray-500  dark:text-white mr-2">
-                      This Year
-                    </span>
-                    <i className="fas fa-chevron-down text-gray-500  dark:text-white"></i>
-                  </div>
-                </div>
-                <SurveyChart />
-              </div>
-              <div className="bg-white dark:bg-gray-800 pt-6 rounded-lg">
-                <div className="flex justify-between items-center mb-4">
-                  <h2 className="text-lg font-semibold">Responses</h2>
-                  <span
-                    onClick={() => setSeeResponses(!seeResponses)}
-                    className="text-gray-500  dark:text-white cursor-pointer"
-                  >
-                    See all
-                  </span>
-                </div>
-                {filteredResponses?.map((response, index) => (
-                  <ResponseItem response={response} key={index} />
-                ))}
-              </div>
-            </div>
-            <div className="lg:col-span-2 w-full">
-              <div className="bg-white dark:bg-gray-800 lg:ml-6 mb-6 !w-full">
-                <div className="flex justify-between items-center mb-4">
-                  <h2 className="text-lg font-semibold">Recent Surveys</h2>
-                  <span
-                    onClick={() => setSeeSurveys(!seeSurveys)}
-                    className="text-gray-500  dark:text-white cursor-pointer"
-                  >
-                    See all
-                  </span>
-                </div>
-                {filteredSurveys
-                  ?.reverse()
-                  .map((survey, index) => (
-                    <SurveyItem key={index} survey={survey} />
+        {fetching ? (
+          <div className="flex h-full w-full items-center justify-center text-primary">
+            <CircularProgress color="inherit" />
+          </div>
+        ) : (
+          <div className="flex-1 p-6">
+            <div className="grid lg:grid-cols-5 gap-6">
+              <div className="lg:col-span-3">
+                <div className="grid sm:grid-cols-3 gap-6">
+                  {statsData.map((item) => (
+                    <StatCard item={item} key={item.id} />
                   ))}
-              </div>
-              <div className="bg-white dark:bg-gray-800 py-6 rounded-lg shadow dark:shadow-slate-400 lg:ml-6 !w-full">
-                <div className="flex flex-col justify-between items-center mb-4">
-                  <div className="w-[50%] h-3 bg-gray-100 rounded-lg mb-4"></div>
-                  <div className="w-[70%] h-3 bg-gray-100 rounded-lg mb-4"></div>
                 </div>
-                <div className="text-center">
-                  <p className="font-semibold mb-2">Have a Question?</p>
-                  <p className="text-gray-500  dark:text-white mb-4">
-                    Start Your Survey Today!
-                  </p>
-                  <button
-                    className="bg-black text-white px-4 py-2 rounded-lg"
-                    onClick={handleOpenModal}
-                  >
-                    + Create Survey
-                  </button>
+                <div className="bg-white dark:bg-gray-800 py-6 rounded-lg">
+                  <div className="flex justify-between items-center mb-4">
+                    <h2 className="text-lg font-semibold">Surveys</h2>
+                    <div className="flex items-center">
+                      <span className="text-gray-500  dark:text-white mr-2">
+                        This Year
+                      </span>
+                      <i className="fas fa-chevron-down text-gray-500  dark:text-white"></i>
+                    </div>
+                  </div>
+                  <SurveyChart />
+                </div>
+                <div className="bg-white dark:bg-gray-800 pt-6 rounded-lg">
+                  <div className="flex justify-between items-center mb-4">
+                    <h2 className="text-lg font-semibold">Responses</h2>
+                    <span
+                      onClick={() => setSeeResponses(!seeResponses)}
+                      className="text-gray-500  dark:text-white cursor-pointer"
+                    >
+                      See all
+                    </span>
+                  </div>
+                  {filteredResponses?.map((response, index) => (
+                    <ResponseItem response={response} key={index} />
+                  ))}
+                </div>
+              </div>
+              <div className="lg:col-span-2 w-full">
+                <div className="bg-white dark:bg-gray-800 lg:ml-6 mb-6 !w-full">
+                  <div className="flex justify-between items-center mb-4">
+                    <h2 className="text-lg font-semibold">Recent Surveys</h2>
+                    <span
+                      onClick={() => setSeeSurveys(!seeSurveys)}
+                      className="text-gray-500  dark:text-white cursor-pointer"
+                    >
+                      See all
+                    </span>
+                  </div>
+                  {filteredSurveys
+                    ?.reverse()
+                    .map((survey, index) => (
+                      <SurveyItem key={index} survey={survey} />
+                    ))}
+                </div>
+                <div className="bg-white dark:bg-gray-800 py-6 rounded-lg shadow dark:shadow-slate-400 lg:ml-6 !w-full">
+                  <div className="flex flex-col justify-between items-center mb-4">
+                    <div className="w-[50%] h-3 bg-gray-100 rounded-lg mb-4"></div>
+                    <div className="w-[70%] h-3 bg-gray-100 rounded-lg mb-4"></div>
+                  </div>
+                  <div className="text-center">
+                    <p className="font-semibold mb-2">Have a Question?</p>
+                    <p className="text-gray-500  dark:text-white mb-4">
+                      Start Your Survey Today!
+                    </p>
+                    <button
+                      className="bg-black text-white px-4 py-2 rounded-lg"
+                      onClick={handleOpenModal}
+                    >
+                      + Create Survey
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
       </Layout>
     </DashContainer>
   );
