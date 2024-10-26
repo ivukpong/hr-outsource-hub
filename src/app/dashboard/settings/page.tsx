@@ -114,8 +114,13 @@ function Page() {
         body: formData,
       });
 
+      const data: { message: string; user: User } = await response.json();
+
       if (response.ok) {
         toast.success("Profile updated successfully!");
+        localStorage.removeItem("user");
+        localStorage.setItem("user", JSON.stringify(data.user));
+        setUser(data.user);
       } else {
         toast.error("Failed to update profile.");
       }
