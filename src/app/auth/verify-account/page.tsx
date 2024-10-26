@@ -69,7 +69,7 @@ function FormFunction() {
           onChange={setOtp}
           numInputs={6}
           containerStyle="w-full flex gap-[23px] mb-10"
-          inputStyle="flex justify-center item-center !w-[55px] h-[55px] rounded-[5px] border-[#EBEBEB] border"
+          inputStyle="dark:text-dark flex justify-center item-center !w-[55px] h-[55px] rounded-[5px] border-[#EBEBEB] border"
           renderInput={(props) => <input {...props} />}
         />
         <Button text="Verify" type="submit" loading={loading} />
