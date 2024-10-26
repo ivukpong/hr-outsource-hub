@@ -100,7 +100,7 @@ export default function DashContainer({
       <div className="flex min-h-screen bg-white dark:bg-gray-800 text-black dark:text-white relative">
         {/* Hamburger button for mobile */}
         <motion.button
-          className="md:hidden fixed top-7 z-20 left-3 p-2 rounded-[5px]"
+          className="md:hidden fixed top-7 z-20 left-3 p-2 rounded-[5px] bg-white dark:bg-gray-800"
           onClick={() => setIsOpen(!isOpen)}
           initial="hidden"
           animate="visible"

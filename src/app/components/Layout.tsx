@@ -61,13 +61,13 @@ const Layout = ({
 
         {/* Profile Section */}
         <motion.div
-          className="flex lg:flex-row flex-col items-center space-x-4 md:mt-0 mt-3 md:justify-center lg:justify-end xl:justify-end"
+          className="flex lg:flex-row flex-col items-center space-x-4 md:mt-0 my-3 md:justify-center lg:justify-end xl:justify-end"
           initial="hidden"
           animate="visible"
           variants={profileVariants}
         >
           <DarkModeToggle />
-          <div className="w-10 h-10 bg-gray-200 rounded-full overflow-hidden">
+          <div className="w-10 h-10 bg-gray-200 md:my-0 my-2 rounded-full overflow-hidden">
             <Image
               src={
                 user?.profilePic ??
@@ -79,7 +79,7 @@ const Layout = ({
               className="object-contain"
             />
           </div>
-          <div>
+          <div className="md:text-left text-center">
             <p className="text-dark dark:text-white font-medium">
               {user?.name}
             </p>

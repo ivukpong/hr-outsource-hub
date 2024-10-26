@@ -78,7 +78,7 @@ const Dashboard = () => {
         ) : (
           <div className="grid grid-cols-1 gap-4 text-white lg:grid-cols-3">
             <div className="col-span-2">
-              <div className="grid grid-cols-1 gap-4 text-white md:grid-cols-2 lg:grid-cols-3">
+              <div className="grid grid-cols-1 gap-4 text-white sm:grid-cols-3">
                 <div className="p-5 flex h-[130px] flex-col justify-around bg-[#29AB91] rounded-lg md:h-[100px] lg:h-[130px] xl:h-[150px]">
                   <p className="text-sm">Total Contract Staff</p>
                   <h2 className="text-xl font-bold">{stats?.totalEmployees}</h2>

@@ -12,7 +12,7 @@ const Cards = () => {
     const res = await fetch("/api/categories");
     const data = await res.json();
     setCardData(data);
-    console.log(data);
+
     setLoading(false);
   }
   useEffect(() => {

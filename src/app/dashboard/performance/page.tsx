@@ -91,8 +91,8 @@ function Page() {
   async function fetchPerformance() {
     const res = await fetch("/api/performance");
     const data = await res.json();
-    setPerformance(data);
-    setFiltered(data);
+    setPerformance(data.reverse());
+    setFiltered(data.reverse());
     setLoading(false);
   }
 
@@ -317,7 +317,7 @@ function Page() {
           </div>
         ) : (
           <div className="">
-            <div className="flex w-full justify-center md:justify-between items-center mb-4 flex-wrap">
+            <div className="flex w-full justify-center md:justify-between items-center mb-4 flex-col md:flex-row">
               <div className="relative flex justify-center md:justify-start items-center">
                 <CustomInput
                   htmlFor="search"

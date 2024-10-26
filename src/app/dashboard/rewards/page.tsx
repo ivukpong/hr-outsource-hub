@@ -95,8 +95,8 @@ function Page() {
   async function fetchRewards() {
     const res = await fetch("/api/rewards");
     const data = await res.json();
-    setRewards(data);
-    setFiltered(data);
+    setRewards(data.reverse());
+    setFiltered(data.reverse());
     setLoading(false);
   }
 

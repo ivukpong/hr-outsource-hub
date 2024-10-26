@@ -1,34 +1,69 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   AreaChart,
   Area,
   XAxis,
   YAxis,
-  CartesianGrid,
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
 
-const data = [
-  { month: "Jan", value: 30 },
-  { month: "Feb", value: 50 },
-  { month: "Mar", value: 45 },
-  { month: "Apr", value: 60 },
-  { month: "May", value: 75 },
-  { month: "Jun", value: 50 },
-  { month: "Jul", value: 80 },
-  { month: "Aug", value: 70 },
-  { month: "Sep", value: 90 },
-  { month: "Oct", value: 85 },
-  { month: "Nov", value: 95 },
-  { month: "Dec", value: 100 },
-];
-
 const SurveyChart = () => {
-  return (
+  const [surveyStats, setSurveyStats] = useState<
+    Array<{ month: string; count: number }>
+  >([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchSurveyStats = async () => {
+      try {
+        const response = await fetch("/api/surveys/count");
+        const data = await response.json();
+
+        // Transform data to match the chart requirements
+        const formattedData = data.map(
+          (item: { month: string; count: number }) => ({
+            month: item.month,
+            count: item.count,
+          })
+        );
+
+        setSurveyStats(formattedData);
+      } catch (error) {
+        console.error("Error fetching performance data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchSurveyStats();
+  }, []);
+
+  interface CustomTooltipProps {
+    active?: boolean;
+    payload?: Array<{
+      value: number;
+      payload: {
+        month: string;
+      };
+    }>;
+  }
+
+  const CustomTooltip: React.FC<CustomTooltipProps> = ({ active, payload }) => {
+    if (active && payload?.length) {
+      return (
+        <div className="custom-tooltip bg-white dark:bg-gray-800 border border-[#ccc] p-[10px] text-dark dark:text-white rounded-[10px]">
+          <p className="label">{`Month: ${payload[0].payload.month}`}</p>
+          <p className="desc">{`Surveys: ${payload[0].value}`}</p>
+        </div>
+      );
+    }
+    return null;
+  };
+
+  return loading ? null : (
     <ResponsiveContainer width="100%" height={400}>
       <AreaChart
-        data={data}
+        data={surveyStats}
         margin={{ top: 20, right: 30, left: 0, bottom: 0 }}
       >
         <defs>
@@ -46,11 +81,10 @@ const SurveyChart = () => {
           stroke="#bbb"
           tick={{ fill: "#666666", fontSize: 14, fontWeight: "bold" }}
         />
-        <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
-        <Tooltip />
+        <Tooltip content={<CustomTooltip />} />
         <Area
           type="monotone"
-          dataKey="value"
+          dataKey="count"
           stroke="#007BFF"
           fillOpacity={1}
           fill="url(#colorValue)"

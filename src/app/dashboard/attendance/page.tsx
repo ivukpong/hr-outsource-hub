@@ -102,8 +102,8 @@ function Page() {
   async function fetchAttendance() {
     const res = await fetch("/api/attendance");
     const data = await res.json();
-    setAttendance(data);
-    setFiltered(data);
+    setAttendance(data.reverse());
+    setFiltered(data.reverse());
   }
 
   async function fetchEmployees() {

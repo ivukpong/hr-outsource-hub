@@ -43,8 +43,8 @@ function Page() {
   async function fetchDepartments() {
     const res = await fetch("/api/departments");
     const data = await res.json();
-    setDepartments(data);
-    setFiltered(data);
+    setDepartments(data.reverse());
+    setFiltered(data.reverse());
   }
   async function fetchEmployees() {
     const res = await fetch("/api/employees");

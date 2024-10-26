@@ -111,8 +111,8 @@ function Employees() {
         ? data.filter((employee) => employee.departmentId?.toString() === dept)
         : data;
 
-      setEmployees(temp);
-      setFiltered(temp);
+      setEmployees(temp.reverse());
+      setFiltered(temp.reverse());
       console.log(temp); // Log filtered employees
     } catch (error) {
       console.error("Error fetching employees:", error);
@@ -250,7 +250,7 @@ function Employees() {
           )}
         </div>
       </Modal>
-      <div className="flex w-full justify-center md:justify-between items-center mb-4 flex-wrap">
+      <div className="flex w-full justify-center md:justify-between items-center mb-4 md:flex-row flex-col">
         <div className="relative flex justify-center md:justify-start items-center">
           <CustomInput
             htmlFor="search"
@@ -283,22 +283,54 @@ function Employees() {
       ) : (
         <div>
           <div className="container mx-auto p-0 md:py-4 overflow-auto">
-            <table className="min-w-full divide-y divide-gray-200">
+            <table
+              className="min-w-full divide-y divide-gray-200"
+              style={{ tableLayout: "fixed" }}
+            >
               <thead className="text-grey">
                 <tr className="border-b border-gray-700 font-normal">
-                  {/* <td className="py-2 whitespace-nowrap w-10"></td> */}
-                  <td className="py-2 whitespace-nowrap">Employee Name</td>
-                  <td className="py-2 whitespace-nowrap">Employee ID</td>
-                  <td className="py-2 whitespace-nowrap">Department</td>
-                  <td className="py-2 whitespace-nowrap">Designation</td>
-                  <td className="py-2 whitespace-nowrap">Email</td>
-                  <td className="py-2 whitespace-nowrap">Action</td>
+                  <td
+                    className="py-2 px-4 whitespace-nowrap"
+                    style={{ minWidth: "150px" }}
+                  >
+                    Employee Name
+                  </td>
+                  <td
+                    className="py-2 px-4 whitespace-nowrap"
+                    style={{ minWidth: "100px" }}
+                  >
+                    Employee ID
+                  </td>
+                  <td
+                    className="py-2 px-4 whitespace-nowrap"
+                    style={{ minWidth: "150px" }}
+                  >
+                    Department
+                  </td>
+                  <td
+                    className="py-2 px-4 whitespace-nowrap"
+                    style={{ minWidth: "150px" }}
+                  >
+                    Designation
+                  </td>
+                  <td
+                    className="py-2 px-4 whitespace-nowrap"
+                    style={{ minWidth: "200px" }}
+                  >
+                    Email
+                  </td>
+                  <td
+                    className="py-2 px-4 whitespace-nowrap"
+                    style={{ minWidth: "100px" }}
+                  >
+                    Action
+                  </td>
                 </tr>
               </thead>
               <tbody className="text-[#16151C] dark:text-white divide-y divide-gray-700">
                 {currentEmployees.map((employee) => (
                   <tr key={employee.id}>
-                    <td className="py-2 h-full flex items-center justify-start whitespace-nowrap">
+                    <td className="py-2 px-4 h-full flex items-center justify-start whitespace-nowrap overflow-hidden text-ellipsis">
                       <Image
                         src={employee.profilePic || "/default-profile-pic.jpg"}
                         alt={`Profile picture of ${employee.firstName}`}
@@ -308,17 +340,19 @@ function Employees() {
                       />
                       {employee.firstName} {employee.lastName}
                     </td>
-                    <td className="py-2 whitespace-nowrap">{employee.id}</td>
-                    <td className="py-2 whitespace-nowrap">
+                    <td className="py-2 px-4 whitespace-nowrap overflow-hidden text-ellipsis">
+                      {employee.id}
+                    </td>
+                    <td className="py-2 px-4 whitespace-nowrap overflow-hidden text-ellipsis">
                       {employee.department.name}
                     </td>
-                    <td className="py-2 whitespace-nowrap">
+                    <td className="py-2 px-4 whitespace-nowrap overflow-hidden text-ellipsis">
                       {employee.teams.name}
                     </td>
-                    <td className="py-2 whitespace-nowrap">
+                    <td className="py-2 px-4 whitespace-nowrap overflow-hidden text-ellipsis">
                       {employee.emailAddress}
                     </td>
-                    <td className="py-2 flex items-center h-full relative bottom-2">
+                    <td className="py-2 px-4 flex items-center h-full relative bottom-2">
                       <div onClick={() => handleNavigate(employee)}>
                         <i className="fas fa-pen text-[#16151C] dark:text-white mr-2 cursor-pointer"></i>
                       </div>

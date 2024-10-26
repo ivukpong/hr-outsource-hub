@@ -82,7 +82,7 @@ export default function Page() {
       setLastName(parsedEmployee.lastName || "");
       setMobileNumber(parsedEmployee.mobileNumber || "");
       setEmailAddress(parsedEmployee.emailAddress || "");
-      setDateOfBirth(parsedEmployee.dateOfBirth || "");
+      setDateOfBirth(parsedEmployee.dateOFBirth || "");
       setMaritalStatus(parsedEmployee.maritalStatus || "");
       setGender(parsedEmployee.gender || "");
       setNationality(parsedEmployee.nationality || "");

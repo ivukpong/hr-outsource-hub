@@ -35,6 +35,7 @@ function Page() {
     totalCompletedSurveys: number;
     totalSeenSurveys: number;
   }>();
+  const [surveyData, setSurveyData] = useState<Survey[]>();
   const [responses, setResponses] =
     useState<
       ({ employee: Employee } & { survey: Survey } & SurveyResponse)[]
@@ -44,19 +45,46 @@ function Page() {
   const [category, setCategory] = useState<SurveyCategory | "">("");
   const [sentToEmails, setSentToEmails] = useState<(string | null)[]>([]);
   const [loading, setLoading] = useState(false);
+  const [seeResponses, setSeeResponses] = useState(false);
+  const [filteredResponses, setFilteredResponses] =
+    useState<
+      ({ employee: Employee } & { survey: Survey } & SurveyResponse)[]
+    >();
+  const [seeSurveys, setSeeSurveys] = useState(false);
+  const [filteredSurveys, setFilteredSurveys] = useState<Survey[]>();
+
+  useEffect(() => {
+    const filterResponses = () => {
+      setFilteredResponses(
+        seeResponses ? responses : filteredResponses?.slice(0, 3)
+      );
+    };
+    filterResponses();
+  }, [seeResponses]);
+
+  useEffect(() => {
+    const fiterSurveys = () => {
+      setFilteredSurveys(
+        seeSurveys ? surveyData : filteredSurveys?.slice(0, 5)
+      );
+    };
+    fiterSurveys();
+  }, [seeSurveys]);
 
   async function fetchSurveys() {
     const res = await fetch("/api/surveys");
     const data = await res.json();
-    console.log(data);
     setSurveys(data);
+    setSurveyData(data.surveys);
+    setFilteredSurveys(data.surveys);
   }
 
   async function fetchResponses() {
     const res = await fetch("/api/surveys/responses");
     const data = await res.json();
-    console.log(data);
-    setResponses(data);
+
+    setResponses(data.reverse());
+    setFilteredResponses(data.slice(0, 3).reverse());
   }
 
   useEffect(() => {
@@ -75,20 +103,18 @@ function Page() {
         category,
       };
       const response = await fetch("/api/surveys", {
-        method: "POST", // Use POST method for creating a new survey
+        method: "POST",
         headers: {
-          "Content-Type": "application/json", // Set the content type to JSON
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(surveyData), // Convert surveyData to JSON string
+        body: JSON.stringify(surveyData),
       });
 
       if (!response.ok) {
-        // Check if the response is not OK (status not in the range 200-299)
         toast.error("Failed to create survey");
         throw Error("Failed to create survey");
       }
-
-      const data = await response.json(); // Parse the JSON response
+      const data = await response.json();
       setTitle("");
       setDescription("");
       setSentToEmails([]);
@@ -96,11 +122,11 @@ function Page() {
       handleCloseModal();
       setLoading(false);
       toast.success(data.message);
-      return data; // Return the created survey data or handle it as needed
+      return data;
     } catch (error) {
       setLoading(false);
-      console.error("Error creating survey:", error); // Log the error
-      throw error; // Propagate error if needed
+      console.error("Error creating survey:", error);
+      throw error;
     }
   }
 
@@ -154,6 +180,7 @@ function Page() {
       color: "text-red-500",
     },
   ];
+
   return (
     <DashContainer>
       <Layout header="Survey" desc="Feedback Survey">
@@ -237,7 +264,7 @@ function Page() {
         <div className="flex-1 p-6">
           <div className="grid lg:grid-cols-5 gap-6">
             <div className="lg:col-span-3">
-              <div className="grid lg:grid-cols-3 gap-6">
+              <div className="grid sm:grid-cols-3 gap-6">
                 {statsData.map((item) => (
                   <StatCard item={item} key={item.id} />
                 ))}
@@ -255,8 +282,16 @@ function Page() {
                 <SurveyChart />
               </div>
               <div className="bg-white dark:bg-gray-800 pt-6 rounded-lg">
-                <h2 className="text-lg font-semibold mb-4">Responses</h2>
-                {responses?.map((response, index) => (
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-lg font-semibold">Responses</h2>
+                  <span
+                    onClick={() => setSeeResponses(!seeResponses)}
+                    className="text-gray-500  dark:text-white cursor-pointer"
+                  >
+                    See all
+                  </span>
+                </div>
+                {filteredResponses?.map((response, index) => (
                   <ResponseItem response={response} key={index} />
                 ))}
               </div>
@@ -265,13 +300,18 @@ function Page() {
               <div className="bg-white dark:bg-gray-800 lg:ml-6 mb-6 !w-full">
                 <div className="flex justify-between items-center mb-4">
                   <h2 className="text-lg font-semibold">Recent Surveys</h2>
-                  <span className="text-gray-500  dark:text-white cursor-pointer">
+                  <span
+                    onClick={() => setSeeSurveys(!seeSurveys)}
+                    className="text-gray-500  dark:text-white cursor-pointer"
+                  >
                     See all
                   </span>
                 </div>
-                {surveys?.surveys.map((survey, index) => (
-                  <SurveyItem key={index} survey={survey} />
-                ))}
+                {filteredSurveys
+                  ?.reverse()
+                  .map((survey, index) => (
+                    <SurveyItem key={index} survey={survey} />
+                  ))}
               </div>
               <div className="bg-white dark:bg-gray-800 py-6 rounded-lg shadow dark:shadow-slate-400 lg:ml-6 !w-full">
                 <div className="flex flex-col justify-between items-center mb-4">

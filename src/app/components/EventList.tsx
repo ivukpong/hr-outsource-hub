@@ -32,7 +32,6 @@ const EventList: React.FC<EventListProps> = ({ selectedDate }) => {
         }
         const data = await response.json(); // Await the JSON response
         setEvents(data); // Set the events from the fetched data
-        console.log(data);
       } catch (err) {
         if (err instanceof Error) {
           // Now TypeScript knows err is an Error

@@ -72,7 +72,7 @@ const Announcements = () => {
           throw new Error("Failed to fetch announcements");
         }
         const data = await response.json();
-        setAnnouncements(data);
+        setAnnouncements(data.reverse());
       } catch (error) {
         if (error instanceof Error) {
           // Now TypeScript knows err is an Error

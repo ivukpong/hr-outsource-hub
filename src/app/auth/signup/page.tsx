@@ -30,7 +30,7 @@ export default function SignUp() {
     console.log(response);
 
     const data = await response.json();
-    console.log(data);
+
     if (response.ok) {
       toast.success(data.message);
       router.push(`/auth/enter-otp/?email=${email}`);
