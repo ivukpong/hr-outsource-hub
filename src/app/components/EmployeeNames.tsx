@@ -6,13 +6,11 @@ function EmployeeNames({
   label,
   options = [],
   onChange = () => {},
-  required = false,
 }: {
   htmlFor?: string;
   label?: string;
   options: Employee[];
   onChange: (selectedEmployeeIds: number[]) => void;
-  required?: boolean;
 }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
