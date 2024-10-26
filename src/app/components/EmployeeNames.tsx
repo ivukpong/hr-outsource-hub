@@ -22,7 +22,7 @@ function EmployeeNames({
   // Trigger onChange only when selectedEmployees updates
   useEffect(() => {
     onChange(selectedEmployeeIds);
-  }, [selectedEmployees]);
+  }, [selectedEmployeeIds, onChange]);
 
   // Filtered options based on search query
   const filteredOptions = options.filter(
