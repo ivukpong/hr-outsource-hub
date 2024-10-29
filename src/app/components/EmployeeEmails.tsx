@@ -233,7 +233,7 @@ function EmployeeEmails({
               {selectedEmails.map((email, index) => (
                 <span
                   key={email || index}
-                  className="bg-blue-500 text-white rounded-full px-2 py-1 mr-2 mb-2"
+                  className="bg-blue-500 text-white dark:text-dark rounded-full px-2 py-1 mr-2 mb-2"
                 >
                   {email}
                   <button
