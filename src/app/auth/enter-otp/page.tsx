@@ -59,10 +59,7 @@ function FormFunction() {
     if (!response.ok) {
       toast.error(data.message);
     }
-    
   };
-
-
 
   const email = searchParams.get("email");
   // Use searchParams as needed
@@ -105,7 +102,7 @@ function FormFunction() {
           onChange={setOtp}
           numInputs={6}
           containerStyle="w-full flex gap-[23px] mb-10"
-          inputStyle="flex justify-center item-center !w-[55px] h-[55px] rounded-[5px] border-[#EBEBEB] border text-dark dark:text-white"
+          inputStyle="flex justify-center item-center !w-[55px] h-[55px] rounded-[5px] border-[#EBEBEB] border text-dark"
           renderInput={(props) => <input {...props} />}
         />
         <Button text="Verify" type="submit" loading={loading} />

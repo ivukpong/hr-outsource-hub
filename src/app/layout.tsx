@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     description: "Built by The Luminaries",
     images: ["/images/og.jpg"],
     type: "website", // Optional: can specify the type of content
-    url: "https://hr-outsource-hub.vercel.app/", // Optional: specify the canonical URL
+    url: "https://yourwebsite.com/gtco-outsource-hub", // Optional: specify the canonical URL
   },
 };
 export default function RootLayout({

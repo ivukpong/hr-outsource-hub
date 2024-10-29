@@ -31,17 +31,21 @@ function CustomSelect({
       </label>
       <div className="flex items-center shadow border rounded w-full py-2 px-3 gap-2 text-dark dark:text-white">
         <select
-          className="appearance-none bg-transparent leading-tight focus:outline-none focus:shadow-outline w-full"
+          className="appearance-none bg-transparent leading-tight focus:outline-none focus:shadow-outline w-full "
           id={id}
           value={value}
           onChange={(e) => onChange(e)}
           required={required}
         >
-          <option value="" disabled>
+          <option className="text-dark" value="" disabled>
             -- Select --
           </option>
           {options.map((option, index) => (
-            <option key={index} value={type ? option.name : option.id}>
+            <option
+              className="text-dark"
+              key={index}
+              value={type ? option.name : option.id}
+            >
               {option.name}
             </option>
           ))}
