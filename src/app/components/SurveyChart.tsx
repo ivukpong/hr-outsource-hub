@@ -48,7 +48,7 @@ const SurveyChart: React.FC = () => {
     );
   }
 
-  if (surveyStats.length === 0) {
+  if (surveyStats?.length === 0) {
     return <div>No survey data available</div>;
   }
 

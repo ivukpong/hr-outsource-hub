@@ -198,7 +198,7 @@ function Page() {
       title: "Surveys created",
       stat: "4.5%",
       trend: "up",
-      value: surveys?.surveys.length,
+      value: surveys?.surveys?.length ?? 0,
       trendText: "vs last month",
       color: "text-green-500",
     },
