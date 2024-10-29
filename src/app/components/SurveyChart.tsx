@@ -96,8 +96,9 @@ const SurveyChart: React.FC = () => {
           <Bar dataKey="count" fill="#007BFF" />
         </BarChart>
       </ResponsiveContainer> */}
-
-      <h2>Survey Distribution by Category</h2>
+      <h2 className="text-lg font-semibold mt-6">
+        Survey Distribution by Category
+      </h2>
       {/* Pie Chart */}
       <ResponsiveContainer width="100%" height={400}>
         <PieChart>

@@ -62,6 +62,8 @@ function FormFunction() {
     
   };
 
+
+
   const email = searchParams.get("email");
   // Use searchParams as needed
   return (
@@ -79,7 +81,7 @@ function FormFunction() {
             onClick={() => router.push("/auth/signin")}
             className="bg-primary text-white py-2 px-4 rounded-lg w-full font-bold"
           >
-            Go to Dashboard
+            Go to Sign In
           </button>
         </div>
       </Modal>

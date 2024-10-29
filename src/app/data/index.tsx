@@ -1,4 +1,4 @@
-import { QuestionType } from "@prisma/client"; // Ensure the import matches your project structure
+import { QuestionType, SurveyCategory } from "@prisma/client"; // Ensure the import matches your project structure
 
 export const headings = [
   "General",
@@ -7,7 +7,6 @@ export const headings = [
   "Reports",
   "Apps",
 ];
-
 
 export const navs = [
   { name: "Dashboard", icon: "fas fa-home" },
@@ -523,14 +522,6 @@ export const data = [
   },
 ];
 
-// Define the possible categories
-export type SurveyCategory =
-  | "LEAD_TO_LEAD"
-  | "LEAD_TO_EMPLOYEE"
-  | "EMPLOYEE_TO_LEAD"
-  | "EMPLOYEE_TO_EMPLOYEE"
-  | "EMPLOYEE_TO_COMPANY";
-
 export const questionMapping: Record<
   SurveyCategory,
   { text: string; type: QuestionType; options: string[] }[]
@@ -670,4 +661,25 @@ export const questionMapping: Record<
       options: ["Yes", "No"],
     },
   ],
+  CUSTOM: [],
+};
+
+export type SurveyType = {
+  title: string;
+  description: string;
+  category: SurveyCategory;
+  sentToEmails: string[];
+  id: number;
+  completedCount: number;
+  seenCount: number;
+  createdAt: Date;
+  updatedAt: Date;
+  responses?: {
+    id: number;
+    createdAt: Date;
+    surveyId: number;
+    employeeEmail: string;
+    response: string[];
+    questionId: number | null;
+  }[];
 };

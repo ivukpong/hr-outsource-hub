@@ -179,9 +179,10 @@ model SurveyQuestion {
   surveyId   Int
   text       String
   type       QuestionType
-  options    String[] 
-  responses  SurveyResponse[]  @relation("QuestionResponses") // Link to SurveyResponse
+  options    String[]         @default([]) // Options for radio/checkbox
+  responses  SurveyResponse[]  @relation("QuestionResponses")
 }
+
 
 model SurveyResponse {
   id            Int       @id @default(autoincrement())
@@ -228,6 +229,7 @@ enum SurveyCategory {
   EMPLOYEE_TO_LEAD
   EMPLOYEE_TO_EMPLOYEE
   EMPLOYEE_TO_COMPANY
+  CUSTOM
 }
 
 enum QuestionType {

@@ -42,7 +42,7 @@ const Modal: React.FC<ModalProps> = ({ children, isOpen, onClose }) => {
           transition={{ duration: 0.3 }}
         >
           <motion.div
-            className="mx-auto mt-10 p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md min-w-[30%] items-center"
+            className="mx-auto mt-10 p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md min-w-[60%] lg:min-w-[30%] items-center max-h-[80%] overflow-y-auto"
             variants={modalVariants}
             initial="hidden"
             animate="visible"
