@@ -13,8 +13,14 @@ const satoshi = localFont({
 export const metadata: Metadata = {
   title: "GTCO Outsource Hub",
   description: "Built by The Luminaries",
+  openGraph: {
+    title: "GTCO Outsource Hub", // Optional, but good for consistency
+    description: "Built by The Luminaries",
+    images: ["/images/og.jpg"],
+    type: "website", // Optional: can specify the type of content
+    url: "https://yourwebsite.com/gtco-outsource-hub", // Optional: specify the canonical URL
+  },
 };
-
 export default function RootLayout({
   children,
 }: Readonly<{
