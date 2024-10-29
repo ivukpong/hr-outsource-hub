@@ -327,11 +327,19 @@ function Page() {
                 }
                 required
               />
-              <EmployeeEmails
+
+              {/* <EmployeeEmails
                 htmlFor="senttoEmails"
                 label="Select Emails"
                 options={employees}
                 onChange={(e) => setSentToEmails(e)}
+                required
+              /> */}
+              <EmployeeEmails
+                htmlFor="senttoEmails"
+                label="Select Emails"
+                options={employees}
+                onChange={(selectedEmails) => setSentToEmails(selectedEmails)}
                 required
               />
 

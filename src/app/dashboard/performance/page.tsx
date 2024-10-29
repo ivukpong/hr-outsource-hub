@@ -264,7 +264,7 @@ function Page() {
           <div>
             <h2 className="text-lg font-semibold mb-4">Filter</h2>
             <div className="mb-4">
-              <h3 className="font-semibold mb-2">Department</h3>
+              <h3 className="font-semibold mb-2">Teams</h3>
               <div className="grid grid-cols-2 gap-2">
                 {teams.map((department: Department) => (
                   <label className="flex items-center" key={department.id}>

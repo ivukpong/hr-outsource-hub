@@ -287,9 +287,19 @@ async function main() {
 
   // Step 8: Create a Single Attendance Record for Each Employee
   for (const employee of employees) {
+    const randomMonth = faker.number.int({ min: 0, max: 9 }); // January (0) to October (9)
+    const randomDay = faker.number.int({ min: 1, max: 31 }); // Ensure valid days per month as needed
     const randomHour = faker.number.int({ min: 6, max: 10 });
     const randomMinute = faker.number.int({ min: 0, max: 59 });
-    const checkInTime = new Date(2023, 0, 1, randomHour, randomMinute); // Set to a specific date for simplicity
+
+    // Generate a random date between January and October 2024
+    const checkInTime = new Date(
+      2024,
+      randomMonth,
+      randomDay,
+      randomHour,
+      randomMinute
+    );
 
     const status = checkInTime.getHours() > 7 ? "Late" : "On Time";
     const type = employee.officeLocation === "Hybrid" ? "Hybrid" : "Onsite";
